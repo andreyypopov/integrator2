@@ -37,10 +37,10 @@ __global__ void kCalculateCellMeasure(int n, const Point3 *vertices, const int3 
 }
 
 __global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNeighbors, int *simpleNeighborsNum,
-    int2 *attachedNeighbors, int *attachedNeighborsNum){
+    int2 *attachedNeighbors, int *attachedNeighborsNum, int2 *notNeighbors, int *notNeighborsNum){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    int tri1idx = idx / blockDim.x;
-    int tri2idx = idx % blockDim.x;
+    int tri1idx = idx / n;
+    int tri2idx = idx % n;
 
     if(tri1idx < n && tri2idx < n && tri1idx < tri2idx){
         unsigned int commonPoints = 0;
@@ -55,6 +55,11 @@ __global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNei
 
         if(tri1.z == tri2.x || tri1.z == tri2.y || tri1.z == tri2.z)
             ++commonPoints;
+        
+        if(commonPoints == 0){
+            int pos = atomicAdd(notNeighborsNum, 1);
+            notNeighbors[pos] = int2({ tri1idx, tri2idx });
+        }
         
         if(commonPoints == 1){
             int pos = atomicAdd(simpleNeighborsNum, 1);
@@ -90,6 +95,11 @@ Mesh3D::~Mesh3D(){
     if(attachedNeighborsNum){
         free_device(d_attachedNeighborsNum);
         free_device(attachedNeighbors);
+    }
+
+    if(notNeighborsNum){
+        free_device(d_notNeighborsNum);
+        free_device(notNeighbors);
     }
 }
 
@@ -183,16 +193,20 @@ void Mesh3D::calculateMeasures(){
 void Mesh3D::fillNeightborsLists(){
     allocate_device(&d_simpleNeighborsNum, 1);
     allocate_device(&d_attachedNeighborsNum, 1);
+    allocate_device(&d_notNeighborsNum, 1);
     zero_value_device(d_simpleNeighborsNum, 1);
     zero_value_device(d_attachedNeighborsNum, 1);
+    zero_value_device(d_notNeighborsNum, 1);
 
     allocate_device(&simpleNeighbors, cellsNum * CONSTANTS::MAX_SIMPLE_NEIGHBORS_PER_VERTEX / 2);    // number of triangles * (3 neighbors * 3 vertices per triangle) / 2 (discard duplicated pairs)
     allocate_device(&attachedNeighbors, cellsNum * 3 / 2);  // number of triangles * (3 vertices edges per triangle) / 2 (discard duplicated pairs)
+    allocate_device(&notNeighbors, cellsNum * (cellsNum) / 2);  // all pairs of triangls
 
     unsigned int blocks = blocksForSize(cellsNum * cellsNum);
-    kDetermineNeighborType<<<blocks, gpuThreads>>>(cellsNum, cells, simpleNeighbors, d_simpleNeighborsNum, attachedNeighbors, d_attachedNeighborsNum);
+    kDetermineNeighborType<<<blocks, gpuThreads>>>(cellsNum, cells, simpleNeighbors, d_simpleNeighborsNum, attachedNeighbors, d_attachedNeighborsNum, notNeighbors, d_notNeighborsNum);
     copy_d2h(d_simpleNeighborsNum, &simpleNeighborsNum, 1);
     copy_d2h(d_attachedNeighborsNum, &attachedNeighborsNum, 1);
+    copy_d2h(d_notNeighborsNum, &notNeighborsNum, 1);
 
-    printf("Found %d simple neighbors and %d attached neighbors\n", simpleNeighborsNum, attachedNeighborsNum);
+    printf("Found %d pairs of simple neighbors and %d pairs of attached neighbors, %d pairs are not neighbors\n", simpleNeighborsNum, attachedNeighborsNum, notNeighborsNum);
 }

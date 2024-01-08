@@ -6,7 +6,7 @@
 #include "common/constants.h"
 #include "Mesh3d.cuh"
 
-__constant__ double3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];
+__constant__ Point3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];
 __constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];
 
 struct QuadratureFormula3D

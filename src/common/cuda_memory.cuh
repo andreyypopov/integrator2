@@ -58,4 +58,12 @@ void copy_d2d(const T* src, const T* dst, size_t elements_num, cudaStream_t stre
         printf("Zero device-to-device memory copy requested\n");
 }
 
+template<class T>
+void copy_h2const(const T* src, const T* dst, size_t elements_num, cudaStream_t stream = nullptr){
+    if(elements_num)
+        checkCudaErrors(cudaMemcpyToSymbolAsync((void*)dst, (void*)src, elements_num * sizeof(T), 0, cudaMemcpyHostToDevice, stream));
+    else
+        printf("Zero host-to-constant memory copy requested\n");
+}
+
 #endif // CUDA_MEMORY_CUH

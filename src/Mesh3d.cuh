@@ -19,6 +19,30 @@ public:
     bool loadMeshFromFile(const std::string &filename, double scale = 1.0);
 
     void prepareMesh();
+
+    int getSimpleNeighborsNum() const {
+        return simpleNeighborsNum;
+    }
+
+    const int2 *getSimpleNeighbors() const {
+        return simpleNeighbors;
+    }
+
+    int getAttachedNeighborsNum() const {
+        return attachedNeighborsNum;
+    }
+
+    const int2 *getAttachedNeighbors() const {
+        return attachedNeighbors;
+    }
+
+    int getNotNeighborsNum() const {
+        return notNeighborsNum;
+    }
+
+    const int2 *getNotNeighbors() const {
+        return notNeighbors;
+    }
 private:
     void calculateNormals();
 
@@ -42,10 +66,13 @@ private:
 
     int simpleNeighborsNum = 0;
     int attachedNeighborsNum = 0;
+    int notNeighborsNum = 0;
     int *d_simpleNeighborsNum;
     int *d_attachedNeighborsNum;
+    int *d_notNeighborsNum;
     int2 *simpleNeighbors;
     int2 *attachedNeighbors;
+    int2 *notNeighbors;
 };
 
 #endif // MESH3D_CUH
