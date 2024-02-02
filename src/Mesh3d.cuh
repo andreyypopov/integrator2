@@ -5,6 +5,7 @@
 #include "common/device_vector.cuh"
 
 #include <string>
+#include <vector>
 
 enum class neighbour_type_enum {
     simple_neighbors = 0,
@@ -70,5 +71,7 @@ private:
     deviceVector<int2> attachedNeighbors;
     deviceVector<int2> notNeighbors;
 };
+
+void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells);
 
 #endif // MESH3D_CUH

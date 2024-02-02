@@ -4,7 +4,6 @@
 #include "common/constants.h"
 
 #include <fstream>
-#include <vector>
 
 __global__ void kCalculateCellNormal(int n, const Point3 *vertices, const int3 *cells, Point3 *normals){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -202,4 +201,17 @@ void Mesh3D::fillNeightborsLists(){
     copy_d2h(d_notNeighborsNum, &notNeighbors.size, 1);
 
     printf("Found %d pairs of simple neighbors and %d pairs of attached neighbors, %d pairs are not neighbors\n", simpleNeighbors.size, attachedNeighbors.size, notNeighbors.size);
+}
+
+void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells)
+{
+    std::ofstream outputFile(filename.c_str());
+
+    for(const auto &pt : vertices)
+        outputFile << "v " << pt.x << " " << pt.y << " " << pt.z << std::endl;
+
+    for(const auto &triangle : cells)
+        outputFile << "f " << triangle.x + 1 << " " << triangle.y + 1 << " " << triangle.z + 1 << std::endl;
+
+    outputFile.close();
 }

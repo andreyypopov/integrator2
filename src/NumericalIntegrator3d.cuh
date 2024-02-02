@@ -208,6 +208,14 @@ public:
 	void gatherResults(deviceVector<double> &simpleNeighborsResults, deviceVector<double> &attachedNeighborsResults,
 			deviceVector<double> &notNeighborsResults) const;
 
+    const auto &getRefinedVertices() const {
+        return refinedVertices;
+    }
+
+    const auto &getRefinedCells() const {
+        return refinedCells;
+    }
+
 private:
     const int GaussPointsNum;
     const Mesh3D &mesh;

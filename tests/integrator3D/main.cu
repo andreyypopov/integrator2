@@ -19,11 +19,28 @@ int main(int argc, char *argv[]){
 
     mesh.prepareMesh();
 
+    std::vector<Point3> vertices;
+    std::vector<int3> cells;
+
+    vertices.resize(mesh.getVertices().size);
+    copy_d2h(mesh.getVertices().data, vertices.data(), mesh.getVertices().size);
+    cells.resize(mesh.getCells().size);
+    copy_d2h(mesh.getCells().data, cells.data(), mesh.getCells().size);
+
+    exportMeshToObj("OriginalMesh.obj", vertices, cells);
+
     NumericalIntegrator3D numIntegrator(mesh, qf3D13);
-    EvaluatorJ3DK evaluator(mesh,numIntegrator);
+    EvaluatorJ3DK evaluator(mesh, numIntegrator);
     evaluator.setFixedRefinementLevel(3);
 
     evaluator.runAllPairs();
+
+    vertices.resize(numIntegrator.getRefinedVertices().size);
+    copy_d2h(numIntegrator.getRefinedVertices().data, vertices.data(), numIntegrator.getRefinedVertices().size);
+    cells.resize(numIntegrator.getRefinedCells().size);
+    copy_d2h(numIntegrator.getRefinedCells().data, cells.data(), numIntegrator.getRefinedCells().size);
+
+    exportMeshToObj("RefinedMesh.obj", vertices, cells);
 
     return EXIT_SUCCESS;
 }
