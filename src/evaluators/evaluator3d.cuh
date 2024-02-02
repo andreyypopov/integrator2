@@ -6,10 +6,15 @@
 #include "../NumericalIntegrator3d.cuh"
 #include "../Mesh3d.cuh"
 
+enum class error_control_type_enum {
+    fixed_refinement_level = 0,
+    automatic_error_control = 1
+};
+
 class Evaluator3D
 {
 public:
-    Evaluator3D(const Mesh3D &mesh_, const NumericalIntegrator3D* const numIntegrator_ = nullptr);
+    Evaluator3D(const Mesh3D &mesh_, NumericalIntegrator3D &numIntegrator_);
     virtual ~Evaluator3D();
 
     virtual void integrateOverSimpleNeighbors() = 0;
@@ -18,24 +23,26 @@ public:
 
     virtual void runAllPairs();
 
-protected:
-    int simpleNeighborsTasksNum = 0;
-    int attachedNeighborsTasksNum = 0;
-    int notNeighborsTasksNum = 0;
-    int2 *simpleNeighborsTasks;
-    int2 *attachedNeighborsTasks;
-    int2 *notNeighborsTasks;
+    void setFixedRefinementLevel(int refinementLevel = 0);
 
-    double *d_simpleNeighborsResults;
-    double *d_attachedNeighborsResults;
-    double *d_notNeighborsResults;
+protected:
+    deviceVector<int2> simpleNeighborsTasks;
+    deviceVector<int2> attachedNeighborsTasks;
+    deviceVector<int2> notNeighborsTasks;
+
+    deviceVector<double> d_simpleNeighborsResults;
+    deviceVector<double> d_attachedNeighborsResults;
+    deviceVector<double> d_notNeighborsResults;
 
     std::vector<double> simpleNeighborsResults;
     std::vector<double> attachedNeighborsResults;
     std::vector<double> notNeighborsResults;
 
     const Mesh3D &mesh;
-    const NumericalIntegrator3D* const numIntegrator;
+    NumericalIntegrator3D &numIntegrator;
+
+    error_control_type_enum errorControlType;
+    int meshRefinementLevel;
 };
 
 #endif // EVALUATOR3D_CUH

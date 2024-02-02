@@ -21,7 +21,7 @@ __global__ void kCalculateCellCenter(int n, const Point3 *vertices, const int3 *
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
         const int3 triangle = cells[idx];
-        centers[idx] = (vertices[triangle.x] + vertices[triangle.y] + vertices[triangle.z]) * CONSTANTS::ONE_THIRD;
+        centers[idx] = CONSTANTS::ONE_THIRD * (vertices[triangle.x] + vertices[triangle.y] + vertices[triangle.z]);
     }
 }
 
@@ -74,32 +74,28 @@ __global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNei
 }
 
 Mesh3D::~Mesh3D(){
-    if(verticesNum)
-        free_device(vertices);
+    vertices.free();
 
-    if(cellsNum){
-        free_device(cells);
-        free_device(cellNormals);
-        free_device(cellCenters);
-        free_device(cellMeasures);
-    }
+    cells.free();
+    cellNormals.free();
+    cellCenters.free();
+    cellMeasures.free();
+    
+    quadraturePoints.free();
 
-    if(quadraturePointsNum)
-        free_device(quadraturePoints);
-
-    if(simpleNeighborsNum){
+    if(simpleNeighbors.size){
         free_device(d_simpleNeighborsNum);
-        free_device(simpleNeighbors);
+        simpleNeighbors.free();
     }
 
-    if(attachedNeighborsNum){
+    if(attachedNeighbors.size){
         free_device(d_attachedNeighborsNum);
-        free_device(attachedNeighbors);
+        attachedNeighbors.free();
     }
 
-    if(notNeighborsNum){
+    if(notNeighbors.size){
         free_device(d_notNeighborsNum);
-        free_device(notNeighbors);
+        notNeighbors.free();
     }
 }
 
@@ -122,7 +118,7 @@ bool Mesh3D::loadMeshFromFile(const std::string &filename, double scale)
         for(int i = 0; i < numVertices; ++i){
             Point3 vertex;
             meshFile >> tmp >> vertex.x >> vertex.y >> vertex.z;
-            hostVertices.push_back(vertex * scale);
+            hostVertices.push_back(scale * vertex);
         }
 
         while(!meshFile.eof()){
@@ -145,19 +141,16 @@ bool Mesh3D::loadMeshFromFile(const std::string &filename, double scale)
 
         meshFile.close();
 
-        verticesNum = numVertices;
-        cellsNum = numCells;
+        vertices.allocate(numVertices);
+        cells.allocate(numCells);
+        cellNormals.allocate(numCells);
+        cellCenters.allocate(numCells);
+        cellMeasures.allocate(numCells);
 
-        allocate_device(&vertices, verticesNum);
-        allocate_device(&cells, cellsNum);
-        allocate_device(&cellNormals, cellsNum);
-        allocate_device(&cellCenters, cellsNum);
-        allocate_device(&cellMeasures, cellsNum);
+        copy_h2d(hostVertices.data(), vertices.data, vertices.size);
+        copy_h2d(hostCells.data(), cells.data, cells.size);
 
-        copy_h2d(hostVertices.data(), vertices, verticesNum);
-        copy_h2d(hostCells.data(), cells, cellsNum);
-
-        printf("Loaded mesh with %d vertices and %d cells\n", verticesNum, cellsNum);
+        printf("Loaded mesh with %d vertices and %d cells\n", numVertices, numCells);
 
         return true;
     } else {
@@ -176,18 +169,18 @@ void Mesh3D::prepareMesh(){
 }
 
 void Mesh3D::calculateNormals(){
-    unsigned int blocks = blocksForSize(cellsNum);
-    kCalculateCellNormal<<<blocks, gpuThreads>>>(cellsNum, vertices, cells, cellNormals);
+    unsigned int blocks = blocksForSize(cells.size);
+    kCalculateCellNormal<<<blocks, gpuThreads>>>(cells.size, vertices.data, cells.data, cellNormals.data);
 }
 
 void Mesh3D::calculateCenters(){
-    unsigned int blocks = blocksForSize(cellsNum);
-    kCalculateCellCenter<<<blocks, gpuThreads>>>(cellsNum, vertices, cells, cellCenters);
+    unsigned int blocks = blocksForSize(cells.size);
+    kCalculateCellCenter<<<blocks, gpuThreads>>>(cells.size, vertices.data, cells.data, cellCenters.data);
 }
 
 void Mesh3D::calculateMeasures(){
-    unsigned int blocks = blocksForSize(cellsNum);
-    kCalculateCellMeasure<<<blocks, gpuThreads>>>(cellsNum, vertices, cells, cellMeasures);
+    unsigned int blocks = blocksForSize(cells.size);
+    kCalculateCellMeasure<<<blocks, gpuThreads>>>(cells.size, vertices.data, cells.data, cellMeasures.data);
 }
 
 void Mesh3D::fillNeightborsLists(){
@@ -198,15 +191,15 @@ void Mesh3D::fillNeightborsLists(){
     zero_value_device(d_attachedNeighborsNum, 1);
     zero_value_device(d_notNeighborsNum, 1);
 
-    allocate_device(&simpleNeighbors, cellsNum * CONSTANTS::MAX_SIMPLE_NEIGHBORS_PER_VERTEX / 2);    // number of triangles * (3 neighbors * 3 vertices per triangle) / 2 (discard duplicated pairs)
-    allocate_device(&attachedNeighbors, cellsNum * 3 / 2);  // number of triangles * (3 vertices edges per triangle) / 2 (discard duplicated pairs)
-    allocate_device(&notNeighbors, cellsNum * (cellsNum) / 2);  // all pairs of triangls
+    simpleNeighbors.allocate(cells.size * CONSTANTS::MAX_SIMPLE_NEIGHBORS_PER_VERTEX / 2);    // number of triangles * (3 neighbors * 3 vertices per triangle) / 2 (discard duplicated pairs)
+    attachedNeighbors.allocate(cells.size * 3 / 2);  // number of triangles * (3 vertices edges per triangle) / 2 (discard duplicated pairs)
+    notNeighbors.allocate(cells.size * cells.size / 2);  // all pairs of triangls
 
-    unsigned int blocks = blocksForSize(cellsNum * cellsNum);
-    kDetermineNeighborType<<<blocks, gpuThreads>>>(cellsNum, cells, simpleNeighbors, d_simpleNeighborsNum, attachedNeighbors, d_attachedNeighborsNum, notNeighbors, d_notNeighborsNum);
-    copy_d2h(d_simpleNeighborsNum, &simpleNeighborsNum, 1);
-    copy_d2h(d_attachedNeighborsNum, &attachedNeighborsNum, 1);
-    copy_d2h(d_notNeighborsNum, &notNeighborsNum, 1);
+    unsigned int blocks = blocksForSize(cells.size * cells.size);
+    kDetermineNeighborType<<<blocks, gpuThreads>>>(cells.size, cells.data, simpleNeighbors.data, d_simpleNeighborsNum, attachedNeighbors.data, d_attachedNeighborsNum, notNeighbors.data, d_notNeighborsNum);
+    copy_d2h(d_simpleNeighborsNum, &simpleNeighbors.size, 1);
+    copy_d2h(d_attachedNeighborsNum, &attachedNeighbors.size, 1);
+    copy_d2h(d_notNeighborsNum, &notNeighbors.size, 1);
 
-    printf("Found %d pairs of simple neighbors and %d pairs of attached neighbors, %d pairs are not neighbors\n", simpleNeighborsNum, attachedNeighborsNum, notNeighborsNum);
+    printf("Found %d pairs of simple neighbors and %d pairs of attached neighbors, %d pairs are not neighbors\n", simpleNeighbors.size, attachedNeighbors.size, notNeighbors.size);
 }

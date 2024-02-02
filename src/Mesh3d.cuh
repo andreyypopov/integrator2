@@ -2,6 +2,7 @@
 #define MESH3D_CUH
 
 #include "common/cuda_math.cuh"
+#include "common/device_vector.cuh"
 
 #include <string>
 
@@ -20,29 +21,30 @@ public:
 
     void prepareMesh();
 
-    int getSimpleNeighborsNum() const {
-        return simpleNeighborsNum;
-    }
-
-    const int2 *getSimpleNeighbors() const {
+    const auto &getSimpleNeighbors() const {
         return simpleNeighbors;
     }
 
-    int getAttachedNeighborsNum() const {
-        return attachedNeighborsNum;
-    }
-
-    const int2 *getAttachedNeighbors() const {
+    const auto &getAttachedNeighbors() const {
         return attachedNeighbors;
     }
 
-    int getNotNeighborsNum() const {
-        return notNeighborsNum;
-    }
-
-    const int2 *getNotNeighbors() const {
+    const auto &getNotNeighbors() const {
         return notNeighbors;
     }
+
+    const auto &getVertices() const {
+        return vertices;
+    }
+
+    const auto &getCells() const {
+        return cells;
+    }
+
+    const auto &getCellMeasures() const {
+        return cellMeasures;
+    }
+
 private:
     void calculateNormals();
 
@@ -52,27 +54,21 @@ private:
 
     void fillNeightborsLists();
 
-    int verticesNum = 0;
-    Point3 *vertices;
+    deviceVector<Point3> vertices;
         
-    int cellsNum = 0;
-    int3 *cells;
-    Point3 *cellNormals;
-    Point3 *cellCenters;
-    double *cellMeasures;
+    deviceVector<int3> cells;
+    deviceVector<Point3> cellNormals;
+    deviceVector<Point3> cellCenters;
+    deviceVector<double> cellMeasures;
     
-    int quadraturePointsNum = 0;
-    Point3 *quadraturePoints;
+    deviceVector<Point3> quadraturePoints;
 
-    int simpleNeighborsNum = 0;
-    int attachedNeighborsNum = 0;
-    int notNeighborsNum = 0;
     int *d_simpleNeighborsNum;
     int *d_attachedNeighborsNum;
     int *d_notNeighborsNum;
-    int2 *simpleNeighbors;
-    int2 *attachedNeighbors;
-    int2 *notNeighbors;
+    deviceVector<int2> simpleNeighbors;
+    deviceVector<int2> attachedNeighbors;
+    deviceVector<int2> notNeighbors;
 };
 
 #endif // MESH3D_CUH

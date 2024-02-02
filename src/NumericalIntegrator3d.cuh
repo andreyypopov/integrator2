@@ -6,9 +6,6 @@
 #include "common/constants.h"
 #include "Mesh3d.cuh"
 
-__constant__ Point3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];
-__constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];
-
 struct QuadratureFormula3D
 {
     const std::vector<double2> coordinates;
@@ -203,12 +200,38 @@ class NumericalIntegrator3D
 {
 public:
     NumericalIntegrator3D(const Mesh3D &mesh_, const QuadratureFormula3D &qf_);
+	virtual ~NumericalIntegrator3D();
+
+	void prepareTasksAndRefineWholeMesh(const deviceVector<int2> &simpleNeighborsTasks, const deviceVector<int2> &attachedNeighborsTasks,
+			const deviceVector<int2> &notNeighborsTasks, int refineLevel = 0);
+
+	void gatherResults(deviceVector<double> &simpleNeighborsResults, deviceVector<double> &attachedNeighborsResults,
+			deviceVector<double> &notNeighborsResults) const;
 
 private:
     const int GaussPointsNum;
     const Mesh3D &mesh;
     const QuadratureFormula3D &qf;
 
+    deviceVector<Point3> refinedVertices;
+
+    deviceVector<int3> refinedCells;
+    deviceVector<double> refinedCellMeasures;
+
+	//tasks for refined cells (i,j and index of the original non-refined task)
+    deviceVector<int3> refinedSimpleNeighborsTasks;
+    deviceVector<int3> refinedAttachedNeighborsTasks;
+    deviceVector<int3> refinedNotNeighborsTasks;
+
+	//intermediate results (can be used for comparison of 2 iterations)
+    deviceVector<double> d_simpleNeighborsResults;
+    deviceVector<double> d_attachedNeighborsResults;
+    deviceVector<double> d_notNeighborsResults;
+
+	//buffers for mesh refinement
+	deviceVector<Point3> tempVertices;
+    deviceVector<int3> tempCells;
+    deviceVector<double> tempCellMeasures;
 };
 
 #endif // NUMERICAL_INTEGRATOR_3D_CUH

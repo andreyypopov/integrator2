@@ -1,4 +1,6 @@
 #include "../../src/Mesh3d.cuh"
+#include "../../src/NumericalIntegrator3d.cuh"
+#include "../../src/evaluators/evaluatorJ3DK.cuh"
 
 int main(int argc, char *argv[]){
     if(argc == 1){
@@ -16,6 +18,12 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
 
     mesh.prepareMesh();
+
+    NumericalIntegrator3D numIntegrator(mesh, qf3D13);
+    EvaluatorJ3DK evaluator(mesh,numIntegrator);
+    evaluator.setFixedRefinementLevel(3);
+
+    evaluator.runAllPairs();
 
     return EXIT_SUCCESS;
 }

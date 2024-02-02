@@ -59,9 +59,9 @@ void copy_d2d(const T* src, const T* dst, size_t elements_num, cudaStream_t stre
 }
 
 template<class T>
-void copy_h2const(const T* src, const T* dst, size_t elements_num, cudaStream_t stream = nullptr){
+void copy_h2const(const T* src, const void* dst, size_t elements_num, cudaStream_t stream = nullptr){
     if(elements_num)
-        checkCudaErrors(cudaMemcpyToSymbolAsync((void*)dst, (void*)src, elements_num * sizeof(T), 0, cudaMemcpyHostToDevice, stream));
+        checkCudaErrors(cudaMemcpyToSymbolAsync(dst, (void*)src, elements_num * sizeof(T), 0, cudaMemcpyHostToDevice, stream));
     else
         printf("Zero host-to-constant memory copy requested\n");
 }

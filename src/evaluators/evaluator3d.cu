@@ -15,62 +15,64 @@ __global__ void kAddReversedPairs(int n, int2 *pairs)
     }
 }
 
-Evaluator3D::Evaluator3D(const Mesh3D &mesh_, const NumericalIntegrator3D *const numIntegrator_)
+Evaluator3D::Evaluator3D(const Mesh3D &mesh_, NumericalIntegrator3D &numIntegrator_)
     : mesh(mesh_), numIntegrator(numIntegrator_)
 {
+    errorControlType = error_control_type_enum::automatic_error_control;
 }
 
 Evaluator3D::~Evaluator3D()
 {
-    if(simpleNeighborsTasksNum){
-        free_device(simpleNeighborsTasks);
-        free_device(d_simpleNeighborsResults);
-    }
-
-    if(attachedNeighborsTasksNum){
-        free_device(attachedNeighborsTasks);
-        free_device(d_attachedNeighborsResults);
-    }
-
-    if(notNeighborsTasksNum){
-        free_device(notNeighborsTasks);
-        free_device(d_notNeighborsResults);
-    }
+    simpleNeighborsTasks.free();
+    d_simpleNeighborsResults.free();
+    attachedNeighborsTasks.free();
+    d_attachedNeighborsResults.free();
+    notNeighborsTasks.free();
+    d_notNeighborsResults.free();
 }
 
 void Evaluator3D::runAllPairs()
 {
-    simpleNeighborsTasksNum = 2 * mesh.getSimpleNeighborsNum();
-    attachedNeighborsTasksNum = 2 * mesh.getAttachedNeighborsNum();
-    notNeighborsTasksNum = 2 * mesh.getNotNeighborsNum();
+    int simpleNeighborsTasksNum = 2 * mesh.getSimpleNeighbors().size;
+    int attachedNeighborsTasksNum = 2 * mesh.getAttachedNeighbors().size;
+    int notNeighborsTasksNum = 2 * mesh.getNotNeighbors().size;
 
-    allocate_device(&simpleNeighborsTasks, simpleNeighborsTasksNum);
-    allocate_device(&d_simpleNeighborsResults, simpleNeighborsTasksNum);
-    allocate_device(&attachedNeighborsTasks, attachedNeighborsTasksNum);
-    allocate_device(&d_attachedNeighborsResults, attachedNeighborsTasksNum);
-    allocate_device(&notNeighborsTasks, notNeighborsTasksNum);
-    allocate_device(&d_notNeighborsResults, notNeighborsTasksNum);
+    simpleNeighborsTasks.allocate(simpleNeighborsTasksNum);
+    d_simpleNeighborsResults.allocate(simpleNeighborsTasksNum);
+    attachedNeighborsTasks.allocate(attachedNeighborsTasksNum);
+    d_attachedNeighborsResults.allocate(attachedNeighborsTasksNum);
+    notNeighborsTasks.allocate(notNeighborsTasksNum);
+    d_notNeighborsResults.allocate(notNeighborsTasksNum);
 
     simpleNeighborsResults.resize(simpleNeighborsTasksNum);
     attachedNeighborsResults.resize(attachedNeighborsTasksNum);
     notNeighborsResults.resize(notNeighborsTasksNum);
 
-    copy_d2d(mesh.getSimpleNeighbors(), simpleNeighborsTasks, mesh.getSimpleNeighborsNum());
-    copy_d2d(mesh.getAttachedNeighbors(), attachedNeighborsTasks, mesh.getAttachedNeighborsNum());
-    copy_d2d(mesh.getNotNeighbors(), notNeighborsTasks, mesh.getNotNeighborsNum());
+    copy_d2d(mesh.getSimpleNeighbors().data, simpleNeighborsTasks.data, mesh.getSimpleNeighbors().size);
+    copy_d2d(mesh.getAttachedNeighbors().data, attachedNeighborsTasks.data, mesh.getAttachedNeighbors().size);
+    copy_d2d(mesh.getNotNeighbors().data, notNeighborsTasks.data, mesh.getNotNeighbors().size);
 
     unsigned int blocks;
 
-    blocks = blocksForSize(mesh.getSimpleNeighborsNum());
-    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getSimpleNeighborsNum(), simpleNeighborsTasks);
+    blocks = blocksForSize(mesh.getSimpleNeighbors().size);
+    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getSimpleNeighbors().size, simpleNeighborsTasks.data);
 
-    blocks = blocksForSize(mesh.getAttachedNeighborsNum());
-    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getAttachedNeighborsNum(), attachedNeighborsTasks);
+    blocks = blocksForSize(mesh.getAttachedNeighbors().size);
+    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getAttachedNeighbors().size, attachedNeighborsTasks.data);
 
-    blocks = blocksForSize(mesh.getNotNeighborsNum());
-    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getNotNeighborsNum(), notNeighborsTasks);
+    blocks = blocksForSize(mesh.getNotNeighbors().size);
+    kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getNotNeighbors().size, notNeighborsTasks.data);
     
+    if(errorControlType == error_control_type_enum::fixed_refinement_level)
+        numIntegrator.prepareTasksAndRefineWholeMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks, meshRefinementLevel);
+
     integrateOverSimpleNeighbors();
     integrateOverAttachedNeighbors();
     integrateOverNotNeighbors();
+}
+
+void Evaluator3D::setFixedRefinementLevel(int refinementLevel)
+{
+    errorControlType = error_control_type_enum::fixed_refinement_level;
+    meshRefinementLevel = refinementLevel;
 }

@@ -14,15 +14,19 @@ file(GLOB src_files
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cu
 	${PROJECT_SOURCE_PATH}/Mesh3d.cu
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cu
+	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cu
+	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cu
 	)
 file(GLOB header_files
 	${PROJECT_SOURCE_PATH}/common/constants.h
 	${PROJECT_SOURCE_PATH}/common/cuda_helper.cuh
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cuh
 	${PROJECT_SOURCE_PATH}/common/cuda_memory.cuh
+	${PROJECT_SOURCE_PATH}/common/device_vector.cuh
 	${PROJECT_SOURCE_PATH}/Mesh3d.cuh
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cuh
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cuh
+	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cuh
 	)
 
 
