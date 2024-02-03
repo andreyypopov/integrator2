@@ -73,29 +73,9 @@ __global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNei
 }
 
 Mesh3D::~Mesh3D(){
-    vertices.free();
-
-    cells.free();
-    cellNormals.free();
-    cellCenters.free();
-    cellMeasures.free();
-    
-    quadraturePoints.free();
-
-    if(simpleNeighbors.size){
-        free_device(d_simpleNeighborsNum);
-        simpleNeighbors.free();
-    }
-
-    if(attachedNeighbors.size){
-        free_device(d_attachedNeighborsNum);
-        attachedNeighbors.free();
-    }
-
-    if(notNeighbors.size){
-        free_device(d_notNeighborsNum);
-        notNeighbors.free();
-    }
+    free_device(d_simpleNeighborsNum);
+    free_device(d_attachedNeighborsNum);
+    free_device(d_notNeighborsNum);
 }
 
 bool Mesh3D::loadMeshFromFile(const std::string &filename, double scale)

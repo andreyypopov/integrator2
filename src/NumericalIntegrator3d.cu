@@ -11,10 +11,10 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
         //data of the triangle to be split
-        const int3& triangle = tempCells[idx];
-        const Point3& triA = tempVertices[triangle.x];
-        const Point3& triB = tempVertices[triangle.y];
-        const Point3& triC = tempVertices[triangle.z];
+        const int3 triangle = tempCells[idx];
+        const Point3 triA = tempVertices[triangle.x];
+        const Point3 triB = tempVertices[triangle.y];
+        const Point3 triC = tempVertices[triangle.z];
         const double measure = tempCellMeasures[idx];
         const int originalCellIndex = tempOriginalCells[idx];
 
@@ -52,8 +52,8 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
     int refinedCellId = blockIdx.y * blockDim.y + threadIdx.y;
 
     if(taskId < tasksNum && refinedCellId < refinedCellsNum){
-        const int2 &oldTask = tasks[taskId];
-        const int &originalCell = originalCells[refinedCellId];
+        const int2 oldTask = tasks[taskId];
+        const int originalCell = originalCells[refinedCellId];
 
         if(oldTask.x == originalCell){
             int pos = atomicAdd(counter, 1);
@@ -67,17 +67,23 @@ __global__ void kCopyTasks(int n, int3 *refinedTasks, const int2 *tasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int2 &oldTask = tasks[idx];
+        const int2 oldTask = tasks[idx];
         refinedTasks[idx] = { oldTask.x, oldTask.y, (int)idx };
     }
 }
 
-__global__ void kSumIntegrationResults(int n, double *results, const double *refinedResults, const int3 *refinedTasks)
+__global__ void kSumIntegrationResults(int n, double4 *results, const double4 *refinedResults, const int3 *refinedTasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int3 &task = refinedTasks[idx];
-        atomicAdd(results + task.z, refinedResults[idx]);
+        const int3 task = refinedTasks[idx];
+        const double4 refinedResult = refinedResults[idx];
+        double *originalResult = (double*)(results + task.z);
+
+        atomicAdd(originalResult + 0, refinedResult.x);
+        atomicAdd(originalResult + 1, refinedResult.y);
+        atomicAdd(originalResult + 2, refinedResult.z);
+        atomicAdd(originalResult + 3, refinedResult.w);
     }
 }
 
@@ -105,22 +111,7 @@ NumericalIntegrator3D::NumericalIntegrator3D(const Mesh3D &mesh_, const Quadratu
 
 NumericalIntegrator3D::~NumericalIntegrator3D()
 {
-    refinedVertices.free();
 
-    refinedCells.free();
-    refinedCellMeasures.free();
-
-    refinedSimpleNeighborsTasks.free();
-    refinedAttachedNeighborsTasks.free();
-    refinedNotNeighborsTasks.free();
-
-    d_simpleNeighborsResults.free();
-    d_attachedNeighborsResults.free();
-    d_notNeighborsResults.free();
-
-	tempVertices.free();
-    tempCells.free();
-    tempCellMeasures.free();
 }
 
 void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<int2> &simpleNeighborsTasks, const deviceVector<int2> &attachedNeighborsTasks, const deviceVector<int2> &notNeighborsTasks, int refineLevel)
@@ -274,26 +265,37 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
     printf("Refined mesh contains %d vertices and %d cells. Number of tasks: simple neighbors - %d, attached neighbors - %d, non-neighbors - %d\n",
             verticesCellsNum.x, verticesCellsNum.y, refinedSimpleNeighborsTasks.size, refinedAttachedNeighborsTasks.size, refinedNotNeighborsTasks.size);
 
-    originalCells.free();
-    tempOriginalCells.free();
     free_device(refinedVerticesCellsNum);
     free_device(taskCount);
 }
 
-void NumericalIntegrator3D::gatherResults(deviceVector<double> &simpleNeighborsResults, deviceVector<double> &attachedNeighborsResults, deviceVector<double> &notNeighborsResults) const
+void NumericalIntegrator3D::gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const
 {
-    if(simpleNeighborsResults.size){
-        int blocks = blocksForSize(refinedSimpleNeighborsTasks.size);
-        kSumIntegrationResults<<<blocks, gpuThreads>>>(refinedSimpleNeighborsTasks.size, simpleNeighborsResults.data, d_simpleNeighborsResults.data, refinedSimpleNeighborsTasks.data);
+    int3 *refinedTasks;
+    int refinedTasksSize;
+    double4 *refinedResults;
+    
+    switch (neighborType)
+    {
+    case neighbour_type_enum::simple_neighbors:
+        refinedTasks = refinedSimpleNeighborsTasks.data;
+        refinedTasksSize = refinedSimpleNeighborsTasks.size;
+        refinedResults = d_simpleNeighborsResults.data;
+        break;
+    case neighbour_type_enum::attached_neighbors:
+        refinedTasks = refinedAttachedNeighborsTasks.data;
+        refinedTasksSize = refinedAttachedNeighborsTasks.size;
+        refinedResults = d_attachedNeighborsResults.data;
+        break;
+    case neighbour_type_enum::not_neighbors:
+        refinedTasks = refinedNotNeighborsTasks.data;
+        refinedTasksSize = refinedNotNeighborsTasks.size;
+        refinedResults = d_notNeighborsResults.data;
+        break;
     }
 
-    if(attachedNeighborsResults.size){
-        int blocks = blocksForSize(refinedAttachedNeighborsTasks.size);
-        kSumIntegrationResults<<<blocks, gpuThreads>>>(refinedAttachedNeighborsTasks.size, attachedNeighborsResults.data, d_attachedNeighborsResults.data, refinedAttachedNeighborsTasks.data);
-    }
-
-    if(notNeighborsResults.size){
-        int blocks = blocksForSize(refinedNotNeighborsTasks.size);
-        kSumIntegrationResults<<<blocks, gpuThreads>>>(refinedNotNeighborsTasks.size, notNeighborsResults.data, d_notNeighborsResults.data, refinedNotNeighborsTasks.data);
+    if(results.size){
+        int blocks = blocksForSize(refinedTasksSize);
+        kSumIntegrationResults<<<blocks, gpuThreads>>>(refinedTasksSize, results.data, refinedResults, refinedTasks);
     }
 }

@@ -1,5 +1,27 @@
 #include "evaluatorJ3DK.cuh"
 
+__global__ void kIntegrateSingularPartAttached(int n, double4 *results, const int2 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int2 task = tasks[idx];
+
+        const double4 singularThetaPsi = integrateSingularPartAttached(task.x, task.y, vertices, cells, normals, measures);
+        results[idx] = singularThetaPsi;
+    }
+}
+
+__global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int2 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int2 task = tasks[idx];
+
+        const double4 singularThetaPsi = integrateSingularPartSimple(task.x, task.y, vertices, cells, normals, measures);
+        results[idx] = singularThetaPsi;
+    }
+}
+
 __device__ double4 thetaPsi(const Point3 &pt, const Point3 *vertices, const int3 &triangle)
 {
     double4 res;
@@ -86,7 +108,7 @@ __device__ double4 singularPartAttached(const Point3 &pt, int i, int j, const Po
     return res;
 }
 
-__device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Point3 *vertices, const Point3 *normals, const int3 *cells, const double *measures)
+__device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     double4 res;
 
@@ -274,23 +296,23 @@ __device__ double2 q_thetaPsi_cont(double2 sinCosXi, double mu, double2 sinCosMu
     return res;
 }
 
-__device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *vertices, const Point3 *normals, const int3 *cells, const double *measures)
+__device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     double4 res;
 
-    const int3& triangleI = cells[i];
-    const int3& triangleJ = cells[j];
+    const int3 triangleI = cells[i];
+    const int3 triangleJ = cells[j];
 
     const int2 shifts = shiftsForAttachedNeighbors(triangleI, triangleJ);
     const int3 shiftedTriangleI = rotateLeft(triangleI, shifts.x);
     const int3 shiftedTriangleJ = rotateLeft(triangleJ, shifts.y);
 
-    const Point3& triIA = vertices[shiftedTriangleI.x];
-    const Point3& triIB = vertices[shiftedTriangleI.y];
-    const Point3& triIC = vertices[shiftedTriangleI.z];
-    const Point3& triJA = vertices[shiftedTriangleJ.x];
-    const Point3& triJB = vertices[shiftedTriangleJ.y];
-    const Point3& triJC = vertices[shiftedTriangleJ.z];
+    const Point3 triIA = vertices[shiftedTriangleI.x];
+    const Point3 triIB = vertices[shiftedTriangleI.y];
+    const Point3 triIC = vertices[shiftedTriangleI.z];
+    const Point3 triJA = vertices[shiftedTriangleJ.x];
+    const Point3 triJB = vertices[shiftedTriangleJ.y];
+    const Point3 triJC = vertices[shiftedTriangleJ.z];
 
     const Point3 taua = normalize(triJA - triJC);
     const Point3 taub = normalize(triJB - triJA);
@@ -303,8 +325,8 @@ __device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *ver
 
     const double nu = CONSTANTS::PI - alpha - beta;
 
-    const Point3& normalI = normals[i];
-    const Point3& normalJ = normals[j];
+    const Point3 normalI = normals[i];
+    const Point3 normalJ = normals[j];
 
     const double xi = atan2(dot(cross(normalI, normalJ), tauc), dot(normalI, normalJ));
     
@@ -322,6 +344,7 @@ __device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *ver
     const double cosSigma = -(sinCosAlpha.y * sinCosDelta.y + sinCosXi.y * sinCosAlpha.x * sinCosDelta.x);
 	const double cosMu = -(sinCosBeta.y * sinCosGamma.y + sinCosXi.y * sinCosBeta.x * sinCosGamma.x);
 	const double cosLambda = -(sinCosAlpha.y * sinCosGamma.y - sinCosXi.y * sinCosAlpha.x * sinCosGamma.x);
+    const double cosTheta = -(sinCosBeta.y * sinCosDelta.y - sinCosXi.y * sinCosBeta.x * sinCosDelta.x);
 
 	const double q_alpha_beta = sinCosNu.x * log(tan(0.5 * alpha) * tan(0.5 * nu)) / sinCosBeta.x + sinCosNu.x * log(tan(0.5 * beta) * tan(0.5 * nu)) / sinCosAlpha.x
 		                + log(tan(0.5 * alpha) * tan(0.5 * beta));
@@ -336,37 +359,37 @@ __device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *ver
 	if ((fabs(xi) < CONSTANTS::EPS_ZERO) && (fabs(alpha - delta) < CONSTANTS::EPS_ZERO))
 		qTP_B = q_thetaPsi_zero(sinCosAlpha, sinCosNu, sinCosBeta.x);
 	else
-		qTP_B = q_thetaPsi(sinCosBeta, sinCosAlpha, sinCosDelta, sinCosNu, sinCosXi, cosSigma, cosLambda);
+		qTP_B = q_thetaPsi(sinCosBeta, sinCosAlpha, sinCosDelta, sinCosNu, sinCosXi, cosSigma, cosTheta);
 
     res = assign_vector_part(measures[i] * (qTP_A.y * taub + qTP_B.y * taua - q_alpha_beta * tauc));
-    res.w = measures[i] * (qTP_A.x + qTP_B.y);
+    res.w = measures[i] * (qTP_A.x + qTP_B.x);
 
     return res;
 }
 
-__device__ double4 integrateSingularPartSimple(int i, int j, const Point3 *vertices, const Point3 *normals, const int3 *cells, const double *measures)
+__device__ double4 integrateSingularPartSimple(int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     double4 res;
 
-    const int3& triangleI = cells[i];
-    const int3& triangleJ = cells[j];
+    const int3 triangleI = cells[i];
+    const int3 triangleJ = cells[j];
 
     const int2 shifts = shiftsForSimpleNeighbors(triangleI, triangleJ);
     const int3 shiftedTriangleI = rotateLeft(triangleI, shifts.x);
     const int3 shiftedTriangleJ = rotateLeft(triangleJ, shifts.y);
 
-    const Point3& triIA = vertices[shiftedTriangleI.x];
-    const Point3& triIB = vertices[shiftedTriangleI.y];
-    const Point3& triIC = vertices[shiftedTriangleI.z];
-    const Point3& triJA = vertices[shiftedTriangleJ.x];
-    const Point3& triJB = vertices[shiftedTriangleJ.y];
-    const Point3& triJC = vertices[shiftedTriangleJ.z];
+    const Point3 triIA = vertices[shiftedTriangleI.x];
+    const Point3 triIB = vertices[shiftedTriangleI.y];
+    const Point3 triIC = vertices[shiftedTriangleI.z];
+    const Point3 triJA = vertices[shiftedTriangleJ.x];
+    const Point3 triJB = vertices[shiftedTriangleJ.y];
+    const Point3 triJC = vertices[shiftedTriangleJ.z];
 
     const Point3 taua = normalize(triJA - triJC);
     const Point3 taub = normalize(triJB - triJA);
 
-    const Point3& normalI = normals[i];
-    const Point3& normalJ = normals[j];
+    const Point3 normalI = normals[i];
+    const Point3 normalJ = normals[j];
 
     Point3 e = cross(normalI, normalJ);
     if(vector_length2(e) < CONSTANTS::EPS_ZERO2){
@@ -510,7 +533,7 @@ __device__ int3 rotateLeft(const int3 &triangle, int shift)
 
     for(int i = 0; i < 3; ++i){
         int oldIndex = i + shift;
-        if(oldIndex > 3)
+        if(oldIndex >= 3)
             oldIndex -= 3;
 
         *(&res.x + i) = *(&triangle.x + oldIndex);
@@ -521,10 +544,18 @@ __device__ int3 rotateLeft(const int3 &triangle, int shift)
 
 void EvaluatorJ3DK::integrateOverSimpleNeighbors()
 {
+    //1. Integrate singular part
+    unsigned int blocks = blocksForSize(simpleNeighborsTasks.size);
+    kIntegrateSingularPartSimple<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, 
+                        mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 }
 
 void EvaluatorJ3DK::integrateOverAttachedNeighbors()
 {
+    //1. Integrate singular part
+    unsigned int blocks = blocksForSize(attachedNeighborsTasks.size);
+    kIntegrateSingularPartAttached<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, d_attachedNeighborsIntegrals.data, attachedNeighborsTasks.data, 
+                        mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 }
 
 void EvaluatorJ3DK::integrateOverNotNeighbors()

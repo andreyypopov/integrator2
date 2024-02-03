@@ -205,8 +205,19 @@ public:
 	void prepareTasksAndRefineWholeMesh(const deviceVector<int2> &simpleNeighborsTasks, const deviceVector<int2> &attachedNeighborsTasks,
 			const deviceVector<int2> &notNeighborsTasks, int refineLevel = 0);
 
-	void gatherResults(deviceVector<double> &simpleNeighborsResults, deviceVector<double> &attachedNeighborsResults,
-			deviceVector<double> &notNeighborsResults) const;
+	void gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const;
+
+    const auto &getRefinedSimpleNeighborsTasks() const {
+        return refinedSimpleNeighborsTasks;
+    }
+
+    const auto &getRefinedAttachedNeighborsTasks() const {
+        return refinedAttachedNeighborsTasks;
+    }
+
+    const auto &getRefinedNotNeighborsTasks() const {
+        return refinedNotNeighborsTasks;
+    }
 
     const auto &getRefinedVertices() const {
         return refinedVertices;
@@ -231,10 +242,10 @@ private:
     deviceVector<int3> refinedAttachedNeighborsTasks;
     deviceVector<int3> refinedNotNeighborsTasks;
 
-	//intermediate results (can be used for comparison of 2 iterations)
-    deviceVector<double> d_simpleNeighborsResults;
-    deviceVector<double> d_attachedNeighborsResults;
-    deviceVector<double> d_notNeighborsResults;
+    //intermediate results of numerical integration (can be used for comparison of 2 iterations)
+    deviceVector<double4> d_simpleNeighborsResults;
+    deviceVector<double4> d_attachedNeighborsResults;
+    deviceVector<double4> d_notNeighborsResults;
 
 	//buffers for mesh refinement
 	deviceVector<Point3> tempVertices;

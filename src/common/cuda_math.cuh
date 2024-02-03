@@ -41,7 +41,7 @@ __host__ __device__ inline Point3 operator*(double a, const Point3 &v){
 }
 
 __host__ __device__ inline double dot(const Point3 &v1, const Point3 &v2){
-    return v1.x * v2.x + v1.x * v2.y + v1.z * v2.z;
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 __host__ __device__ inline Point3 cross(const Point3 &v1, const Point3 &v2){

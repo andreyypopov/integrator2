@@ -30,13 +30,19 @@ protected:
     deviceVector<int2> attachedNeighborsTasks;
     deviceVector<int2> notNeighborsTasks;
 
-    deviceVector<double> d_simpleNeighborsResults;
-    deviceVector<double> d_attachedNeighborsResults;
-    deviceVector<double> d_notNeighborsResults;
+    //separate values of theta and psi obtained after integration over Ki
+    //of both regular and singular parts
+    deviceVector<double4> d_simpleNeighborsIntegrals;
+    deviceVector<double4> d_attachedNeighborsIntegrals;
+    deviceVector<double4> d_notNeighborsIntegrals;
 
-    std::vector<double> simpleNeighborsResults;
-    std::vector<double> attachedNeighborsResults;
-    std::vector<double> notNeighborsResults;
+    deviceVector<Point3> d_simpleNeighborsResults;
+    deviceVector<Point3> d_attachedNeighborsResults;
+    deviceVector<Point3> d_notNeighborsResults;
+
+    std::vector<Point3> simpleNeighborsResults;
+    std::vector<Point3> attachedNeighborsResults;
+    std::vector<Point3> notNeighborsResults;
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;

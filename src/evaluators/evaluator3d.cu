@@ -23,12 +23,7 @@ Evaluator3D::Evaluator3D(const Mesh3D &mesh_, NumericalIntegrator3D &numIntegrat
 
 Evaluator3D::~Evaluator3D()
 {
-    simpleNeighborsTasks.free();
-    d_simpleNeighborsResults.free();
-    attachedNeighborsTasks.free();
-    d_attachedNeighborsResults.free();
-    notNeighborsTasks.free();
-    d_notNeighborsResults.free();
+
 }
 
 void Evaluator3D::runAllPairs()
@@ -39,10 +34,13 @@ void Evaluator3D::runAllPairs()
 
     simpleNeighborsTasks.allocate(simpleNeighborsTasksNum);
     d_simpleNeighborsResults.allocate(simpleNeighborsTasksNum);
+    d_simpleNeighborsIntegrals.allocate(simpleNeighborsTasksNum);
     attachedNeighborsTasks.allocate(attachedNeighborsTasksNum);
     d_attachedNeighborsResults.allocate(attachedNeighborsTasksNum);
+    d_attachedNeighborsIntegrals.allocate(attachedNeighborsTasksNum);
     notNeighborsTasks.allocate(notNeighborsTasksNum);
     d_notNeighborsResults.allocate(notNeighborsTasksNum);
+    d_notNeighborsIntegrals.allocate(notNeighborsTasksNum);
 
     simpleNeighborsResults.resize(simpleNeighborsTasksNum);
     attachedNeighborsResults.resize(attachedNeighborsTasksNum);

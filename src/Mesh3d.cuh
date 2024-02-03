@@ -42,6 +42,10 @@ public:
         return cells;
     }
 
+    const auto &getCellNormals() const {
+        return cellNormals;
+    }
+
     const auto &getCellMeasures() const {
         return cellMeasures;
     }
@@ -62,11 +66,9 @@ private:
     deviceVector<Point3> cellCenters;
     deviceVector<double> cellMeasures;
     
-    deviceVector<Point3> quadraturePoints;
-
-    int *d_simpleNeighborsNum;
-    int *d_attachedNeighborsNum;
-    int *d_notNeighborsNum;
+    int *d_simpleNeighborsNum = nullptr;
+    int *d_attachedNeighborsNum = nullptr;
+    int *d_notNeighborsNum = nullptr;
     deviceVector<int2> simpleNeighbors;
     deviceVector<int2> attachedNeighbors;
     deviceVector<int2> notNeighbors;
