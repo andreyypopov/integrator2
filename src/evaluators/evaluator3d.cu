@@ -2,6 +2,8 @@
 
 #include "../common/cuda_memory.cuh"
 
+#include <fstream>
+
 __global__ void kAddReversedPairs(int n, int2 *pairs)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -42,10 +44,6 @@ void Evaluator3D::runAllPairs()
     d_notNeighborsResults.allocate(notNeighborsTasksNum);
     d_notNeighborsIntegrals.allocate(notNeighborsTasksNum);
 
-    simpleNeighborsResults.resize(simpleNeighborsTasksNum);
-    attachedNeighborsResults.resize(attachedNeighborsTasksNum);
-    notNeighborsResults.resize(notNeighborsTasksNum);
-
     copy_d2d(mesh.getSimpleNeighbors().data, simpleNeighborsTasks.data, mesh.getSimpleNeighbors().size);
     copy_d2d(mesh.getAttachedNeighbors().data, attachedNeighborsTasks.data, mesh.getAttachedNeighbors().size);
     copy_d2d(mesh.getNotNeighbors().data, notNeighborsTasks.data, mesh.getNotNeighbors().size);
@@ -73,4 +71,57 @@ void Evaluator3D::setFixedRefinementLevel(int refinementLevel)
 {
     errorControlType = error_control_type_enum::fixed_refinement_level;
     meshRefinementLevel = refinementLevel;
+}
+
+bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
+{
+    int2 *tasks;
+    int tasksSize;
+    Point3 *deviceResults;
+    std::string filename;
+
+    switch (neighborType)
+    {
+    case neighbour_type_enum::simple_neighbors:
+        tasks = simpleNeighborsTasks.data;
+        tasksSize = simpleNeighborsTasks.size;
+        deviceResults = d_simpleNeighborsResults.data;
+        filename = "SimpleNeighbors.dat";
+        break;
+    case neighbour_type_enum::attached_neighbors:
+        tasks = attachedNeighborsTasks.data;
+        tasksSize = attachedNeighborsTasks.size;
+        deviceResults = d_attachedNeighborsResults.data;
+        filename = "AttachedNeighbors.dat";
+        break;
+    case neighbour_type_enum::not_neighbors:
+        tasks = notNeighborsTasks.data;
+        tasksSize = notNeighborsTasks.size;
+        deviceResults = d_notNeighborsResults.data;
+        filename = "NotNeighbors.dat";
+        break;
+    }
+
+    std::vector<Point3> hostResults(tasksSize);
+    std::vector<int2> hostTasks(tasksSize);
+
+    copy_d2h(deviceResults, hostResults.data(), tasksSize);
+    copy_d2h(tasks, hostTasks.data(), tasksSize);
+
+    std::ofstream resultsFile(filename.c_str());
+
+    if(resultsFile.is_open()){
+        for(int i = 0; i < tasksSize; ++i)
+            resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
+                    << hostResults[i].x << ", " << hostResults[i].y << ", " << hostResults[i].z << "]" << std::endl;
+
+        resultsFile.close();
+
+        printf("%d results saved to file %s\n", tasksSize, filename.c_str());
+
+        return true;
+    } else {
+        printf("Error while opening the file\n");
+        return false;
+    }
 }

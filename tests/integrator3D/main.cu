@@ -35,6 +35,8 @@ int main(int argc, char *argv[]){
 
     evaluator.runAllPairs();
 
+    evaluator.outputResultsToFile(neighbour_type_enum::not_neighbors);
+
     vertices.resize(numIntegrator.getRefinedVertices().size);
     copy_d2h(numIntegrator.getRefinedVertices().data, vertices.data(), numIntegrator.getRefinedVertices().size);
     cells.resize(numIntegrator.getRefinedCells().size);

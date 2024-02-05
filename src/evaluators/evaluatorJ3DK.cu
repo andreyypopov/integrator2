@@ -22,13 +22,46 @@ __global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int2
     }
 }
 
+__global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *refinedTasks, const Point3 *vertices, const int3 *cells,
+            const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int3 task = refinedTasks[idx];
+        const int3 triangleI = refinedCells[task.x];
+        const int3 triangleJ = cells[task.y];
+
+        Point3 quadraturePoints[CONSTANTS::MAX_GAUSS_POINTS];
+        double4 functionValues[CONSTANTS::MAX_GAUSS_POINTS];
+
+        calculateQuadraturePoints(quadraturePoints, refinedVertices, triangleI);
+        for(int i = 0; i < GaussPointsNum; ++i)
+            functionValues[i] = thetaPsi(quadraturePoints[i], vertices, triangleJ);
+
+        const double4 res = integrate4D(functionValues);
+        integrals[idx] = refinedCellMeasures[task.x] * res;
+    }
+}
+
+__global__ void kFinalizeNotNeighborsResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int2 task = tasks[idx];
+        const double4 integral = integrals[idx];
+        const Point3 normal = cellNormals[task.y];
+
+        results[idx] = CONSTANTS::RECIPROCAL_FOUR_PI * (integral.w * normal + cross(extract_vector_part(integral), normal));
+    }
+}
+
 __device__ double4 thetaPsi(const Point3 &pt, const Point3 *vertices, const int3 &triangle)
 {
     double4 res;
 
-    const Point3& triA = vertices[triangle.x];
-    const Point3& triB = vertices[triangle.y];
-    const Point3& triC = vertices[triangle.z];
+    const Point3 triA = vertices[triangle.x];
+    const Point3 triB = vertices[triangle.y];
+    const Point3 triC = vertices[triangle.z];
 
     Point3 ova = pt - triA;
     Point3 ovb = pt - triB;
@@ -75,15 +108,15 @@ __device__ double4 singularPartAttached(const Point3 &pt, int i, int j, const Po
 {
     double4 res;
 
-    const int3& triangleI = cells[i];
-    const int3& triangleJ = cells[j];
+    const int3 triangleI = cells[i];
+    const int3 triangleJ = cells[j];
 
     const int2 shifts = shiftsForAttachedNeighbors(triangleI, triangleJ);
     const int3 shiftedTriangleJ = rotateLeft(triangleJ, shifts.y);
 
-    const Point3& triJA = vertices[shiftedTriangleJ.x];
-    const Point3& triJB = vertices[shiftedTriangleJ.y];
-    const Point3& triJC = vertices[shiftedTriangleJ.z];
+    const Point3 triJA = vertices[shiftedTriangleJ.x];
+    const Point3 triJB = vertices[shiftedTriangleJ.y];
+    const Point3 triJC = vertices[shiftedTriangleJ.z];
 
     Point3 va = pt - triJB;
     Point3 vb = pt - triJC;
@@ -112,15 +145,15 @@ __device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Poin
 {
     double4 res;
 
-    const int3& triangleI = cells[i];
-    const int3& triangleJ = cells[j];
+    const int3 triangleI = cells[i];
+    const int3 triangleJ = cells[j];
 
     const int2 shifts = shiftsForSimpleNeighbors(triangleI, triangleJ);
     const int3 shiftedTriangleJ = rotateLeft(triangleJ, shifts.y);
 
-    const Point3& triJA = vertices[shiftedTriangleJ.x];
-    const Point3& triJB = vertices[shiftedTriangleJ.y];
-    const Point3& triJC = vertices[shiftedTriangleJ.z];
+    const Point3 triJA = vertices[shiftedTriangleJ.x];
+    const Point3 triJB = vertices[shiftedTriangleJ.y];
+    const Point3 triJC = vertices[shiftedTriangleJ.z];
 
 	Point3 ovc = pt - triJA;
 	const double lvc = vector_length(ovc);
@@ -129,8 +162,8 @@ __device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Poin
     const Point3 taua = normalize(triJA - triJC);
     const Point3 taub = normalize(triJB - triJA);
 
-    const Point3& normalI = normals[i];
-    const Point3& normalJ = normals[j];
+    const Point3 normalI = normals[i];
+    const Point3 normalJ = normals[j];
 
     Point3 e = cross(normalI, normalJ);
     if(vector_length2(e) < CONSTANTS::EPS_ZERO2)
@@ -560,4 +593,17 @@ void EvaluatorJ3DK::integrateOverAttachedNeighbors()
 
 void EvaluatorJ3DK::integrateOverNotNeighbors()
 {
+    //1. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
+    const auto &refinedTasks = numIntegrator.getRefinedNotNeighborsTasks();
+    unsigned int blocks = blocksForSize(refinedTasks.size);
+    kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getNotNeighborsResults().data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
+            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+
+    //2. Sum up the results of numerical integration for all refined triangles i
+    zero_value_device(d_notNeighborsIntegrals.data, d_notNeighborsIntegrals.size);
+    numIntegrator.gatherResults(d_notNeighborsIntegrals, neighbour_type_enum::not_neighbors);
+
+    //3. Convert results from the form (psi, theta) into an array of Point3
+    blocks = blocksForSize(notNeighborsTasks.size);
+    kFinalizeNotNeighborsResults<<<blocks, gpuThreads>>>(notNeighborsTasks.size, d_notNeighborsResults.data, d_notNeighborsIntegrals.data, notNeighborsTasks.data, mesh.getCellNormals().data);
 }

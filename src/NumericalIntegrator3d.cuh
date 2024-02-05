@@ -196,6 +196,10 @@ const QuadratureFormula3D qf3D13{
 	7
 };
 
+__device__ double4 integrate4D(const double4 *functionValues);
+
+__device__ void calculateQuadraturePoints(Point3 *quadraturePoints, const Point3 *vertices, const int3 &triangle);
+
 class NumericalIntegrator3D
 {
 public:
@@ -207,16 +211,32 @@ public:
 
 	void gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const;
 
+	int getGaussPointsNumber() const {
+		return GaussPointsNum;
+	}
+
     const auto &getRefinedSimpleNeighborsTasks() const {
         return refinedSimpleNeighborsTasks;
+    }
+
+    const auto &getSimpleNeighborsResults() const {
+        return d_simpleNeighborsResults;
     }
 
     const auto &getRefinedAttachedNeighborsTasks() const {
         return refinedAttachedNeighborsTasks;
     }
 
+    const auto &getAttachedNeighborsResults() const {
+        return d_attachedNeighborsResults;
+    }
+
     const auto &getRefinedNotNeighborsTasks() const {
         return refinedNotNeighborsTasks;
+    }
+
+    const auto &getNotNeighborsResults() const {
+        return d_notNeighborsResults;
     }
 
     const auto &getRefinedVertices() const {
@@ -225,6 +245,10 @@ public:
 
     const auto &getRefinedCells() const {
         return refinedCells;
+    }
+
+	const auto &getRefinedCellMeasures() const {
+        return refinedCellMeasures;
     }
 
 private:

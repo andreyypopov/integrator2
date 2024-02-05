@@ -25,6 +25,8 @@ public:
 
     void setFixedRefinementLevel(int refinementLevel = 0);
 
+    bool outputResultsToFile(neighbour_type_enum neighborType) const;
+
 protected:
     deviceVector<int2> simpleNeighborsTasks;
     deviceVector<int2> attachedNeighborsTasks;
@@ -39,10 +41,6 @@ protected:
     deviceVector<Point3> d_simpleNeighborsResults;
     deviceVector<Point3> d_attachedNeighborsResults;
     deviceVector<Point3> d_notNeighborsResults;
-
-    std::vector<Point3> simpleNeighborsResults;
-    std::vector<Point3> attachedNeighborsResults;
-    std::vector<Point3> notNeighborsResults;
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;

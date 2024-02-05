@@ -4,6 +4,7 @@
 
 __constant__ Point3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];
 __constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];
+__constant__ int    c_GaussPointsNumber;
 
 __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, double *refinedCellMeasures, int *originalCells, int2 *refinedVerticesCellsNum,
         const Point3 *tempVertices, const int3 *tempCells, const double *tempCellMeasures, const int *tempOriginalCells)
@@ -107,6 +108,7 @@ NumericalIntegrator3D::NumericalIntegrator3D(const Mesh3D &mesh_, const Quadratu
 
     copy_h2const(lCoordinates.data(), c_GaussPointsCoordinates, GaussPointsNum);
     copy_h2const(qf.weights.data(), c_GaussPointsWeights, GaussPointsNum);
+    copy_h2const(&GaussPointsNum, &c_GaussPointsNumber, 1);
 }
 
 NumericalIntegrator3D::~NumericalIntegrator3D()
@@ -297,5 +299,32 @@ void NumericalIntegrator3D::gatherResults(deviceVector<double4> &results, neighb
     if(results.size){
         int blocks = blocksForSize(refinedTasksSize);
         kSumIntegrationResults<<<blocks, gpuThreads>>>(refinedTasksSize, results.data, refinedResults, refinedTasks);
+    }
+}
+
+__device__ double4 integrate4D(const double4 *functionValues)
+{
+    double4 res = { 0.0, 0.0, 0.0, 0.0 };
+    for(int i = 0; i < c_GaussPointsNumber; ++i)
+        res += c_GaussPointsWeights[i] * functionValues[i];
+    
+    return res;
+}
+
+__device__ void calculateQuadraturePoints(Point3 *quadraturePoints, const Point3 *vertices, const int3 &triangle)
+{
+    Point3 triangleVertices[3];
+    triangleVertices[0] = vertices[triangle.x];
+    triangleVertices[1] = vertices[triangle.y];
+    triangleVertices[2] = vertices[triangle.z];
+
+    for(int i = 0; i < c_GaussPointsNumber; ++i){
+        Point3 res = { 0.0, 0.0, 0.0 };
+        const Point3 Lcoordinates = c_GaussPointsCoordinates[i];
+
+        for(int j = 0; j < 3; ++j)
+            res += *(&Lcoordinates.x + j) * triangleVertices[j];
+
+        quadraturePoints[i] = res;
     }
 }
