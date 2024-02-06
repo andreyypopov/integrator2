@@ -35,6 +35,8 @@ int main(int argc, char *argv[]){
 
     evaluator.runAllPairs();
 
+    evaluator.outputResultsToFile(neighbour_type_enum::simple_neighbors);
+    evaluator.outputResultsToFile(neighbour_type_enum::attached_neighbors);
     evaluator.outputResultsToFile(neighbour_type_enum::not_neighbors);
 
     vertices.resize(numIntegrator.getRefinedVertices().size);

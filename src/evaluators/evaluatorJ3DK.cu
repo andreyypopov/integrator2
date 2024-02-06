@@ -22,6 +22,52 @@ __global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int2
     }
 }
 
+__global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int3 *refinedTasks, const int2 *originalTasks,
+            const Point3 *vertices, const int3 *cells, const Point3 *cellNormals, const double *cellMeasures,
+            const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int3 task = refinedTasks[idx];
+        const int2 originalTask = originalTasks[task.z];
+        const int3 triangleI = refinedCells[task.x];
+        const int3 triangleJ = cells[task.y];
+
+        Point3 quadraturePoints[CONSTANTS::MAX_GAUSS_POINTS];
+        double4 functionValues[CONSTANTS::MAX_GAUSS_POINTS];
+
+        calculateQuadraturePoints(quadraturePoints, refinedVertices, triangleI);
+        for(int i = 0; i < GaussPointsNum; ++i)
+            functionValues[i] = thetaPsi(quadraturePoints[i], vertices, triangleJ) - singularPartSimple(quadraturePoints[i], originalTask.x, task.y, vertices, cells, cellNormals, cellMeasures);
+
+        const double4 res = integrate4D(functionValues);
+        integrals[idx] = refinedCellMeasures[task.x] * res;
+    }
+}
+
+__global__ void kIntegrateRegularPartAttached(int n, double4 *integrals, const int3 *refinedTasks, const int2 *originalTasks,
+            const Point3 *vertices, const int3 *cells, const Point3 *cellNormals,
+            const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int3 task = refinedTasks[idx];
+        const int2 originalTask = originalTasks[task.z];
+        const int3 triangleI = refinedCells[task.x];
+        const int3 triangleJ = cells[task.y];
+
+        Point3 quadraturePoints[CONSTANTS::MAX_GAUSS_POINTS];
+        double4 functionValues[CONSTANTS::MAX_GAUSS_POINTS];
+
+        calculateQuadraturePoints(quadraturePoints, refinedVertices, triangleI);
+        for(int i = 0; i < GaussPointsNum; ++i)
+            functionValues[i] = thetaPsi(quadraturePoints[i], vertices, triangleJ) - singularPartAttached(quadraturePoints[i], originalTask.x, task.y, vertices, cells);
+
+        const double4 res = integrate4D(functionValues);
+        integrals[idx] = refinedCellMeasures[task.x] * res;
+    }
+}
+
 __global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *refinedTasks, const Point3 *vertices, const int3 *cells,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
 {
@@ -43,7 +89,26 @@ __global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *re
     }
 }
 
-__global__ void kFinalizeNotNeighborsResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals)
+__global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals, const double *cellMeasures)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const int2 task = tasks[idx];
+        const double4 integral = integrals[idx];
+        const Point3 normal = cellNormals[task.y];
+
+        int p = 0;
+        const double refTheta = CONSTANTS::TWO_PI * cellMeasures[task.y];
+        if(integral.w > refTheta)
+            p = -((int)trunc((integral.w - refTheta) / (2.0 * refTheta)) + 1);
+        else if(integral.w < -refTheta)
+            p = ((int)trunc((-refTheta - integral.w) / (2.0 * refTheta)) + 1);
+
+        results[idx] = CONSTANTS::RECIPROCAL_FOUR_PI * ((integral.w + 2.0 * p * refTheta) * normal + cross(extract_vector_part(integral), normal));
+    }
+}
+
+__global__ void kFinalizeNonSimpleResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
@@ -129,7 +194,7 @@ __device__ double4 singularPartAttached(const Point3 &pt, int i, int j, const Po
 
     const Point3 taua = normalize(triJA - triJC);
     const Point3 taub = normalize(triJB - triJA);
-    Point3 tauc = normalize(triJC - triJB);
+    Point3 tauc = triJC - triJB;
 
     const double ilvc = 1.0 / vector_length(tauc);
     tauc *= ilvc;
@@ -190,9 +255,9 @@ __device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Poin
         delta = getDeltas();
     }
 
-	const double ari = sqrt(measures[i]);
+	const double invAri = rsqrt(measures[i]);
 
-    res = assign_vector_part(-(log((lvc * (1 + dot(taua,  ovc))) / ari) * taua + log((lvc * (1 - dot(taub, ovc))) / ari) * taub));
+    res = assign_vector_part(-(log((lvc * (1 + dot(taua,  ovc))) * invAri) * taua + log((lvc * (1 - dot(taub, ovc))) * invAri) * taub));
     res.w = 2.0 * (atan2(dot(cross(ovc, taua), e), dot(e - ovc, e - taua)) + atan2(dot(cross(ovc, taub), e), dot(e - ovc, e + taub)));
 
 	return res;
@@ -581,6 +646,20 @@ void EvaluatorJ3DK::integrateOverSimpleNeighbors()
     unsigned int blocks = blocksForSize(simpleNeighborsTasks.size);
     kIntegrateSingularPartSimple<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, 
                         mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
+
+    //2. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
+    const auto &refinedTasks = numIntegrator.getRefinedSimpleNeighborsTasks();
+    blocks = blocksForSize(refinedTasks.size);
+    kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getSimpleNeighborsResults().data, refinedTasks.data, simpleNeighborsTasks.data,
+            mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data,
+            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+
+    //3. Sum up the results of numerical integration of the regular part for all refined triangles i together with results of singular part integration
+    numIntegrator.gatherResults(d_simpleNeighborsIntegrals, neighbour_type_enum::simple_neighbors);
+
+    //4. Convert results from the form (psi, theta) into an array of Point3 with an additional check of result
+    blocks = blocksForSize(simpleNeighborsTasks.size);
+    kFinalizeSimpleNeighborsResults<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsResults.data, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 }
 
 void EvaluatorJ3DK::integrateOverAttachedNeighbors()
@@ -589,6 +668,20 @@ void EvaluatorJ3DK::integrateOverAttachedNeighbors()
     unsigned int blocks = blocksForSize(attachedNeighborsTasks.size);
     kIntegrateSingularPartAttached<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, d_attachedNeighborsIntegrals.data, attachedNeighborsTasks.data, 
                         mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
+
+    //2. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
+    const auto &refinedTasks = numIntegrator.getRefinedAttachedNeighborsTasks();
+    blocks = blocksForSize(refinedTasks.size);
+    kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getAttachedNeighborsResults().data, refinedTasks.data, attachedNeighborsTasks.data,
+            mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data,
+            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+
+    //3. Sum up the results of numerical integration of the regular part for all refined triangles i together with results of singular part integration
+    numIntegrator.gatherResults(d_attachedNeighborsIntegrals, neighbour_type_enum::attached_neighbors);
+
+    //4. Convert results from the form (psi, theta) into an array of Point3
+    blocks = blocksForSize(attachedNeighborsTasks.size);
+    kFinalizeNonSimpleResults<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, d_attachedNeighborsResults.data, d_attachedNeighborsIntegrals.data, attachedNeighborsTasks.data, mesh.getCellNormals().data);
 }
 
 void EvaluatorJ3DK::integrateOverNotNeighbors()
@@ -605,5 +698,5 @@ void EvaluatorJ3DK::integrateOverNotNeighbors()
 
     //3. Convert results from the form (psi, theta) into an array of Point3
     blocks = blocksForSize(notNeighborsTasks.size);
-    kFinalizeNotNeighborsResults<<<blocks, gpuThreads>>>(notNeighborsTasks.size, d_notNeighborsResults.data, d_notNeighborsIntegrals.data, notNeighborsTasks.data, mesh.getCellNormals().data);
+    kFinalizeNonSimpleResults<<<blocks, gpuThreads>>>(notNeighborsTasks.size, d_notNeighborsResults.data, d_notNeighborsIntegrals.data, notNeighborsTasks.data, mesh.getCellNormals().data);
 }

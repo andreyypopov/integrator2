@@ -10,6 +10,7 @@ struct CONSTANTS {
 
     static constexpr double ONE_THIRD = 0.3333333333333333;
     static constexpr double PI = 3.14159265358979323846;
+    static constexpr double TWO_PI = 6.28318530717958647692;
     static constexpr double RECIPROCAL_FOUR_PI = 0.079577471545947667884;
 
     static constexpr int MAX_SIMPLE_NEIGHBORS_PER_VERTEX = 10;

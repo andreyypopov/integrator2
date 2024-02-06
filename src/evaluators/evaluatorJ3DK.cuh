@@ -5,6 +5,10 @@
 
 __device__ double4 thetaPsi(const Point3 &pt, const Point3 *vertices, const int3 &triangle);
 
+__device__ double4 singularPartAttached(const Point3 &pt, int i, int j, const Point3 *vertices, const int3 *cells);
+
+__device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures);
+
 __device__ double4 integrateSingularPartAttached(int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures);
 
 __device__ double4 integrateSingularPartSimple(int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures);

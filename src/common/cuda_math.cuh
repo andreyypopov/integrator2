@@ -32,6 +32,10 @@ __host__ __device__ inline double4 operator+(const double4 &v1, const double4 &v
     return double4({ v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w });
 }
 
+__host__ __device__ inline double4 operator-(const double4 &v1, const double4 &v2){
+    return double4({ v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w });
+}
+
 __host__ __device__ inline double4 operator*(double a, const double4 &v){
     return double4({ v.x * a, v.y * a, v.z * a, v.w * a });
 }
