@@ -111,7 +111,7 @@ int main(int argc, char *argv[]){
 
     NumericalIntegrator3D numIntegrator(mesh, qf3D13);
     EvaluatorJ3DK evaluator(mesh, numIntegrator);
-    evaluator.setFixedRefinementLevel(3);
+    numIntegrator.setFixedRefinementLevel(3);
 
     evaluator.runAllPairs();
 

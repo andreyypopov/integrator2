@@ -69,9 +69,9 @@ private:
     int *d_simpleNeighborsNum = nullptr;
     int *d_attachedNeighborsNum = nullptr;
     int *d_notNeighborsNum = nullptr;
-    deviceVector<int2> simpleNeighbors;
-    deviceVector<int2> attachedNeighbors;
-    deviceVector<int2> notNeighbors;
+    deviceVector<int3> simpleNeighbors;
+    deviceVector<int3> attachedNeighbors;
+    deviceVector<int3> notNeighbors;
 };
 
 void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells);

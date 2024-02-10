@@ -1,35 +1,35 @@
 #include "evaluatorJ3DK.cuh"
 
-__global__ void kIntegrateSingularPartAttached(int n, double4 *results, const int2 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
+__global__ void kIntegrateSingularPartAttached(int n, double4 *results, const int3 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int2 task = tasks[idx];
+        const int3 task = tasks[idx];
 
         const double4 singularThetaPsi = integrateSingularPartAttached(task.x, task.y, vertices, cells, normals, measures);
         results[idx] = singularThetaPsi;
     }
 }
 
-__global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int2 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
+__global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int3 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int2 task = tasks[idx];
+        const int3 task = tasks[idx];
 
         const double4 singularThetaPsi = integrateSingularPartSimple(task.x, task.y, vertices, cells, normals, measures);
         results[idx] = singularThetaPsi;
     }
 }
 
-__global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int3 *refinedTasks, const int2 *originalTasks,
+__global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks,
             const Point3 *vertices, const int3 *cells, const Point3 *cellNormals, const double *cellMeasures,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
         const int3 task = refinedTasks[idx];
-        const int2 originalTask = originalTasks[task.z];
+        const int3 originalTask = originalTasks[task.z];
         const int3 triangleI = refinedCells[task.x];
         const int3 triangleJ = cells[task.y];
 
@@ -45,14 +45,14 @@ __global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int
     }
 }
 
-__global__ void kIntegrateRegularPartAttached(int n, double4 *integrals, const int3 *refinedTasks, const int2 *originalTasks,
+__global__ void kIntegrateRegularPartAttached(int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks,
             const Point3 *vertices, const int3 *cells, const Point3 *cellNormals,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
         const int3 task = refinedTasks[idx];
-        const int2 originalTask = originalTasks[task.z];
+        const int3 originalTask = originalTasks[task.z];
         const int3 triangleI = refinedCells[task.x];
         const int3 triangleJ = cells[task.y];
 
@@ -89,11 +89,11 @@ __global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *re
     }
 }
 
-__global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals, const double *cellMeasures)
+__global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const double4 *integrals, const int3 *tasks, const Point3 *cellNormals, const double *cellMeasures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int2 task = tasks[idx];
+        const int3 task = tasks[idx];
         const double4 integral = integrals[idx];
         const Point3 normal = cellNormals[task.y];
 
@@ -108,11 +108,11 @@ __global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const do
     }
 }
 
-__global__ void kFinalizeNonSimpleResults(int n, Point3 *results, const double4 *integrals, const int2 *tasks, const Point3 *cellNormals)
+__global__ void kFinalizeNonSimpleResults(int n, Point3 *results, const double4 *integrals, const int3 *tasks, const Point3 *cellNormals)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        const int2 task = tasks[idx];
+        const int3 task = tasks[idx];
         const double4 integral = integrals[idx];
         const Point3 normal = cellNormals[task.y];
 

@@ -196,6 +196,11 @@ const QuadratureFormula3D qf3D13{
 	7
 };
 
+enum class error_control_type_enum {
+    fixed_refinement_level = 0,
+    automatic_error_control = 1
+};
+
 __device__ double4 integrate4D(const double4 *functionValues);
 
 __device__ void calculateQuadraturePoints(Point3 *quadraturePoints, const Point3 *vertices, const int3 &triangle);
@@ -206,13 +211,19 @@ public:
     NumericalIntegrator3D(const Mesh3D &mesh_, const QuadratureFormula3D &qf_);
 	virtual ~NumericalIntegrator3D();
 
-	void prepareTasksAndRefineWholeMesh(const deviceVector<int2> &simpleNeighborsTasks, const deviceVector<int2> &attachedNeighborsTasks,
-			const deviceVector<int2> &notNeighborsTasks, int refineLevel = 0);
+	void setFixedRefinementLevel(int refinementLevel = 0);
+
+	void prepareTasksAndRefineWholeMesh(const deviceVector<int3> &simpleNeighborsTasks, const deviceVector<int3> &attachedNeighborsTasks,
+			const deviceVector<int3> &notNeighborsTasks);
 
 	void gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const;
 
 	int getGaussPointsNumber() const {
 		return GaussPointsNum;
+	}
+
+	error_control_type_enum getErrorControlType() const {
+		return errorControlType;
 	}
 
     const auto &getRefinedSimpleNeighborsTasks() const {
@@ -266,15 +277,23 @@ private:
     deviceVector<int3> refinedAttachedNeighborsTasks;
     deviceVector<int3> refinedNotNeighborsTasks;
 
-    //intermediate results of numerical integration (can be used for comparison of 2 iterations)
+    //intermediate results of numerical integration (for each pair of neighbors considering refined cells)
     deviceVector<double4> d_simpleNeighborsResults;
     deviceVector<double4> d_attachedNeighborsResults;
     deviceVector<double4> d_notNeighborsResults;
+
+	//additional buffers for previous results of numerical integration (used for comparison of 2 refinement steps)
+    deviceVector<double4> d_tempSimpleNeighborsResults;
+    deviceVector<double4> d_tempAttachedNeighborsResults;
+    deviceVector<double4> d_tempNotNeighborsResults;
 
 	//buffers for mesh refinement
 	deviceVector<Point3> tempVertices;
     deviceVector<int3> tempCells;
     deviceVector<double> tempCellMeasures;
+
+	error_control_type_enum errorControlType;
+    int meshRefinementLevel;
 };
 
 #endif // NUMERICAL_INTEGRATOR_3D_CUH

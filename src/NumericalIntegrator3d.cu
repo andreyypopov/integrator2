@@ -47,13 +47,13 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
     }
 }
 
-__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int2 *tasks, const int *originalCells, int3 *refinedTasks = nullptr)
+__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, int3 *refinedTasks = nullptr)
 {
     int taskId = blockIdx.x * blockDim.x + threadIdx.x;
     int refinedCellId = blockIdx.y * blockDim.y + threadIdx.y;
 
     if(taskId < tasksNum && refinedCellId < refinedCellsNum){
-        const int2 oldTask = tasks[taskId];
+        const int3 oldTask = tasks[taskId];
         const int originalCell = originalCells[refinedCellId];
 
         if(oldTask.x == originalCell){
@@ -61,15 +61,6 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
             if(refinedTasks)
                 refinedTasks[pos] = { refinedCellId, oldTask.y, taskId };
         }
-    }
-}
-
-__global__ void kCopyTasks(int n, int3 *refinedTasks, const int2 *tasks)
-{
-    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if(idx < n){
-        const int2 oldTask = tasks[idx];
-        refinedTasks[idx] = { oldTask.x, oldTask.y, (int)idx };
     }
 }
 
@@ -109,6 +100,8 @@ NumericalIntegrator3D::NumericalIntegrator3D(const Mesh3D &mesh_, const Quadratu
     copy_h2const(lCoordinates.data(), c_GaussPointsCoordinates, GaussPointsNum);
     copy_h2const(qf.weights.data(), c_GaussPointsWeights, GaussPointsNum);
     copy_h2const(&GaussPointsNum, &c_GaussPointsNumber, 1);
+
+    errorControlType = error_control_type_enum::automatic_error_control;
 }
 
 NumericalIntegrator3D::~NumericalIntegrator3D()
@@ -116,11 +109,17 @@ NumericalIntegrator3D::~NumericalIntegrator3D()
 
 }
 
-void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<int2> &simpleNeighborsTasks, const deviceVector<int2> &attachedNeighborsTasks, const deviceVector<int2> &notNeighborsTasks, int refineLevel)
+void NumericalIntegrator3D::setFixedRefinementLevel(int refinementLevel)
+{
+    errorControlType = error_control_type_enum::fixed_refinement_level;
+    meshRefinementLevel = refinementLevel;
+}
+
+void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<int3> &simpleNeighborsTasks, const deviceVector<int3> &attachedNeighborsTasks, const deviceVector<int3> &notNeighborsTasks)
 {
     int2 verticesCellsNum = { mesh.getVertices().size, mesh.getCells().size };
 
-    if(!refineLevel){
+    if(!meshRefinementLevel){
         //copy mesh vertices, cells and measures as is
         refinedVertices.allocate(verticesCellsNum.x);
         copy_d2d(mesh.getVertices().data, refinedVertices.data, verticesCellsNum.x);
@@ -134,38 +133,30 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
         //copy tasks and prepare vectors for results
         if(simpleNeighborsTasks.size){
             refinedSimpleNeighborsTasks.allocate(simpleNeighborsTasks.size);
-            
-            int blocks = blocksForSize(simpleNeighborsTasks.size);
-            kCopyTasks<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, refinedSimpleNeighborsTasks.data, simpleNeighborsTasks.data);
+            copy_d2d(simpleNeighborsTasks.data, refinedSimpleNeighborsTasks.data, simpleNeighborsTasks.size);
             d_simpleNeighborsResults.allocate(simpleNeighborsTasks.size);
         }
 
         if(attachedNeighborsTasks.size){
             refinedAttachedNeighborsTasks.allocate(attachedNeighborsTasks.size);
-
-            int blocks = blocksForSize(attachedNeighborsTasks.size);
-            kCopyTasks<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, refinedAttachedNeighborsTasks.data, attachedNeighborsTasks.data);
-
+            copy_d2d(attachedNeighborsTasks.data, refinedAttachedNeighborsTasks.data, attachedNeighborsTasks.size);
             d_simpleNeighborsResults.allocate(attachedNeighborsTasks.size);
         }
 
         if(notNeighborsTasks.size){
             refinedNotNeighborsTasks.allocate(notNeighborsTasks.size);
-
-            int blocks = blocksForSize(notNeighborsTasks.size);
-            kCopyTasks<<<blocks, gpuThreads>>>(notNeighborsTasks.size, refinedNotNeighborsTasks.data, notNeighborsTasks.data);
-
+            copy_d2d(notNeighborsTasks.data, refinedNotNeighborsTasks.data, notNeighborsTasks.size);
             d_simpleNeighborsResults.allocate(notNeighborsTasks.size);
         }
 
         return;
     }
 
-    int refinedVerticesNum = verticesCellsNum.x + verticesCellsNum.y * ((1 << (2 * refineLevel)) - 1);
+    int refinedVerticesNum = verticesCellsNum.x + verticesCellsNum.y * ((1 << (2 * meshRefinementLevel)) - 1);
     refinedVertices.allocate(refinedVerticesNum);
     tempVertices.allocate(refinedVerticesNum);
 
-    int refinedCellsNum = (1 << (2 * refineLevel)) * verticesCellsNum.y;
+    int refinedCellsNum = (1 << (2 * meshRefinementLevel)) * verticesCellsNum.y;
     refinedCells.allocate(refinedCellsNum);
     tempCells.allocate(refinedCellsNum);
     refinedCellMeasures.allocate(refinedCellsNum);
@@ -189,7 +180,7 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
     allocate_device(&refinedVerticesCellsNum, 1);
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 
-    for(int i = 0; i < refineLevel; ++i){
+    for(int i = 0; i < meshRefinementLevel; ++i){
         std::swap(refinedVertices.data, tempVertices.data);
         std::swap(refinedCells.data, tempCells.data);
         std::swap(refinedCellMeasures.data, tempCellMeasures.data);

@@ -35,8 +35,8 @@ __global__ void kCalculateCellMeasure(int n, const Point3 *vertices, const int3 
     }
 }
 
-__global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNeighbors, int *simpleNeighborsNum,
-    int2 *attachedNeighbors, int *attachedNeighborsNum, int2 *notNeighbors, int *notNeighborsNum){
+__global__ void kDetermineNeighborType(int n, const int3 *cells, int3 *simpleNeighbors, int *simpleNeighborsNum,
+    int3 *attachedNeighbors, int *attachedNeighborsNum, int3 *notNeighbors, int *notNeighborsNum){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     int tri1idx = idx / n;
     int tri2idx = idx % n;
@@ -57,17 +57,17 @@ __global__ void kDetermineNeighborType(int n, const int3 *cells, int2 *simpleNei
         
         if(commonPoints == 0){
             int pos = atomicAdd(notNeighborsNum, 1);
-            notNeighbors[pos] = int2({ tri1idx, tri2idx });
+            notNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
         }
         
         if(commonPoints == 1){
             int pos = atomicAdd(simpleNeighborsNum, 1);
-            simpleNeighbors[pos] = int2({ tri1idx, tri2idx });
+            simpleNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
         }
 
         if(commonPoints == 2){
             int pos = atomicAdd(attachedNeighborsNum, 1);
-            attachedNeighbors[pos] = int2({ tri1idx, tri2idx });
+            attachedNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
         }
     }
 }

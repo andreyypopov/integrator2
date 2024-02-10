@@ -4,14 +4,12 @@
 
 #include <fstream>
 
-__global__ void kAddReversedPairs(int n, int2 *pairs)
+__global__ void kAddReversedPairs(int n, int3 *pairs)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        int2 oldPair = pairs[idx];
-        int2 newPair;
-        newPair.x = oldPair.y;
-        newPair.y = oldPair.x;
+        int3 oldPair = pairs[idx];
+        int3 newPair = { oldPair.y, oldPair.x, oldPair.z };
 
         pairs[n + idx] = newPair;
     }
@@ -20,7 +18,7 @@ __global__ void kAddReversedPairs(int n, int2 *pairs)
 Evaluator3D::Evaluator3D(const Mesh3D &mesh_, NumericalIntegrator3D &numIntegrator_)
     : mesh(mesh_), numIntegrator(numIntegrator_)
 {
-    errorControlType = error_control_type_enum::automatic_error_control;
+
 }
 
 Evaluator3D::~Evaluator3D()
@@ -59,23 +57,17 @@ void Evaluator3D::runAllPairs()
     blocks = blocksForSize(mesh.getNotNeighbors().size);
     kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getNotNeighbors().size, notNeighborsTasks.data);
     
-    if(errorControlType == error_control_type_enum::fixed_refinement_level)
-        numIntegrator.prepareTasksAndRefineWholeMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks, meshRefinementLevel);
+    if(numIntegrator.getErrorControlType() == error_control_type_enum::fixed_refinement_level)
+        numIntegrator.prepareTasksAndRefineWholeMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
     integrateOverSimpleNeighbors();
     integrateOverAttachedNeighbors();
     integrateOverNotNeighbors();
 }
 
-void Evaluator3D::setFixedRefinementLevel(int refinementLevel)
-{
-    errorControlType = error_control_type_enum::fixed_refinement_level;
-    meshRefinementLevel = refinementLevel;
-}
-
 bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
 {
-    int2 *tasks;
+    int3 *tasks;
     int tasksSize;
     Point3 *deviceResults;
     std::string filename;
@@ -103,7 +95,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
     }
 
     std::vector<Point3> hostResults(tasksSize);
-    std::vector<int2> hostTasks(tasksSize);
+    std::vector<int3> hostTasks(tasksSize);
 
     copy_d2h(deviceResults, hostResults.data(), tasksSize);
     copy_d2h(tasks, hostTasks.data(), tasksSize);

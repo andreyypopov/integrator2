@@ -6,11 +6,6 @@
 #include "../NumericalIntegrator3d.cuh"
 #include "../Mesh3d.cuh"
 
-enum class error_control_type_enum {
-    fixed_refinement_level = 0,
-    automatic_error_control = 1
-};
-
 class Evaluator3D
 {
 public:
@@ -23,14 +18,12 @@ public:
 
     virtual void runAllPairs();
 
-    void setFixedRefinementLevel(int refinementLevel = 0);
-
     bool outputResultsToFile(neighbour_type_enum neighborType) const;
 
 protected:
-    deviceVector<int2> simpleNeighborsTasks;
-    deviceVector<int2> attachedNeighborsTasks;
-    deviceVector<int2> notNeighborsTasks;
+    deviceVector<int3> simpleNeighborsTasks;
+    deviceVector<int3> attachedNeighborsTasks;
+    deviceVector<int3> notNeighborsTasks;
 
     //separate values of theta and psi obtained after integration over Ki
     //of both regular and singular parts
@@ -44,9 +37,6 @@ protected:
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;
-
-    error_control_type_enum errorControlType;
-    int meshRefinementLevel;
 };
 
 #endif // EVALUATOR3D_CUH
