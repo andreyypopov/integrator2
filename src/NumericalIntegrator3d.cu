@@ -49,19 +49,34 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
 
 __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int2 *tasks, const int *originalCells, int3 *refinedTasks = nullptr)
 {
-    int taskId = blockIdx.x * blockDim.x + threadIdx.x;
-    int refinedCellId = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if(taskId < tasksNum && refinedCellId < refinedCellsNum){
-        const int2 oldTask = tasks[taskId];
-        const int originalCell = originalCells[refinedCellId];
+    __shared__ int originalCellsSh[gpuThreadsMax];
 
-        if(oldTask.x == originalCell){
-            int pos = atomicAdd(counter, 1);
-            if(refinedTasks)
-                refinedTasks[pos] = { refinedCellId, oldTask.y, taskId };
-        }
-    }
+	//do not exit the kernel immediately when idx >= tasksNum
+	//because the thread might be required to perform loading into shared memory
+	for(int blockStart = 0; blockStart < refinedCellsNum; blockStart += gpuThreadsMax){
+		if(blockStart + threadIdx.x < refinedCellsNum)
+			originalCellsSh[threadIdx.x] = originalCells[blockStart + threadIdx.x];
+		__syncthreads();
+
+		if(idx < tasksNum){
+			const int2 oldTask = tasks[idx];
+
+			for(int cell = 0; cell < gpuThreadsMax; ++cell)
+				if(blockStart + cell < refinedCellsNum){
+					const int originalCell = originalCellsSh[cell];
+
+					if(oldTask.x == originalCell){
+						int pos = atomicAdd(counter, 1);
+						if(refinedTasks)
+							refinedTasks[pos] = { blockStart + cell, oldTask.y, (int)idx };
+					}
+				}
+		}
+
+		__syncthreads();
+	}
 }
 
 __global__ void kCopyTasks(int n, int3 *refinedTasks, const int2 *tasks)
@@ -213,15 +228,11 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
     int hostTaskCount;
     allocate_device(&taskCount, 1);
 
-    int cellBlocks = blocksForSize(verticesCellsNum.y, gpuThreads2D);
-    dim3 threads(gpuThreads2D, gpuThreads2D);
-
     if(simpleNeighborsTasks.size){
         zero_value_device(taskCount, 1);
-        int taskBlocks = blocksForSize(simpleNeighborsTasks.size, gpuThreads2D);        
+        blocks = blocksForSize(simpleNeighborsTasks.size, gpuThreadsMax);
 
-        dim3 blocks(taskBlocks, cellBlocks);
-        kCountOrCreateTasks<<<blocks, threads>>>(simpleNeighborsTasks.size, verticesCellsNum.y, taskCount, simpleNeighborsTasks.data, originalCells.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(simpleNeighborsTasks.size, verticesCellsNum.y, taskCount, simpleNeighborsTasks.data, originalCells.data);
 
         cudaDeviceSynchronize();
         copy_d2h(taskCount, &hostTaskCount, 1);
@@ -229,15 +240,15 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
         refinedSimpleNeighborsTasks.allocate(hostTaskCount);
         d_simpleNeighborsResults.allocate(hostTaskCount);
         zero_value_device(taskCount, 1);
-        kCountOrCreateTasks<<<blocks, threads>>>(simpleNeighborsTasks.size, verticesCellsNum.y, taskCount, simpleNeighborsTasks.data, originalCells.data, refinedSimpleNeighborsTasks.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(simpleNeighborsTasks.size, verticesCellsNum.y, taskCount, simpleNeighborsTasks.data, originalCells.data, refinedSimpleNeighborsTasks.data);
+        cudaDeviceSynchronize();
     }
 
     if(attachedNeighborsTasks.size){
         zero_value_device(taskCount, 1);
-        int taskBlocks = blocksForSize(attachedNeighborsTasks.size, gpuThreads2D);
+        blocks = blocksForSize(attachedNeighborsTasks.size, gpuThreadsMax);
         
-        dim3 blocks(taskBlocks, cellBlocks);
-        kCountOrCreateTasks<<<blocks, threads>>>(attachedNeighborsTasks.size, verticesCellsNum.y, taskCount, attachedNeighborsTasks.data, originalCells.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(attachedNeighborsTasks.size, verticesCellsNum.y, taskCount, attachedNeighborsTasks.data, originalCells.data);
 
         cudaDeviceSynchronize();
         copy_d2h(taskCount, &hostTaskCount, 1);
@@ -245,15 +256,15 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
         refinedAttachedNeighborsTasks.allocate(hostTaskCount);
         d_attachedNeighborsResults.allocate(hostTaskCount);
         zero_value_device(taskCount, 1);
-        kCountOrCreateTasks<<<blocks, threads>>>(attachedNeighborsTasks.size, verticesCellsNum.y, taskCount, attachedNeighborsTasks.data, originalCells.data, refinedAttachedNeighborsTasks.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(attachedNeighborsTasks.size, verticesCellsNum.y, taskCount, attachedNeighborsTasks.data, originalCells.data, refinedAttachedNeighborsTasks.data);
+        cudaDeviceSynchronize();
     }
 
     if(notNeighborsTasks.size){
         zero_value_device(taskCount, 1);
-        int taskBlocks = blocksForSize(notNeighborsTasks.size, gpuThreads2D);
+        blocks = blocksForSize(notNeighborsTasks.size, gpuThreadsMax);
         
-        dim3 blocks(taskBlocks, cellBlocks);
-        kCountOrCreateTasks<<<blocks, threads>>>(notNeighborsTasks.size, verticesCellsNum.y, taskCount, notNeighborsTasks.data, originalCells.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(notNeighborsTasks.size, verticesCellsNum.y, taskCount, notNeighborsTasks.data, originalCells.data);
 
         cudaDeviceSynchronize();
         copy_d2h(taskCount, &hostTaskCount, 1);
@@ -261,7 +272,8 @@ void NumericalIntegrator3D::prepareTasksAndRefineWholeMesh(const deviceVector<in
         refinedNotNeighborsTasks.allocate(hostTaskCount);
         d_notNeighborsResults.allocate(hostTaskCount);
         zero_value_device(taskCount, 1);
-        kCountOrCreateTasks<<<blocks, threads>>>(notNeighborsTasks.size, verticesCellsNum.y, taskCount, notNeighborsTasks.data, originalCells.data, refinedNotNeighborsTasks.data);
+        kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(notNeighborsTasks.size, verticesCellsNum.y, taskCount, notNeighborsTasks.data, originalCells.data, refinedNotNeighborsTasks.data);
+        cudaDeviceSynchronize();
     }
 
     printf("Refined mesh contains %d vertices and %d cells. Number of tasks: simple neighbors - %d, attached neighbors - %d, non-neighbors - %d\n",
