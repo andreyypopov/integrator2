@@ -51,7 +51,7 @@ struct Arg: public option::Arg
   }
 };
 
-enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTMESH, EXPORTRESULTS };
+enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTMESH, EXPORTRESULTS, REFINELEVEL };
 
 const option::Descriptor usage[] = 
 {
@@ -62,6 +62,7 @@ const option::Descriptor usage[] =
     { SCALE,            0, "s", "scale",        Arg::Numeric,   "   -s <arg>, \t--scale=<arg> \tMesh scale factor." },
     { EXPORTMESH,       0, "",  "exportmesh",   Arg::None,      "   \t--exportmesh \tExport original and refined meshes to OBJ files."},
     { EXPORTRESULTS,    0, "",  "exportresults",Arg::None,      "   \t--exportresults \tExport results of integration to text files."},
+    { REFINELEVEL,      0, "r", "refine",       Arg::Numeric,   "   -r <arg>, \t--refine=<arg> \tRefine the whole mesh N times." },
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -111,7 +112,8 @@ int main(int argc, char *argv[]){
 
     NumericalIntegrator3D numIntegrator(mesh, qf3D13);
     EvaluatorJ3DK evaluator(mesh, numIntegrator);
-    evaluator.setFixedRefinementLevel(3);
+    if(options[REFINELEVEL])
+        evaluator.setFixedRefinementLevel(std::stoi(options[REFINELEVEL].arg));
 
     evaluator.runAllPairs();
 
