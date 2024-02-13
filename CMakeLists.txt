@@ -25,6 +25,7 @@ file(GLOB header_files
 	${PROJECT_SOURCE_PATH}/common/device_vector.cuh
 	${PROJECT_SOURCE_PATH}/Mesh3d.cuh
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cuh
+	${PROJECT_SOURCE_PATH}/QuadratureFormula3d.cuh
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cuh
 	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cuh
 	)
