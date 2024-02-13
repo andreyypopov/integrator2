@@ -38,38 +38,52 @@ __global__ void kCalculateCellMeasure(int n, const Point3 *vertices, const int3 
 __global__ void kDetermineNeighborType(int n, const int3 *cells, int3 *simpleNeighbors, int *simpleNeighborsNum,
     int3 *attachedNeighbors, int *attachedNeighborsNum, int3 *notNeighbors, int *notNeighborsNum){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    int tri1idx = idx / n;
-    int tri2idx = idx % n;
 
-    if(tri1idx < n && tri2idx < n && tri1idx < tri2idx){
-        unsigned int commonPoints = 0;
-        int3 tri1 = cells[tri1idx];
-        int3 tri2 = cells[tri2idx];
+    __shared__ int3 sharedCells[gpuThreadsMax];
 
-        if(tri1.x == tri2.x || tri1.x == tri2.y || tri1.x == tri2.z)
-            ++commonPoints;
+	//do not exit the kernel immediately when idx >= n
+	//because the thread might be required to perform loading into shared memory  
+	for(int blockStart = 0; blockStart < n; blockStart += gpuThreadsMax){
+		if(blockStart + threadIdx.x < n)
+			sharedCells[threadIdx.x] = cells[blockStart + threadIdx.x];
+		__syncthreads();
 
-        if(tri1.y == tri2.x || tri1.y == tri2.y || tri1.y == tri2.z)
-            ++commonPoints;
+		if(idx < n){
+			const int3 tri1 = cells[idx];
 
-        if(tri1.z == tri2.x || tri1.z == tri2.y || tri1.z == tri2.z)
-            ++commonPoints;
-        
-        if(commonPoints == 0){
-            int pos = atomicAdd(notNeighborsNum, 1);
-            notNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
-        }
-        
-        if(commonPoints == 1){
-            int pos = atomicAdd(simpleNeighborsNum, 1);
-            simpleNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
-        }
+			for(int cell = 0; cell < gpuThreadsMax; ++cell)
+				if(idx < blockStart + cell && blockStart + cell < n){
+					unsigned int commonPoints = 0;
+			
+					const int3 tri2 = sharedCells[cell];
 
-        if(commonPoints == 2){
-            int pos = atomicAdd(attachedNeighborsNum, 1);
-            attachedNeighbors[pos] = int3({ tri1idx, tri2idx, -1 });
-        }
-    }
+					if(tri1.x == tri2.x || tri1.x == tri2.y || tri1.x == tri2.z)
+						++commonPoints;
+
+					if(tri1.y == tri2.x || tri1.y == tri2.y || tri1.y == tri2.z)
+						++commonPoints;
+
+					if(tri1.z == tri2.x || tri1.z == tri2.y || tri1.z == tri2.z)
+						++commonPoints;
+					
+					if(commonPoints == 0){
+						int pos = atomicAdd(notNeighborsNum, 1);
+						notNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+					}
+					
+					if(commonPoints == 1){
+						int pos = atomicAdd(simpleNeighborsNum, 1);
+						simpleNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+					}
+
+					if(commonPoints == 2){
+						int pos = atomicAdd(attachedNeighborsNum, 1);
+						attachedNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+					}
+				}
+		}
+		__syncthreads();
+	}
 }
 
 Mesh3D::~Mesh3D(){
@@ -174,8 +188,8 @@ void Mesh3D::fillNeightborsLists(){
     attachedNeighbors.allocate(cells.size * 3 / 2);  // number of triangles * (3 vertices edges per triangle) / 2 (discard duplicated pairs)
     notNeighbors.allocate(cells.size * cells.size / 2);  // all pairs of triangls
 
-    unsigned int blocks = blocksForSize(cells.size * cells.size);
-    kDetermineNeighborType<<<blocks, gpuThreads>>>(cells.size, cells.data, simpleNeighbors.data, d_simpleNeighborsNum, attachedNeighbors.data, d_attachedNeighborsNum, notNeighbors.data, d_notNeighborsNum);
+    unsigned int blocks = blocksForSize(cells.size, gpuThreadsMax);
+    kDetermineNeighborType<<<blocks, gpuThreadsMax>>>(cells.size, cells.data, simpleNeighbors.data, d_simpleNeighborsNum, attachedNeighbors.data, d_attachedNeighborsNum, notNeighbors.data, d_notNeighborsNum);
     copy_d2h(d_simpleNeighborsNum, &simpleNeighbors.size, 1);
     copy_d2h(d_attachedNeighborsNum, &attachedNeighbors.size, 1);
     copy_d2h(d_notNeighborsNum, &notNeighbors.size, 1);

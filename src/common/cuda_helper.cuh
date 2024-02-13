@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 const int gpuThreads = 256;
+const int gpuThreadsMax = 1024;
 const int gpuThreads2D = 16;
 
 inline unsigned int blocksForSize(unsigned int n, unsigned int maxThreads = gpuThreads){
