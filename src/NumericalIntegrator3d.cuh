@@ -22,10 +22,11 @@ public:
 
 	void setFixedRefinementLevel(int refinementLevel = 0);
 
-	void prepareTasksAndRefineWholeMesh(const deviceVector<int3> &simpleNeighborsTasks, const deviceVector<int3> &attachedNeighborsTasks,
-			const deviceVector<int3> &notNeighborsTasks);
+	void prepareTasksAndMesh(const deviceVector<int3> &simpleNeighborsTasks, const deviceVector<int3> &attachedNeighborsTasks,	const deviceVector<int3> &notNeighborsTasks);
 
 	void gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const;
+
+	void refineMesh();
 
 	int getGaussPointsNumber() const {
 		return GaussPointsNum;
@@ -72,14 +73,19 @@ public:
     }
 
 private:
+    int updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType, bool performAllocation = false);
+    
     const int GaussPointsNum;
     const Mesh3D &mesh;
     const QuadratureFormula3D &qf;
 
     deviceVector<Point3> refinedVertices;
 
+    int2 verticesCellsNum;
+    int2 *refinedVerticesCellsNum;
     deviceVector<int3> refinedCells;
     deviceVector<double> refinedCellMeasures;
+    deviceVector<int> originalCells;    //vector of indices of original triangles (with respect to the refined triangles)
 
 	//tasks for refined cells (i,j and index of the original non-refined task)
     deviceVector<int3> refinedSimpleNeighborsTasks;
@@ -96,10 +102,18 @@ private:
     deviceVector<double4> d_tempAttachedNeighborsResults;
     deviceVector<double4> d_tempNotNeighborsResults;
 
+    //additional buffers for tasks (in case of adaptive error control)
+    deviceVector<int3> tempRefinedSimpleNeighborsTasks;
+    deviceVector<int3> tempRefinedAttachedNeighborsTasks;
+    deviceVector<int3> tempRefinedNotNeighborsTasks;
+
 	//buffers for mesh refinement
 	deviceVector<Point3> tempVertices;
     deviceVector<int3> tempCells;
     deviceVector<double> tempCellMeasures;
+    deviceVector<int> tempOriginalCells;
+    deviceVector<int> cellsToBeRefined;
+    int *taskCount;
 
 	error_control_type_enum errorControlType;
     int meshRefinementLevel;

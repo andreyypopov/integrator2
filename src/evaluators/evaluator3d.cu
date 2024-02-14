@@ -57,8 +57,7 @@ void Evaluator3D::runAllPairs()
     blocks = blocksForSize(mesh.getNotNeighbors().size);
     kAddReversedPairs<<<blocks, gpuThreads>>>(mesh.getNotNeighbors().size, notNeighborsTasks.data);
     
-    if(numIntegrator.getErrorControlType() == error_control_type_enum::fixed_refinement_level)
-        numIntegrator.prepareTasksAndRefineWholeMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
+    numIntegrator.prepareTasksAndMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
     integrateOverSimpleNeighbors();
     integrateOverAttachedNeighbors();
