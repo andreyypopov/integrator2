@@ -11,6 +11,7 @@ INCLUDE(${PROJECT_ROOT_PATH}/cmake/functions.cmake)
 SET(PROJECT_SOURCE_PATH ${PROJECT_ROOT_PATH}/src)
 
 file(GLOB src_files
+	${PROJECT_SOURCE_PATH}/common/cuda_helper.cu
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cu
 	${PROJECT_SOURCE_PATH}/Mesh3d.cu
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cu

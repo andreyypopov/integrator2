@@ -10,7 +10,8 @@
 enum class neighbour_type_enum {
     simple_neighbors = 0,
     attached_neighbors = 1,
-    not_neighbors = 2
+    not_neighbors = 2,
+    undefined = -1
 };
 
 class Mesh3D

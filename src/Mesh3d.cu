@@ -68,17 +68,17 @@ __global__ void kDetermineNeighborType(int n, const int3 *cells, int3 *simpleNei
 					
 					if(commonPoints == 0){
 						int pos = atomicAdd(notNeighborsNum, 1);
-						notNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+						notNeighbors[pos] = int3({ (int)idx, blockStart + cell, pos });
 					}
 					
 					if(commonPoints == 1){
 						int pos = atomicAdd(simpleNeighborsNum, 1);
-						simpleNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+						simpleNeighbors[pos] = int3({ (int)idx, blockStart + cell, pos });
 					}
 
 					if(commonPoints == 2){
 						int pos = atomicAdd(attachedNeighborsNum, 1);
-						attachedNeighbors[pos] = int3({ (int)idx, blockStart + cell, -1 });
+						attachedNeighbors[pos] = int3({ (int)idx, blockStart + cell, pos });
 					}
 				}
 		}

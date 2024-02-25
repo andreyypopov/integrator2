@@ -7,6 +7,7 @@ struct CONSTANTS {
     static constexpr double EPS_ZERO2 = EPS_ZERO * EPS_ZERO;
     static constexpr double EPS_PSI_THETA = EPS_ZERO;
     static constexpr double EPS_PSI_THETA2 = EPS_PSI_THETA * EPS_PSI_THETA;
+    static constexpr double EPS_INTEGRATION = 1e-5;
 
     static constexpr double ONE_THIRD = 0.3333333333333333;
     static constexpr double PI = 3.14159265358979323846;
