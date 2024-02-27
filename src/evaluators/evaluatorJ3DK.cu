@@ -7,7 +7,7 @@ __global__ void kIntegrateSingularPartAttached(int n, double4 *results, const in
         const int3 task = tasks[idx];
 
         const double4 singularThetaPsi = integrateSingularPartAttached(task.x, task.y, vertices, cells, normals, measures);
-        results[idx] = singularThetaPsi;
+        results[idx] += singularThetaPsi;
     }
 }
 
@@ -18,7 +18,7 @@ __global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int3
         const int3 task = tasks[idx];
 
         const double4 singularThetaPsi = integrateSingularPartSimple(task.x, task.y, vertices, cells, normals, measures);
-        results[idx] = singularThetaPsi;
+        results[idx] += singularThetaPsi;
     }
 }
 
@@ -642,61 +642,178 @@ __device__ int3 rotateLeft(const int3 &triangle, int shift)
 
 void EvaluatorJ3DK::integrateOverSimpleNeighbors()
 {
-    //1. Integrate singular part
+    printf("\nIntegrating over simple neighbors (%d pairs)...\n", simpleNeighborsTasks.size);
+
+    //1. Integrate the regular part numerically
+    numericalIntegration(neighbour_type_enum::simple_neighbors);
+
+    //1. Integrate the singular part analytically
     unsigned int blocks = blocksForSize(simpleNeighborsTasks.size);
     kIntegrateSingularPartSimple<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, 
                         mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 
-    //2. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
-    const auto &refinedTasks = numIntegrator.getRefinedSimpleNeighborsTasks();
-    blocks = blocksForSize(refinedTasks.size);
-    kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getSimpleNeighborsResults().data, refinedTasks.data, simpleNeighborsTasks.data,
-            mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data,
-            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
-
-    //3. Sum up the results of numerical integration of the regular part for all refined triangles i together with results of singular part integration
-    numIntegrator.gatherResults(d_simpleNeighborsIntegrals, neighbour_type_enum::simple_neighbors);
-
-    //4. Convert results from the form (psi, theta) into an array of Point3 with an additional check of result
+    //3. Convert results from the form (psi, theta) into an array of Point3 with an additional check of result
     blocks = blocksForSize(simpleNeighborsTasks.size);
     kFinalizeSimpleNeighborsResults<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsResults.data, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 }
 
 void EvaluatorJ3DK::integrateOverAttachedNeighbors()
 {
-    //1. Integrate singular part
+    printf("\nIntegrating over attached neighbors (%d pairs)...\n", attachedNeighborsTasks.size);
+
+    //1. Integrate the regular part numerically
+    numericalIntegration(neighbour_type_enum::attached_neighbors);
+
+    //2. Integrate the singular part analytically
     unsigned int blocks = blocksForSize(attachedNeighborsTasks.size);
     kIntegrateSingularPartAttached<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, d_attachedNeighborsIntegrals.data, attachedNeighborsTasks.data, 
                         mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
 
-    //2. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
-    const auto &refinedTasks = numIntegrator.getRefinedAttachedNeighborsTasks();
-    blocks = blocksForSize(refinedTasks.size);
-    kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getAttachedNeighborsResults().data, refinedTasks.data, attachedNeighborsTasks.data,
-            mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data,
-            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
-
-    //3. Sum up the results of numerical integration of the regular part for all refined triangles i together with results of singular part integration
-    numIntegrator.gatherResults(d_attachedNeighborsIntegrals, neighbour_type_enum::attached_neighbors);
-
-    //4. Convert results from the form (psi, theta) into an array of Point3
+    //3. Convert results from the form (psi, theta) into an array of Point3
     blocks = blocksForSize(attachedNeighborsTasks.size);
     kFinalizeNonSimpleResults<<<blocks, gpuThreads>>>(attachedNeighborsTasks.size, d_attachedNeighborsResults.data, d_attachedNeighborsIntegrals.data, attachedNeighborsTasks.data, mesh.getCellNormals().data);
 }
 
 void EvaluatorJ3DK::integrateOverNotNeighbors()
 {
-    //1. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle)
-    const auto &refinedTasks = numIntegrator.getRefinedNotNeighborsTasks();
-    unsigned int blocks = blocksForSize(refinedTasks.size);
-    kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getNotNeighborsResults().data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
-            numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+    printf("\nIntegrating over not neighbors (%d pairs)...\n", notNeighborsTasks.size);
 
-    //2. Sum up the results of numerical integration for all refined triangles i
-    zero_value_device(d_notNeighborsIntegrals.data, d_notNeighborsIntegrals.size);
-    numIntegrator.gatherResults(d_notNeighborsIntegrals, neighbour_type_enum::not_neighbors);
+    //1. Perform numerical integration
+    numericalIntegration(neighbour_type_enum::not_neighbors);
 
-    //3. Convert results from the form (psi, theta) into an array of Point3
-    blocks = blocksForSize(notNeighborsTasks.size);
+    //2. Convert results from the form (psi, theta) into an array of Point3
+    unsigned int blocks = blocksForSize(notNeighborsTasks.size);
     kFinalizeNonSimpleResults<<<blocks, gpuThreads>>>(notNeighborsTasks.size, d_notNeighborsResults.data, d_notNeighborsIntegrals.data, notNeighborsTasks.data, mesh.getCellNormals().data);
+}
+
+void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
+{
+    const deviceVector<int3> *tasks, *refinedTasks;
+    deviceVector<int> *restTasks;
+    deviceVector<double4> *integrals, *tempIntegrals;
+
+    unsigned int blocks;
+
+    switch (neighborType)
+    {
+    case neighbour_type_enum::simple_neighbors:
+        tasks = &simpleNeighborsTasks;
+        refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
+        restTasks = &simpleNeighborsTasksRest;
+        integrals = &d_simpleNeighborsIntegrals;
+        tempIntegrals = &d_tempSimpleNeighborsIntegrals;
+        break;
+    case neighbour_type_enum::attached_neighbors:
+        tasks = &attachedNeighborsTasks;
+        refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
+        restTasks = &attachedNeighborsTasksRest;
+        integrals = &d_attachedNeighborsIntegrals;
+        tempIntegrals = &d_tempAttachedNeighborsIntegrals;
+        break;
+    case neighbour_type_enum::not_neighbors:
+        tasks = &notNeighborsTasks;
+        refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
+        restTasks = &notNeighborsTasksRest;
+        integrals = &d_notNeighborsIntegrals;
+        tempIntegrals = &d_tempNotNeighborsIntegrals;
+        break;
+    default:
+        return;
+    }
+
+    auto performIntegration = [neighborType, tasks](const deviceVector<int3> &refinedTasks, const Mesh3D &mesh, const NumericalIntegrator3D &numIntegrator){
+        unsigned int blocks = blocksForSize(refinedTasks.size);
+        switch(neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getSimpleNeighborsResults().data, refinedTasks.data, tasks->data,
+                mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data,
+                numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+            break;
+        case neighbour_type_enum::attached_neighbors:
+            kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getAttachedNeighborsResults().data, refinedTasks.data, tasks->data,
+                mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, numIntegrator.getRefinedVertices().data,
+                numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+            break;
+        case neighbour_type_enum::not_neighbors:
+            kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getNotNeighborsResults().data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
+                numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
+            break;
+        default:
+            break;
+        }
+    };
+
+    if(numIntegrator.getErrorControlType() == error_control_type_enum::automatic_error_control){
+        numIntegrator.resetMesh();
+        unsigned int blocks = blocksForSize(refinedTasks->size);
+        kFillOrdinal<<<blocks, gpuThreads>>>(refinedTasks->size, restTasks->data);
+    }
+
+    if(numIntegrator.getErrorControlType() == error_control_type_enum::automatic_error_control)
+        printf("Iteration 0, integrating %d tasks\n", refinedTasks->size);
+    
+    //1. Perform numerical integration over pairs (i, j) of refined tasks (i - refined triangle, j - original triangle),
+    //in case of automatic mesh refinement original tasks are used at this point
+    performIntegration(*refinedTasks, mesh, numIntegrator);
+
+    //2. Sum up the results of numerical integration for all triangles i
+    zero_value_device(integrals->data, integrals->size);
+    numIntegrator.gatherResults(*integrals, neighborType);
+
+    if(numIntegrator.getErrorControlType() == error_control_type_enum::automatic_error_control){
+        int remainingTaskCount = refinedTasks->size;
+        int iteration = 0;
+
+        numIntegrator.determineCellsToBeRefined(*restTasks, neighborType);
+
+        while(remainingTaskCount && iteration < CONSTANTS::MAX_REFINE_LEVEL){
+            ++iteration;
+
+            numIntegrator.refineMesh(neighborType);
+            integrals->swap(*tempIntegrals);
+
+            switch (neighborType)
+            {
+            case neighbour_type_enum::simple_neighbors:
+                refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
+                break;
+            case neighbour_type_enum::attached_neighbors:
+                refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
+                break;
+            case neighbour_type_enum::not_neighbors:
+                refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
+                break;
+            }
+
+            printf("Iteration %d, integrating %d tasks\n", iteration, refinedTasks->size);
+
+            //Perform numerical integration over pairs of remaining refined tasks
+            performIntegration(*refinedTasks, mesh, numIntegrator);
+            
+            //reset to zero only those integrals which have not yet converged
+            blocks = blocksForSize(remainingTaskCount);
+            kFillValue<double4><<<blocks, gpuThreads>>>(remainingTaskCount, integrals->data, make_double4(0, 0, 0, 0), restTasks->data);
+            
+            //Sum up the results of numerical integration
+            numIntegrator.gatherResults(*integrals, neighborType);
+
+            remainingTaskCount = compareIntegrationResults(neighborType, iteration == 1);
+
+            switch (neighborType)
+            {
+            case neighbour_type_enum::simple_neighbors:
+                restTasks = &simpleNeighborsTasksRest;
+                break;
+            case neighbour_type_enum::attached_neighbors:
+                restTasks = &attachedNeighborsTasksRest;
+                break;
+            case neighbour_type_enum::not_neighbors:
+                restTasks = &notNeighborsTasksRest;
+                break;
+            }
+
+            numIntegrator.determineCellsToBeRefined(*restTasks, neighborType);
+        }
+    }
 }

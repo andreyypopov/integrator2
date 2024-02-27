@@ -18,6 +18,10 @@ public:
 
     virtual void runAllPairs();
 
+    void runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks);
+
+    int compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs = false);
+
     bool outputResultsToFile(neighbour_type_enum neighborType) const;
 
 protected:
@@ -30,6 +34,21 @@ protected:
     deviceVector<double4> d_simpleNeighborsIntegrals;
     deviceVector<double4> d_attachedNeighborsIntegrals;
     deviceVector<double4> d_notNeighborsIntegrals;
+
+    //additional buffers for previous results of numerical integration (used for comparison of 2 refinement steps)
+    deviceVector<double4> d_tempSimpleNeighborsIntegrals;
+    deviceVector<double4> d_tempAttachedNeighborsIntegrals;
+    deviceVector<double4> d_tempNotNeighborsIntegrals;
+
+    //indices of original tasks which have not yet converged and are left for further integration
+    //(lists for the next and the current iteration)
+    deviceVector<int> simpleNeighborsTasksRest;
+    deviceVector<int> attachedNeighborsTasksRest;
+    deviceVector<int> notNeighborsTasksRest;
+    deviceVector<int> tempSimpleNeighborsTasksRest;
+    deviceVector<int> tempAttachedNeighborsTasksRest;
+    deviceVector<int> tempNotNeighborsTasksRest;
+    int *d_restTaskCount;
 
     deviceVector<Point3> d_simpleNeighborsResults;
     deviceVector<Point3> d_attachedNeighborsResults;

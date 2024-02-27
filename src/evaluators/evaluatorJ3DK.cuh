@@ -28,6 +28,9 @@ public:
     virtual void integrateOverSimpleNeighbors() override;
     virtual void integrateOverAttachedNeighbors() override;
     virtual void integrateOverNotNeighbors() override;
+
+private:
+    void numericalIntegration(neighbour_type_enum neighborType);
 };
 
 #endif // EVALUATORJ3DK_CUH

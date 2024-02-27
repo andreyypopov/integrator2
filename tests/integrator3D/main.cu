@@ -102,18 +102,28 @@ int main(int argc, char *argv[]){
     std::vector<Point3> vertices;
     std::vector<int3> cells;
 
-    vertices.resize(mesh.getVertices().size);
-    copy_d2h(mesh.getVertices().data, vertices.data(), mesh.getVertices().size);
-    cells.resize(mesh.getCells().size);
-    copy_d2h(mesh.getCells().data, cells.data(), mesh.getCells().size);
+    if(options[EXPORTMESH]){
+        vertices.resize(mesh.getVertices().size);
+        copy_d2h(mesh.getVertices().data, vertices.data(), mesh.getVertices().size);
+        cells.resize(mesh.getCells().size);
+        copy_d2h(mesh.getCells().data, cells.data(), mesh.getCells().size);
 
-    if(options[EXPORTMESH])
         exportMeshToObj("OriginalMesh.obj", vertices, cells);
+    }
 
     NumericalIntegrator3D numIntegrator(mesh, qf3D13);
     EvaluatorJ3DK evaluator(mesh, numIntegrator);
-    if(options[REFINELEVEL])
-        numIntegrator.setFixedRefinementLevel(std::stoi(options[REFINELEVEL].arg));
+
+    int refineLevelValue = -1;
+    if(options[REFINELEVEL]){
+        refineLevelValue = std::stoi(options[REFINELEVEL].arg);
+        numIntegrator.setFixedRefinementLevel(refineLevelValue);
+        if(refineLevelValue)
+            printf("Using fixed refinement level equal to %d\n", refineLevelValue);
+        else
+            printf("Using original mesh without refinement\n");
+    } else
+        printf("Using adaptive error control procedure\n");
 
     evaluator.runAllPairs();
 
@@ -123,13 +133,14 @@ int main(int argc, char *argv[]){
         evaluator.outputResultsToFile(neighbour_type_enum::not_neighbors);
     }
 
-    vertices.resize(numIntegrator.getRefinedVertices().size);
-    copy_d2h(numIntegrator.getRefinedVertices().data, vertices.data(), numIntegrator.getRefinedVertices().size);
-    cells.resize(numIntegrator.getRefinedCells().size);
-    copy_d2h(numIntegrator.getRefinedCells().data, cells.data(), numIntegrator.getRefinedCells().size);
+    if(options[EXPORTMESH]){
+        vertices.resize(numIntegrator.getRefinedVertices().size);
+        copy_d2h(numIntegrator.getRefinedVertices().data, vertices.data(), numIntegrator.getRefinedVertices().size);
+        cells.resize(numIntegrator.getRefinedCells().size);
+        copy_d2h(numIntegrator.getRefinedCells().data, cells.data(), numIntegrator.getRefinedCells().size);
 
-    if(options[EXPORTMESH])
         exportMeshToObj("RefinedMesh.obj", vertices, cells);
+    }
 
     return EXIT_SUCCESS;
 }

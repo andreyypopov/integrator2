@@ -50,7 +50,7 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
     }
 }
 
-__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, int3 *refinedTasks = nullptr)
+__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, bool *taskConverged = nullptr, int3 *refinedTasks = nullptr)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -66,6 +66,9 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
 		if(idx < tasksNum){
 			const int3 oldTask = tasks[idx];
 
+		if(taskConverged && taskConverged[oldTask.z])
+			continue;
+
 			for(int cell = 0; cell < gpuThreadsMax; ++cell)
 				if(blockStart + cell < refinedCellsNum){
 					const int originalCell = originalCellsSh[cell];
@@ -73,7 +76,7 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
 					if(oldTask.x == originalCell){
 						int pos = atomicAdd(counter, 1);
 						if(refinedTasks)
-							refinedTasks[pos] = { blockStart + cell, oldTask.y, (int)idx };
+							refinedTasks[pos] = { blockStart + cell, oldTask.y, oldTask.z };
 					}
 				}
 		}
@@ -97,11 +100,15 @@ __global__ void kSumIntegrationResults(int n, double4 *results, const double4 *r
     }
 }
 
-__global__ void kInitializeOriginalCellIndices(int n, int *originalCells)
+__global__ void kExtractCellNeedsRefinement(int n, bool *cellNeedsRefinement, const int3 *refinedTasks, const int *restTasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if(idx < n)
-        originalCells[idx] = idx;
+    if(idx < n){
+        const int taskIndex = restTasks[idx];
+        const int3 task = refinedTasks[taskIndex];
+
+        cellNeedsRefinement[task.x] = true;
+    }
 }
 
 NumericalIntegrator3D::NumericalIntegrator3D(const Mesh3D &mesh_, const QuadratureFormula3D &qf_)
@@ -129,6 +136,7 @@ NumericalIntegrator3D::~NumericalIntegrator3D()
 {
     free_device(refinedVerticesCellsNum);
     free_device(taskCount);
+    free_device(d_cellsToBeRefinedCount);
 }
 
 void NumericalIntegrator3D::setFixedRefinementLevel(int refinementLevel)
@@ -165,44 +173,53 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
     if(errorControlType == error_control_type_enum::automatic_error_control || !meshRefinementLevel){
         if(simpleNeighborsTasks.size){
             int taskSize = simpleNeighborsTasks.size;
-            if(errorControlType == error_control_type_enum::automatic_error_control)
-                taskSize *= 4;
+            if(errorControlType == error_control_type_enum::automatic_error_control){
+                simpleNeighborsIntegralsConverged.allocate(taskSize);
+                zero_value_device(simpleNeighborsIntegralsConverged.data, taskSize);
+                taskSize *= CONSTANTS::MAX_AUTO_REFINEMENT_TASK_COEFFICIENT;
+            }
 
             refinedSimpleNeighborsTasks.allocate(taskSize);
             copy_d2d(simpleNeighborsTasks.data, refinedSimpleNeighborsTasks.data, simpleNeighborsTasks.size);
+            refinedSimpleNeighborsTasks.size = simpleNeighborsTasks.size;
+
             d_simpleNeighborsResults.allocate(taskSize);
-            if(errorControlType == error_control_type_enum::automatic_error_control){
-                d_tempSimpleNeighborsResults.allocate(taskSize);
+            if(errorControlType == error_control_type_enum::automatic_error_control)
                 tempRefinedSimpleNeighborsTasks.allocate(taskSize);
-            }
         }
 
         if(attachedNeighborsTasks.size){
             int taskSize = attachedNeighborsTasks.size;
-            if(errorControlType == error_control_type_enum::automatic_error_control)
-                taskSize *= 4;
+            if(errorControlType == error_control_type_enum::automatic_error_control){
+                attachedNeighborsIntegralsConverged.allocate(taskSize);
+                zero_value_device(attachedNeighborsIntegralsConverged.data, taskSize);
+                taskSize *= CONSTANTS::MAX_AUTO_REFINEMENT_TASK_COEFFICIENT;
+            }
 
             refinedAttachedNeighborsTasks.allocate(taskSize);
             copy_d2d(attachedNeighborsTasks.data, refinedAttachedNeighborsTasks.data, attachedNeighborsTasks.size);
-            d_simpleNeighborsResults.allocate(taskSize);
-            if(errorControlType == error_control_type_enum::automatic_error_control){
-                d_tempAttachedNeighborsResults.allocate(taskSize);
+            refinedAttachedNeighborsTasks.size = attachedNeighborsTasks.size;
+
+            d_attachedNeighborsResults.allocate(taskSize);
+            if(errorControlType == error_control_type_enum::automatic_error_control)
                 tempRefinedAttachedNeighborsTasks.allocate(taskSize);
-            }
         }
 
         if(notNeighborsTasks.size){
             int taskSize = notNeighborsTasks.size;
-            if(errorControlType == error_control_type_enum::automatic_error_control)
-                taskSize *= 4;
+            if(errorControlType == error_control_type_enum::automatic_error_control){
+                notNeighborsIntegralsConverged.allocate(taskSize);
+                zero_value_device(notNeighborsIntegralsConverged.data, taskSize);
+                taskSize *= CONSTANTS::MAX_AUTO_REFINEMENT_TASK_COEFFICIENT;
+            }
 
             refinedNotNeighborsTasks.allocate(taskSize);
             copy_d2d(notNeighborsTasks.data, refinedNotNeighborsTasks.data, notNeighborsTasks.size);
+            refinedNotNeighborsTasks.size = notNeighborsTasks.size;
+
             d_notNeighborsResults.allocate(taskSize);
-            if(errorControlType == error_control_type_enum::automatic_error_control){
-                d_tempNotNeighborsResults.allocate(taskSize);
+            if(errorControlType == error_control_type_enum::automatic_error_control)
                 tempRefinedNotNeighborsTasks.allocate(taskSize);
-            }
         }
 
         if(errorControlType == error_control_type_enum::fixed_refinement_level)
@@ -218,12 +235,15 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
 
     //initialize number of indices of original cells with 0,1,2,...,ncells-1
     unsigned int blocks = blocksForSize(verticesCellsNum.y);
-    kInitializeOriginalCellIndices<<<blocks, gpuThreads>>>(verticesCellsNum.y, originalCells.data);
+    kFillOrdinal<<<blocks, gpuThreads>>>(verticesCellsNum.y, originalCells.data);
 
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 
     if(errorControlType == error_control_type_enum::automatic_error_control){
         cellsToBeRefined.allocate(refinedCellsNum);
+        cellRequiresRefinement.allocate(refinedCellsNum);
+        allocate_device(&d_cellsToBeRefinedCount, 1);
+
         return;
     }
 
@@ -235,17 +255,17 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
     int hostTaskCount;
 
     if(simpleNeighborsTasks.size){
-        hostTaskCount = updateTasks(simpleNeighborsTasks, neighbour_type_enum::simple_neighbors, true);
+        hostTaskCount = updateTasks(simpleNeighborsTasks, neighbour_type_enum::simple_neighbors);
         d_simpleNeighborsResults.allocate(hostTaskCount);
     }
 
     if(attachedNeighborsTasks.size){
-        hostTaskCount = updateTasks(attachedNeighborsTasks, neighbour_type_enum::attached_neighbors, true);
+        hostTaskCount = updateTasks(attachedNeighborsTasks, neighbour_type_enum::attached_neighbors);
         d_attachedNeighborsResults.allocate(hostTaskCount);
     }
 
     if(notNeighborsTasks.size){
-        hostTaskCount = updateTasks(notNeighborsTasks, neighbour_type_enum::not_neighbors, true);
+        hostTaskCount = updateTasks(notNeighborsTasks, neighbour_type_enum::not_neighbors);
         d_notNeighborsResults.allocate(hostTaskCount);
     }
 
@@ -285,7 +305,7 @@ void NumericalIntegrator3D::gatherResults(deviceVector<double4> &results, neighb
     }
 }
 
-void NumericalIntegrator3D::refineMesh()
+void NumericalIntegrator3D::refineMesh(neighbour_type_enum updateTasksNeighborType)
 {
     std::swap(refinedVertices.data, tempVertices.data);
     std::swap(refinedCells.data, tempCells.data);
@@ -300,34 +320,56 @@ void NumericalIntegrator3D::refineMesh()
     const bool refineWholeMesh = errorControlType == error_control_type_enum::fixed_refinement_level;
     const int numOfCells = refineWholeMesh ? verticesCellsNum.y : cellsToBeRefined.size;
     unsigned int blocks = blocksForSize(numOfCells);
-    kSplitCell<<<blocks, gpuThreads>>>(numOfCells, refinedVertices.data, refinedCells.data, refinedCellMeasures.data, originalCells.data,
-            refinedVerticesCellsNum, tempVertices.data, tempCells.data, tempCellMeasures.data, tempOriginalCells.data, refineWholeMesh ? cellsToBeRefined.data : nullptr);
 
-    cudaDeviceSynchronize();
+    printf("Number of cells for refinement: %d\n", numOfCells);
+
+    kSplitCell<<<blocks, gpuThreads>>>(numOfCells, refinedVertices.data, refinedCells.data, refinedCellMeasures.data, originalCells.data,
+            refinedVerticesCellsNum, tempVertices.data, tempCells.data, tempCellMeasures.data, tempOriginalCells.data, refineWholeMesh ? nullptr : cellsToBeRefined.data);
+
+    checkCudaErrors(cudaDeviceSynchronize());
     copy_d2h(refinedVerticesCellsNum, &verticesCellsNum, 1);
 
     //in case of automatic error control update the tasks
     if(errorControlType == error_control_type_enum::automatic_error_control){
-        int hostTaskCount;
-        
-        if(refinedSimpleNeighborsTasks.size){
-            refinedSimpleNeighborsTasks.swap(tempRefinedSimpleNeighborsTasks);
-            hostTaskCount = updateTasks(tempRefinedSimpleNeighborsTasks, neighbour_type_enum::simple_neighbors);
+        deviceVector<int3> *refinedTasks, *tempRefinedTasks;
+        switch (updateTasksNeighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            refinedTasks = &refinedSimpleNeighborsTasks;
+            tempRefinedTasks = &tempRefinedSimpleNeighborsTasks;
+            break;
+        case neighbour_type_enum::attached_neighbors:
+            refinedTasks = &refinedAttachedNeighborsTasks;
+            tempRefinedTasks = &tempRefinedAttachedNeighborsTasks;
+            break;
+        case neighbour_type_enum::not_neighbors:
+            refinedTasks = &refinedNotNeighborsTasks;
+            tempRefinedTasks = &tempRefinedNotNeighborsTasks;
+            break;
+        default:
+            return;
         }
 
-        if(refinedAttachedNeighborsTasks.size){
-            refinedAttachedNeighborsTasks.swap(tempRefinedAttachedNeighborsTasks);
-            hostTaskCount = updateTasks(tempRefinedAttachedNeighborsTasks, neighbour_type_enum::attached_neighbors);
-        }
-
-        if(refinedNotNeighborsTasks.size){
-            refinedNotNeighborsTasks.swap(tempRefinedNotNeighborsTasks);
-            hostTaskCount = updateTasks(tempRefinedNotNeighborsTasks, neighbour_type_enum::not_neighbors);
-        }
+        refinedTasks->swap(*tempRefinedTasks);
+        updateTasks(*tempRefinedTasks, updateTasksNeighborType);
     }
 }
 
-int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType, bool performAllocation)
+void NumericalIntegrator3D::resetMesh()
+{
+    verticesCellsNum = { mesh.getVertices().size, mesh.getCells().size };
+
+    copy_d2d(mesh.getVertices().data, refinedVertices.data, verticesCellsNum.x);
+    copy_d2d(mesh.getCells().data, refinedCells.data, verticesCellsNum.y);
+    copy_d2d(mesh.getCellMeasures().data, refinedCellMeasures.data, verticesCellsNum.y);
+
+    unsigned int blocks = blocksForSize(verticesCellsNum.y);
+    kFillOrdinal<<<blocks, gpuThreads>>>(verticesCellsNum.y, originalCells.data);
+
+    copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
+}
+
+int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, neighbour_type_enum neighborType)
 {
     deviceVector<int3> *refinedTasks;
     switch (neighborType)
@@ -341,6 +383,50 @@ int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, 
     case neighbour_type_enum::not_neighbors:
         refinedTasks = &refinedNotNeighborsTasks;
         break;
+    default:
+        return 0;
+    }
+
+    zero_value_device(cellRequiresRefinement.data, cellRequiresRefinement.size);
+    unsigned int blocks = blocksForSize(restTasks.size);
+    kExtractCellNeedsRefinement<<<blocks, gpuThreads>>>(restTasks.size, cellRequiresRefinement.data, refinedTasks->data, restTasks.data);
+
+    zero_value_device(d_cellsToBeRefinedCount, 1);
+    blocks = blocksForSize(cellRequiresRefinement.size);
+    kExtractIndices<<<blocks, gpuThreads>>>(cellRequiresRefinement.size, cellsToBeRefined.data, d_cellsToBeRefinedCount, cellRequiresRefinement.data);
+
+    cudaDeviceSynchronize();
+
+    int cellsToBeRefinedCount;
+    copy_d2h(d_cellsToBeRefinedCount, &cellsToBeRefinedCount, 1);
+
+    cellsToBeRefined.size = cellsToBeRefinedCount;
+
+    return cellsToBeRefinedCount;
+}
+
+int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType)
+{
+    deviceVector<int3> *refinedTasks;
+    bool *integralsConverged = nullptr;
+
+    switch (neighborType)
+    {
+    case neighbour_type_enum::simple_neighbors:
+        refinedTasks = &refinedSimpleNeighborsTasks;
+        if(errorControlType == error_control_type_enum::automatic_error_control)
+            integralsConverged = simpleNeighborsIntegralsConverged.data;
+        break;
+    case neighbour_type_enum::attached_neighbors:
+        refinedTasks = &refinedAttachedNeighborsTasks;
+        if(errorControlType == error_control_type_enum::automatic_error_control)
+            integralsConverged = attachedNeighborsIntegralsConverged.data;
+        break;
+    case neighbour_type_enum::not_neighbors:
+        refinedTasks = &refinedNotNeighborsTasks;
+        if(errorControlType == error_control_type_enum::automatic_error_control)
+            integralsConverged = notNeighborsIntegralsConverged.data;
+        break;
     }
 
     int hostTaskCount;
@@ -348,16 +434,18 @@ int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, 
     zero_value_device(taskCount, 1);
     unsigned int blocks = blocksForSize(originalTasks.size, gpuThreadsMax);
     
-    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data);
+    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, integralsConverged);
 
     cudaDeviceSynchronize();
     copy_d2h(taskCount, &hostTaskCount, 1);
 
-    if(performAllocation)
+    if(refinedTasks->data)
+        refinedTasks->size = hostTaskCount;
+    else
         refinedTasks->allocate(hostTaskCount);
 
     zero_value_device(taskCount, 1);
-    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, refinedTasks->data);
+    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, integralsConverged, refinedTasks->data);
 
     return hostTaskCount;
 }

@@ -26,11 +26,19 @@ public:
 
 	void gatherResults(deviceVector<double4> &results, neighbour_type_enum neighborType) const;
 
-	void refineMesh();
+	void refineMesh(neighbour_type_enum updateTasksNeighborType = neighbour_type_enum::undefined);
+
+    void resetMesh();
+
+    int determineCellsToBeRefined(deviceVector<int> &restTasks, neighbour_type_enum neighborType);
 
 	int getGaussPointsNumber() const {
 		return GaussPointsNum;
 	}
+
+    int getQuadratureFormulaOrder() const {
+        return qf.order;
+    }
 
 	error_control_type_enum getErrorControlType() const {
 		return errorControlType;
@@ -72,8 +80,23 @@ public:
         return refinedCellMeasures;
     }
 
+    auto &getCellsToBeRefined() const {
+        return cellsToBeRefined;
+    }
+
+    auto &getIntegralsConverged(neighbour_type_enum neighborType){
+        switch(neighborType){
+            case neighbour_type_enum::simple_neighbors:
+                return simpleNeighborsIntegralsConverged;
+            case neighbour_type_enum::attached_neighbors:
+                return attachedNeighborsIntegralsConverged;
+            case neighbour_type_enum::not_neighbors:
+                return notNeighborsIntegralsConverged;
+        }
+    }
+
 private:
-    int updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType, bool performAllocation = false);
+    int updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType);
     
     const int GaussPointsNum;
     const Mesh3D &mesh;
@@ -97,15 +120,15 @@ private:
     deviceVector<double4> d_attachedNeighborsResults;
     deviceVector<double4> d_notNeighborsResults;
 
-	//additional buffers for previous results of numerical integration (used for comparison of 2 refinement steps)
-    deviceVector<double4> d_tempSimpleNeighborsResults;
-    deviceVector<double4> d_tempAttachedNeighborsResults;
-    deviceVector<double4> d_tempNotNeighborsResults;
-
     //additional buffers for tasks (in case of adaptive error control)
     deviceVector<int3> tempRefinedSimpleNeighborsTasks;
     deviceVector<int3> tempRefinedAttachedNeighborsTasks;
     deviceVector<int3> tempRefinedNotNeighborsTasks;
+
+    //flags for successful integration calculation convergence
+    deviceVector<bool> simpleNeighborsIntegralsConverged;
+    deviceVector<bool> attachedNeighborsIntegralsConverged;
+    deviceVector<bool> notNeighborsIntegralsConverged;
 
 	//buffers for mesh refinement
 	deviceVector<Point3> tempVertices;
@@ -113,6 +136,8 @@ private:
     deviceVector<double> tempCellMeasures;
     deviceVector<int> tempOriginalCells;
     deviceVector<int> cellsToBeRefined;
+    deviceVector<bool> cellRequiresRefinement;
+    int *d_cellsToBeRefinedCount;
     int *taskCount;
 
 	error_control_type_enum errorControlType;
