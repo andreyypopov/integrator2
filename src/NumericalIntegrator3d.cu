@@ -66,8 +66,8 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
 		if(idx < tasksNum){
 			const int3 oldTask = tasks[idx];
 
-		if(taskConverged && taskConverged[oldTask.z])
-			continue;
+			if(taskConverged && taskConverged[oldTask.z])
+				continue;
 
 			for(int cell = 0; cell < gpuThreadsMax; ++cell)
 				if(blockStart + cell < refinedCellsNum){

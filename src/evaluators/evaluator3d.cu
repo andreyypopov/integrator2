@@ -17,6 +17,20 @@ __global__ void kAddReversedPairs(int n, int3 *pairs)
     }
 }
 
+__global__ void kCalculateIntegrationError(int n, double *errors, const Point3 *results)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        const Point3 resultIJ = results[idx];
+        const Point3 resultJI = results[n + idx];
+
+        const double delta = norm1(resultIJ + resultJI) / max(norm1(resultIJ), norm1(resultJI));
+
+        errors[idx] = delta;
+        errors[n + idx] = delta;
+    }
+}
+
 __global__ void kCompareIntegrationResults(int n, const double4 *integrals, const double4 *tempIntegrals, int *d_restTaskCount, int *restTasks, const int *tempRestTasks, bool *taskConverged)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -54,7 +68,7 @@ Evaluator3D::~Evaluator3D()
     free_device(d_restTaskCount);
 }
 
-void Evaluator3D::runAllPairs()
+void Evaluator3D::runAllPairs(bool checkCorrectness)
 {
     int simpleNeighborsTasksNum = 2 * mesh.getSimpleNeighbors().size;
     int attachedNeighborsTasksNum = 2 * mesh.getAttachedNeighbors().size;
@@ -110,6 +124,23 @@ void Evaluator3D::runAllPairs()
     integrateOverSimpleNeighbors();
     integrateOverAttachedNeighbors();
     integrateOverNotNeighbors();
+
+    if(checkCorrectness){
+        simpleNeighborsErrors.allocate(simpleNeighborsTasksNum);
+        attachedNeighborsErrors.allocate(attachedNeighborsTasksNum);
+        notNeighborsErrors.allocate(notNeighborsTasksNum);
+
+        blocks = blocksForSize(mesh.getSimpleNeighbors().size);
+        kCalculateIntegrationError<<<blocks, gpuThreads>>>(mesh.getSimpleNeighbors().size, simpleNeighborsErrors.data, d_simpleNeighborsResults.data);
+
+        blocks = blocksForSize(mesh.getAttachedNeighbors().size);
+        kCalculateIntegrationError<<<blocks, gpuThreads>>>(mesh.getAttachedNeighbors().size, attachedNeighborsErrors.data, d_attachedNeighborsResults.data);
+
+        blocks = blocksForSize(mesh.getNotNeighbors().size);
+        kCalculateIntegrationError<<<blocks, gpuThreads>>>(mesh.getNotNeighbors().size, notNeighborsErrors.data, d_notNeighborsResults.data);
+
+        checkCudaErrors(cudaDeviceSynchronize());
+    }
 }
 
 void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks)
@@ -228,6 +259,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
     int3 *tasks;
     int tasksSize;
     Point3 *deviceResults;
+    double *errors = nullptr;
     std::string filename;
 
     switch (neighborType)
@@ -236,18 +268,24 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         tasks = simpleNeighborsTasks.data;
         tasksSize = simpleNeighborsTasks.size;
         deviceResults = d_simpleNeighborsResults.data;
+        if(simpleNeighborsErrors.data)
+            errors = simpleNeighborsErrors.data;
         filename = "SimpleNeighbors.dat";
         break;
     case neighbour_type_enum::attached_neighbors:
         tasks = attachedNeighborsTasks.data;
         tasksSize = attachedNeighborsTasks.size;
         deviceResults = d_attachedNeighborsResults.data;
+        if(attachedNeighborsErrors.data)
+            errors = attachedNeighborsErrors.data;
         filename = "AttachedNeighbors.dat";
         break;
     case neighbour_type_enum::not_neighbors:
         tasks = notNeighborsTasks.data;
         tasksSize = notNeighborsTasks.size;
         deviceResults = d_notNeighborsResults.data;
+        if(notNeighborsErrors.data)
+            errors = notNeighborsErrors.data;
         filename = "NotNeighbors.dat";
         break;
     }
@@ -257,16 +295,28 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
 
     std::vector<Point3> hostResults(tasksSize);
     std::vector<int3> hostTasks(tasksSize);
+    std::vector<double> hostErrors;
 
     copy_d2h(deviceResults, hostResults.data(), tasksSize);
     copy_d2h(tasks, hostTasks.data(), tasksSize);
 
+    if(errors){
+        hostErrors.resize(tasksSize);
+        copy_d2h(errors, hostErrors.data(), tasksSize);
+    }
+
     std::ofstream resultsFile(filename.c_str());
 
     if(resultsFile.is_open()){
-        for(int i = 0; i < tasksSize; ++i)
+        for(int i = 0; i < tasksSize; ++i){
             resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
-                    << hostResults[i].x << ", " << hostResults[i].y << ", " << hostResults[i].z << "]" << std::endl;
+                    << hostResults[i].x << ", " << hostResults[i].y << ", " << hostResults[i].z << "]";
+
+            if(errors)
+                resultsFile << ", error = " << hostErrors[i];
+
+            resultsFile << std::endl;
+        }
 
         resultsFile.close();
 

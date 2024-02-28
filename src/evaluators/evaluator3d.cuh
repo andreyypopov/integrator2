@@ -16,15 +16,15 @@ public:
     virtual void integrateOverAttachedNeighbors() = 0;
     virtual void integrateOverNotNeighbors() = 0;
 
-    virtual void runAllPairs();
+    virtual void runAllPairs(bool checkCorrectness = false);
 
     void runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks);
-
-    int compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs = false);
 
     bool outputResultsToFile(neighbour_type_enum neighborType) const;
 
 protected:
+    int compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs = false);
+
     deviceVector<int3> simpleNeighborsTasks;
     deviceVector<int3> attachedNeighborsTasks;
     deviceVector<int3> notNeighborsTasks;
@@ -56,6 +56,11 @@ protected:
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;
+
+private:
+    deviceVector<double> simpleNeighborsErrors;
+    deviceVector<double> attachedNeighborsErrors;
+    deviceVector<double> notNeighborsErrors;
 };
 
 #endif // EVALUATOR3D_CUH

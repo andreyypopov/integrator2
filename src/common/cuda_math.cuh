@@ -125,6 +125,10 @@ __host__ __device__ inline double4 divide(const double4 &v1, const double4 &v2){
     return res;
 }
 
+__host__ __device__ inline double norm1(const Point3 &v){
+    return fabs(v.x) + fabs(v.y) + fabs(v.z);
+}
+
 __host__ __device__ inline double norm1(const double4 &v){
     return fabs(v.x) + fabs(v.y) + fabs(v.z) + fabs(v.w);
 }

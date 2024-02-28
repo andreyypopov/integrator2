@@ -51,7 +51,7 @@ struct Arg: public option::Arg
   }
 };
 
-enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTMESH, EXPORTRESULTS, REFINELEVEL };
+enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTMESH, EXPORTRESULTS, REFINELEVEL, CHECKRESULTS };
 
 const option::Descriptor usage[] = 
 {
@@ -63,6 +63,7 @@ const option::Descriptor usage[] =
     { EXPORTMESH,       0, "",  "exportmesh",   Arg::None,      "   \t--exportmesh \tExport original and refined meshes to OBJ files."},
     { EXPORTRESULTS,    0, "",  "exportresults",Arg::None,      "   \t--exportresults \tExport results of integration to text files."},
     { REFINELEVEL,      0, "r", "refine",       Arg::Numeric,   "   -r <arg>, \t--refine=<arg> \tRefine the whole mesh N times." },
+    { CHECKRESULTS,     0, "c", "checkresults", Arg::None,      "   -c, \t--checkresults  \tCheck correctness of pairs of results." },
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -125,7 +126,7 @@ int main(int argc, char *argv[]){
     } else
         printf("Using adaptive error control procedure\n");
 
-    evaluator.runAllPairs();
+    evaluator.runAllPairs(options[CHECKRESULTS]);
 
     if(options[EXPORTRESULTS]){
         evaluator.outputResultsToFile(neighbour_type_enum::simple_neighbors);
