@@ -3,6 +3,7 @@
 #include "common/cuda_memory.cuh"
 #include "common/constants.h"
 
+#include <array>
 #include <fstream>
 
 __global__ void kCalculateCellNormal(int n, const Point3 *vertices, const int3 *cells, Point3 *normals){
@@ -208,4 +209,87 @@ void exportMeshToObj(const std::string &filename, const std::vector<Point3> &ver
         outputFile << "f " << triangle.x + 1 << " " << triangle.y + 1 << " " << triangle.z + 1 << std::endl;
 
     outputFile.close();
+    printf("Mesh saved to %s\n", filename.c_str());
+}
+
+void exportMeshToVtk(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells,
+        const std::array<std::vector<unsigned char>,3> &refinementsRequired)
+{
+    std::ofstream outputFile(filename.c_str());
+
+    //header
+	outputFile << "<?xml version=\"1.0\" ?> " << std::endl;
+	outputFile << "<VTKFile type=\"PolyData\" version=\"0.1\" byte_order=\"LittleEndian\">" << std::endl;
+	outputFile << "  <PolyData>" << std::endl;
+	outputFile << "    <Piece NumberOfPoints=\"" << vertices.size() <<  "\" NumberOfPolys=\"" << cells.size() << "\">" << std::endl;
+
+    //vertices
+	outputFile << "      <Points>" << std::endl;
+	outputFile << "        <DataArray type=\"Float32\" NumberOfComponents=\"3\" Format=\"ascii\">" << std::endl;
+   	outputFile << "        ";
+	for(const Point3 &vertex : vertices)
+		outputFile << vertex.x << " " << vertex.y << " " << vertex.z << " ";
+    outputFile << std::endl;
+	outputFile << "        </DataArray>" << std::endl;
+	outputFile << "      </Points>" << std::endl;
+
+   	//polygons (triangles)
+	outputFile << "      <Polys>" << std::endl;
+	outputFile << "        <DataArray type=\"Int32\" Name=\"connectivity\" Format=\"ascii\">" << std::endl;
+	outputFile << "          ";
+    for (const int3 &cell : cells)
+        outputFile << cell.x << " " << cell.y << " " << cell.z << " ";
+    outputFile << std::endl;
+	outputFile << "        </DataArray>" << std::endl;
+
+	//offsets
+    outputFile << "        <DataArray type=\"Int32\" Name=\"offsets\" Format=\"ascii\">" << std::endl;
+	outputFile << "          ";
+	for (int i = 0; i < cells.size(); ++i)
+        outputFile << (i + 1) * 3 << " ";
+	outputFile << std::endl;
+	outputFile << "        </DataArray>" << std::endl;
+
+    outputFile << "      </Polys>" << std::endl;
+
+    if(!refinementsRequired[0].empty() || !refinementsRequired[1].empty() || !refinementsRequired[2].empty()){
+        outputFile << "      <CellData>" << std::endl;
+
+        for(int k = 0; k < 3; ++k)
+            if(!refinementsRequired[k].empty()){
+                const std::string fieldName = neighborTypeString(neighbour_type_enum(k)) + "Refinements";
+
+                outputFile << "        <DataArray type=\"Int32\" Name=\"" + fieldName + "\" Format=\"ascii\">" << std::endl;
+                outputFile << "          ";
+                for (int i = 0; i < cells.size(); ++i)
+                    outputFile << (int)refinementsRequired[k][i] << " ";
+	            outputFile << std::endl;
+	            outputFile << "        </DataArray>" << std::endl;
+            }
+
+        outputFile << "      </CellData>" << std::endl;
+    }
+
+   	//footer
+	outputFile << "    </Piece>" << std::endl;
+	outputFile << "  </PolyData>" << std::endl;
+	outputFile << "</VTKFile>" << std::endl;
+
+    outputFile.close();
+    printf("Mesh saved to %s\n", filename.c_str());
+}
+
+std::string neighborTypeString(neighbour_type_enum neighborType)
+{
+    switch (neighborType)
+    {
+    case neighbour_type_enum::simple_neighbors:
+        return "SimpleNeighbors";
+    case neighbour_type_enum::attached_neighbors:
+        return "AttachedNeighbors";
+    case neighbour_type_enum::not_neighbors:
+        return "NotNeighbors";
+    default:
+        return std::string();
+    }
 }

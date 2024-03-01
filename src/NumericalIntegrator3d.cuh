@@ -95,6 +95,17 @@ public:
         }
     }
 
+    auto &getRefinementsRequired(neighbour_type_enum neighborType){
+        switch(neighborType){
+            case neighbour_type_enum::simple_neighbors:
+                return simpleNeighborsRefinementsRequired;
+            case neighbour_type_enum::attached_neighbors:
+                return attachedNeighborsRefinementsRequired;
+            case neighbour_type_enum::not_neighbors:
+                return notNeighborsRefinementsRequired;
+        }
+    }
+
 private:
     int updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType);
     
@@ -142,6 +153,11 @@ private:
 
 	error_control_type_enum errorControlType;
     int meshRefinementLevel;
+
+    //number of refinements required for each cell of original mesh during computation of integrals of each type
+    deviceVector<unsigned char> simpleNeighborsRefinementsRequired;
+    deviceVector<unsigned char> attachedNeighborsRefinementsRequired;
+    deviceVector<unsigned char> notNeighborsRefinementsRequired;
 };
 
 #endif // NUMERICAL_INTEGRATOR_3D_CUH

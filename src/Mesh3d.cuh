@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 enum class neighbour_type_enum {
     simple_neighbors = 0,
@@ -76,5 +77,10 @@ private:
 };
 
 void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells);
+
+void exportMeshToVtk(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells,
+        const std::array<std::vector<unsigned char>, 3> &refinementsRequired);
+
+std::string neighborTypeString(neighbour_type_enum neighborType);
 
 #endif // MESH3D_CUH

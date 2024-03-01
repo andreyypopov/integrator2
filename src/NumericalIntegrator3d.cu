@@ -244,6 +244,14 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
         cellRequiresRefinement.allocate(refinedCellsNum);
         allocate_device(&d_cellsToBeRefinedCount, 1);
 
+        //initialize vectors containing numbers of refinement iterations for each cell (for different types of neighbor)
+        simpleNeighborsRefinementsRequired.allocate(verticesCellsNum.y);
+        zero_value_device(simpleNeighborsRefinementsRequired.data, verticesCellsNum.y);
+        attachedNeighborsRefinementsRequired.allocate(verticesCellsNum.y);
+        zero_value_device(attachedNeighborsRefinementsRequired.data, verticesCellsNum.y);
+        notNeighborsRefinementsRequired.allocate(verticesCellsNum.y);
+        zero_value_device(notNeighborsRefinementsRequired.data, verticesCellsNum.y);
+
         return;
     }
 
@@ -372,16 +380,21 @@ void NumericalIntegrator3D::resetMesh()
 int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, neighbour_type_enum neighborType)
 {
     deviceVector<int3> *refinedTasks;
+    deviceVector<unsigned char> *refinementsRequired;
+
     switch (neighborType)
     {
     case neighbour_type_enum::simple_neighbors:
         refinedTasks = &refinedSimpleNeighborsTasks;
+        refinementsRequired = &simpleNeighborsRefinementsRequired;
         break;
     case neighbour_type_enum::attached_neighbors:
         refinedTasks = &refinedAttachedNeighborsTasks;
+        refinementsRequired = &attachedNeighborsRefinementsRequired;
         break;
     case neighbour_type_enum::not_neighbors:
         refinedTasks = &refinedNotNeighborsTasks;
+        refinementsRequired = &notNeighborsRefinementsRequired;
         break;
     default:
         return 0;
@@ -399,6 +412,9 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
 
     int cellsToBeRefinedCount;
     copy_d2h(d_cellsToBeRefinedCount, &cellsToBeRefinedCount, 1);
+
+    blocks = blocksForSize(cellsToBeRefinedCount);
+    kIncreaseValue<unsigned char><<<blocks, gpuThreads>>>(cellsToBeRefinedCount, refinementsRequired->data, 1, cellsToBeRefined.data);
 
     cellsToBeRefined.size = cellsToBeRefinedCount;
 

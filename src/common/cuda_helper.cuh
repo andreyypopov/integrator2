@@ -53,4 +53,16 @@ __global__ void kFillValue(int n, T *array, T value, int *indices = nullptr)
     }
 }
 
+template<class T>
+__global__ void kIncreaseValue(int n, T *array, T value, int *indices = nullptr)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        if(indices)
+            idx = indices[idx];
+
+        array[idx] += value;
+    }
+}
+
 #endif // CUDA_HELPER_CUH
