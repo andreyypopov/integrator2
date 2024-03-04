@@ -31,7 +31,7 @@ __global__ void kCalculateIntegrationError(int n, double *errors, const Point3 *
     }
 }
 
-__global__ void kCompareIntegrationResults(int n, const double4 *integrals, const double4 *tempIntegrals, int *d_restTaskCount, int *restTasks, const int *tempRestTasks, bool *taskConverged)
+__global__ void kCompareIntegrationResults(int n, const double4 *integrals, const double4 *tempIntegrals, int *d_restTaskCount, int *restTasks, const int *tempRestTasks, unsigned char *taskConverged)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
@@ -213,7 +213,7 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     zero_value_device(d_restTaskCount, 1);
     deviceVector<double4> *integrals, *tempIntegrals;
     deviceVector<int> *restTasks, *tempRestTasks;
-    bool *tasksConverged = numIntegrator.getIntegralsConverged(neighborType).data;
+    unsigned char *tasksConverged = numIntegrator.getIntegralsConverged(neighborType).data;
 
     switch (neighborType)
     {

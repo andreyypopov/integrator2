@@ -7,12 +7,14 @@ __constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];
 __constant__ int    c_GaussPointsNumber;
 
 __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, double *refinedCellMeasures, int *originalCells, int2 *refinedVerticesCellsNum,
-        const Point3 *tempVertices, const int3 *tempCells, const double *tempCellMeasures, const int *tempOriginalCells, const int *cellsToBeRefined = nullptr)
+        const Point3 *tempVertices, const int3 *tempCells, const double *tempCellMeasures, const int *tempOriginalCells, int *refinedCellParents = nullptr, const unsigned char *cellRequiresRefinement = nullptr)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
-        if(cellsToBeRefined)
-            idx = cellsToBeRefined[idx];
+        const int originalCellIndex = tempOriginalCells[idx];
+
+        if(cellRequiresRefinement && !cellRequiresRefinement[originalCellIndex])
+            return;
         
         //data of the triangle to be split
         const int3 triangle = tempCells[idx];
@@ -20,7 +22,6 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
         const Point3 triB = tempVertices[triangle.y];
         const Point3 triC = tempVertices[triangle.z];
         const double measure = tempCellMeasures[idx];
-        const int originalCellIndex = tempOriginalCells[idx];
 
         //add 3 new vertices on the triangle egdes
         const int vertexIndex = atomicAdd((int*)refinedVerticesCellsNum, 3);
@@ -47,38 +48,48 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
         originalCells[cellIndex + 1] = originalCellIndex;
         originalCells[cellIndex + 2] = originalCellIndex;
         originalCells[cellIndex + 3] = originalCellIndex;
+
+        if(refinedCellParents){
+            refinedCellParents[cellIndex] = idx;
+            refinedCellParents[cellIndex + 1] = idx;
+            refinedCellParents[cellIndex + 2] = idx;
+            refinedCellParents[cellIndex + 3] = idx;
+        }
     }
 }
 
-__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, bool *taskConverged = nullptr, int3 *refinedTasks = nullptr)
+__global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, const int *tempOriginalCells, const int *refinedCellParents = nullptr, unsigned char *taskConverged = nullptr, int3 *refinedTasks = nullptr)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
     __shared__ int originalCellsSh[gpuThreadsMax];
+    __shared__ int cellParentsSh[gpuThreadsMax];
 
 	//do not exit the kernel immediately when idx >= tasksNum
 	//because the thread might be required to perform loading into shared memory
 	for(int blockStart = 0; blockStart < refinedCellsNum; blockStart += gpuThreadsMax){
-		if(blockStart + threadIdx.x < refinedCellsNum)
+		if(blockStart + threadIdx.x < refinedCellsNum){
 			originalCellsSh[threadIdx.x] = originalCells[blockStart + threadIdx.x];
+			if(refinedCellParents)
+				cellParentsSh[threadIdx.x] = refinedCellParents[blockStart + threadIdx.x];
+		}
 		__syncthreads();
 
 		if(idx < tasksNum){
 			const int3 oldTask = tasks[idx];
 
-			if(taskConverged && taskConverged[oldTask.z])
-				continue;
+			if(!taskConverged || !taskConverged[oldTask.z])
+				for(int cell = 0; cell < gpuThreadsMax; ++cell)
+					if(blockStart + cell < refinedCellsNum){
+						const int originalCell = originalCellsSh[cell];
 
-			for(int cell = 0; cell < gpuThreadsMax; ++cell)
-				if(blockStart + cell < refinedCellsNum){
-					const int originalCell = originalCellsSh[cell];
+						if(tempOriginalCells[oldTask.x] == originalCell && (!refinedCellParents || cellParentsSh[cell] == oldTask.x)){
+							int pos = atomicAdd(counter, 1);
 
-					if(oldTask.x == originalCell){
-						int pos = atomicAdd(counter, 1);
-						if(refinedTasks)
-							refinedTasks[pos] = { blockStart + cell, oldTask.y, oldTask.z };
+							if(refinedTasks)
+								refinedTasks[pos] = { blockStart + cell, oldTask.y, oldTask.z };
+						}
 					}
-				}
 		}
 
 		__syncthreads();
@@ -100,14 +111,14 @@ __global__ void kSumIntegrationResults(int n, double4 *results, const double4 *r
     }
 }
 
-__global__ void kExtractCellNeedsRefinement(int n, bool *cellNeedsRefinement, const int3 *refinedTasks, const int *restTasks)
+__global__ void kExtractCellNeedsRefinement(int n, unsigned char *cellNeedsRefinement, const int *restTasks, const int3 *tasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
         const int taskIndex = restTasks[idx];
-        const int3 task = refinedTasks[taskIndex];
+        const int3 originalTask = tasks[taskIndex];
 
-        cellNeedsRefinement[task.x] = true;
+        cellNeedsRefinement[originalTask.x] = true;
     }
 }
 
@@ -240,8 +251,9 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 
     if(errorControlType == error_control_type_enum::automatic_error_control){
+        refinedCellParents.allocate(refinedCellsNum);
         cellsToBeRefined.allocate(refinedCellsNum);
-        cellRequiresRefinement.allocate(refinedCellsNum);
+        cellRequiresRefinement.allocate(verticesCellsNum.y);
         allocate_device(&d_cellsToBeRefinedCount, 1);
 
         //initialize vectors containing numbers of refinement iterations for each cell (for different types of neighbor)
@@ -326,13 +338,12 @@ void NumericalIntegrator3D::refineMesh(neighbour_type_enum updateTasksNeighborTy
     zero_value_device((int*)refinedVerticesCellsNum + 1, 1);
 
     const bool refineWholeMesh = errorControlType == error_control_type_enum::fixed_refinement_level;
-    const int numOfCells = refineWholeMesh ? verticesCellsNum.y : cellsToBeRefined.size;
-    unsigned int blocks = blocksForSize(numOfCells);
+    unsigned int blocks = blocksForSize(verticesCellsNum.y);
 
     printf("Number of cells for refinement: %d\n", numOfCells);
 
-    kSplitCell<<<blocks, gpuThreads>>>(numOfCells, refinedVertices.data, refinedCells.data, refinedCellMeasures.data, originalCells.data,
-            refinedVerticesCellsNum, tempVertices.data, tempCells.data, tempCellMeasures.data, tempOriginalCells.data, refineWholeMesh ? nullptr : cellsToBeRefined.data);
+    kSplitCell<<<blocks, gpuThreads>>>(verticesCellsNum.y, refinedVertices.data, refinedCells.data, refinedCellMeasures.data, originalCells.data,
+            refinedVerticesCellsNum, tempVertices.data, tempCells.data, tempCellMeasures.data, tempOriginalCells.data, refineWholeMesh ? nullptr : refinedCellParents.data, refineWholeMesh ? nullptr : cellRequiresRefinement.data);
 
     checkCudaErrors(cudaDeviceSynchronize());
     copy_d2h(refinedVerticesCellsNum, &verticesCellsNum, 1);
@@ -377,7 +388,7 @@ void NumericalIntegrator3D::resetMesh()
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 }
 
-int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, neighbour_type_enum neighborType)
+int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> &tasks, neighbour_type_enum neighborType)
 {
     deviceVector<int3> *refinedTasks;
     deviceVector<unsigned char> *refinementsRequired;
@@ -402,7 +413,7 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
 
     zero_value_device(cellRequiresRefinement.data, cellRequiresRefinement.size);
     unsigned int blocks = blocksForSize(restTasks.size);
-    kExtractCellNeedsRefinement<<<blocks, gpuThreads>>>(restTasks.size, cellRequiresRefinement.data, refinedTasks->data, restTasks.data);
+    kExtractCellNeedsRefinement<<<blocks, gpuThreads>>>(restTasks.size, cellRequiresRefinement.data, restTasks.data, tasks.data);
 
     zero_value_device(d_cellsToBeRefinedCount, 1);
     blocks = blocksForSize(cellRequiresRefinement.size);
@@ -424,7 +435,7 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
 int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType)
 {
     deviceVector<int3> *refinedTasks;
-    bool *integralsConverged = nullptr;
+    unsigned char *integralsConverged = nullptr;
 
     switch (neighborType)
     {
@@ -450,7 +461,7 @@ int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, 
     zero_value_device(taskCount, 1);
     unsigned int blocks = blocksForSize(originalTasks.size, gpuThreadsMax);
     
-    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, integralsConverged);
+    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, tempOriginalCells.data, refinedCellParents.data, integralsConverged);
 
     cudaDeviceSynchronize();
     copy_d2h(taskCount, &hostTaskCount, 1);
@@ -461,7 +472,7 @@ int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, 
         refinedTasks->allocate(hostTaskCount);
 
     zero_value_device(taskCount, 1);
-    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, integralsConverged, refinedTasks->data);
+    kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, tempOriginalCells.data, refinedCellParents.data, integralsConverged, refinedTasks->data);
 
     return hostTaskCount;
 }

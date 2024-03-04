@@ -22,6 +22,17 @@ public:
 
     bool outputResultsToFile(neighbour_type_enum neighborType) const;
 
+    const auto &getTasks(neighbour_type_enum neighborType) const {
+        switch(neighborType){
+            case neighbour_type_enum::simple_neighbors:
+                return simpleNeighborsTasks;
+            case neighbour_type_enum::attached_neighbors:
+                return attachedNeighborsTasks;
+            case neighbour_type_enum::not_neighbors:
+                return notNeighborsTasks;
+        }
+    }
+
 protected:
     int compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs = false);
 

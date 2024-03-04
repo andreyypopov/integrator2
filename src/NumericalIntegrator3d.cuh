@@ -30,7 +30,7 @@ public:
 
     void resetMesh();
 
-    int determineCellsToBeRefined(deviceVector<int> &restTasks, neighbour_type_enum neighborType);
+    int determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> &tasks, neighbour_type_enum neighborType);
 
 	int getGaussPointsNumber() const {
 		return GaussPointsNum;
@@ -120,6 +120,7 @@ private:
     deviceVector<int3> refinedCells;
     deviceVector<double> refinedCellMeasures;
     deviceVector<int> originalCells;    //vector of indices of original triangles (with respect to the refined triangles)
+    deviceVector<int> refinedCellParents;
 
 	//tasks for refined cells (i,j and index of the original non-refined task)
     deviceVector<int3> refinedSimpleNeighborsTasks;
@@ -137,9 +138,9 @@ private:
     deviceVector<int3> tempRefinedNotNeighborsTasks;
 
     //flags for successful integration calculation convergence
-    deviceVector<bool> simpleNeighborsIntegralsConverged;
-    deviceVector<bool> attachedNeighborsIntegralsConverged;
-    deviceVector<bool> notNeighborsIntegralsConverged;
+    deviceVector<unsigned char> simpleNeighborsIntegralsConverged;
+    deviceVector<unsigned char> attachedNeighborsIntegralsConverged;
+    deviceVector<unsigned char> notNeighborsIntegralsConverged;
 
 	//buffers for mesh refinement
 	deviceVector<Point3> tempVertices;
@@ -147,7 +148,7 @@ private:
     deviceVector<double> tempCellMeasures;
     deviceVector<int> tempOriginalCells;
     deviceVector<int> cellsToBeRefined;
-    deviceVector<bool> cellRequiresRefinement;
+    deviceVector<unsigned char> cellRequiresRefinement;
     int *d_cellsToBeRefinedCount;
     int *taskCount;
 

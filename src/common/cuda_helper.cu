@@ -7,7 +7,7 @@ __global__ void kFillOrdinal(int n, int *indices)
         indices[idx] = idx;
 }
 
-__global__ void kExtractIndices(int n, int *indices, int *counter, const bool *mask)
+__global__ void kExtractIndices(int n, int *indices, int *counter, const unsigned char *mask)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n)

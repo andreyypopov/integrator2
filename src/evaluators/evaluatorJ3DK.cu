@@ -765,7 +765,7 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
         int remainingTaskCount = refinedTasks->size;
         int iteration = 0;
 
-        numIntegrator.determineCellsToBeRefined(*restTasks, neighborType);
+        numIntegrator.determineCellsToBeRefined(*restTasks, getTasks(neighborType), neighborType);
 
         while(remainingTaskCount && iteration < CONSTANTS::MAX_REFINE_LEVEL){
             ++iteration;
@@ -800,20 +800,22 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
 
             remainingTaskCount = compareIntegrationResults(neighborType, iteration == 1);
 
-            switch (neighborType)
-            {
-            case neighbour_type_enum::simple_neighbors:
-                restTasks = &simpleNeighborsTasksRest;
-                break;
-            case neighbour_type_enum::attached_neighbors:
-                restTasks = &attachedNeighborsTasksRest;
-                break;
-            case neighbour_type_enum::not_neighbors:
-                restTasks = &notNeighborsTasksRest;
-                break;
-            }
+            if(remainingTaskCount){
+                switch (neighborType)
+                {
+                case neighbour_type_enum::simple_neighbors:
+                    restTasks = &simpleNeighborsTasksRest;
+                    break;
+                case neighbour_type_enum::attached_neighbors:
+                    restTasks = &attachedNeighborsTasksRest;
+                    break;
+                case neighbour_type_enum::not_neighbors:
+                    restTasks = &notNeighborsTasksRest;
+                    break;
+                }
 
-            numIntegrator.determineCellsToBeRefined(*restTasks, neighborType);
+                numIntegrator.determineCellsToBeRefined(*restTasks, getTasks(neighborType), neighborType);
+            }
         }
     }
 }
