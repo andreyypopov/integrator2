@@ -21,12 +21,14 @@ void allocate_host(T** ptr, size_t elements_num){
 
 template<class T>
 void free_device(T* ptr){
-    checkCudaErrors(cudaFree(ptr));
+    if(ptr)
+        checkCudaErrors(cudaFree(ptr));
 }
 
 template<class T>
 void free_host(T* ptr){
-    checkCudaErrors(cudaFreeHost(ptr));
+    if(ptr)
+        checkCudaErrors(cudaFreeHost(ptr));
 }
 
 template<class T>

@@ -340,8 +340,6 @@ void NumericalIntegrator3D::refineMesh(neighbour_type_enum updateTasksNeighborTy
     const bool refineWholeMesh = errorControlType == error_control_type_enum::fixed_refinement_level;
     unsigned int blocks = blocksForSize(verticesCellsNum.y);
 
-    printf("Number of cells for refinement: %d\n", numOfCells);
-
     kSplitCell<<<blocks, gpuThreads>>>(verticesCellsNum.y, refinedVertices.data, refinedCells.data, refinedCellMeasures.data, originalCells.data,
             refinedVerticesCellsNum, tempVertices.data, tempCells.data, tempCellMeasures.data, tempOriginalCells.data, refineWholeMesh ? nullptr : refinedCellParents.data, refineWholeMesh ? nullptr : cellRequiresRefinement.data);
 

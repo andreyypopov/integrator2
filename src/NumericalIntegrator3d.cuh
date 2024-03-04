@@ -116,7 +116,7 @@ private:
     deviceVector<Point3> refinedVertices;
 
     int2 verticesCellsNum;
-    int2 *refinedVerticesCellsNum;
+    int2 *refinedVerticesCellsNum = nullptr;
     deviceVector<int3> refinedCells;
     deviceVector<double> refinedCellMeasures;
     deviceVector<int> originalCells;    //vector of indices of original triangles (with respect to the refined triangles)
@@ -149,8 +149,8 @@ private:
     deviceVector<int> tempOriginalCells;
     deviceVector<int> cellsToBeRefined;
     deviceVector<unsigned char> cellRequiresRefinement;
-    int *d_cellsToBeRefinedCount;
-    int *taskCount;
+    int *d_cellsToBeRefinedCount = nullptr;
+    int *taskCount = nullptr;
 
 	error_control_type_enum errorControlType;
     int meshRefinementLevel;

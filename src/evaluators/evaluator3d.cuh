@@ -59,7 +59,7 @@ protected:
     deviceVector<int> tempSimpleNeighborsTasksRest;
     deviceVector<int> tempAttachedNeighborsTasksRest;
     deviceVector<int> tempNotNeighborsTasksRest;
-    int *d_restTaskCount;
+    int *d_restTaskCount = nullptr;
 
     deviceVector<Point3> d_simpleNeighborsResults;
     deviceVector<Point3> d_attachedNeighborsResults;
