@@ -241,9 +241,9 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
 
     const int taskCount = allPairs ? integrals->size : tempRestTasks->size;
     unsigned int blocks = blocksForSize(taskCount);
-    kCompareIntegrationResults<<<blocks, gpuThreads>>>(integrals->size, integrals->data, tempIntegrals->data, d_restTaskCount, restTasks->data, allPairs ? nullptr : tempRestTasks->data, tasksConverged);
+    kCompareIntegrationResults<<<blocks, gpuThreads>>>(taskCount, integrals->data, tempIntegrals->data, d_restTaskCount, restTasks->data, allPairs ? nullptr : tempRestTasks->data, tasksConverged);
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
     int notConvergedTaskCount;
     
     copy_d2h(d_restTaskCount, &notConvergedTaskCount, 1);
