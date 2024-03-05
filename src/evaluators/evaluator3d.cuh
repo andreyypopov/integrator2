@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "../common/gpu_timer.cuh"
 #include "../NumericalIntegrator3d.cuh"
 #include "../Mesh3d.cuh"
 
@@ -67,6 +68,8 @@ protected:
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;
+
+    GpuTimer timer;
 
 private:
     deviceVector<double> simpleNeighborsErrors;

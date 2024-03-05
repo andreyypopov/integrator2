@@ -121,9 +121,17 @@ void Evaluator3D::runAllPairs(bool checkCorrectness)
     
     numIntegrator.prepareTasksAndMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
+    timer.start();
     integrateOverSimpleNeighbors();
+    timer.stop("Simple neighbors integration");
+
+    timer.start();
     integrateOverAttachedNeighbors();
+    timer.stop("Attached neighbors integration");
+
+    timer.start();    
     integrateOverNotNeighbors();
+    timer.stop("Non-neighbors integration");
 
     if(checkCorrectness){
         simpleNeighborsErrors.allocate(simpleNeighborsTasksNum);
@@ -198,14 +206,23 @@ void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, co
 
     numIntegrator.prepareTasksAndMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
-    if(!userSimpleNeighborsTasks.empty())
+    if(!userSimpleNeighborsTasks.empty()){
+        timer.start();
         integrateOverSimpleNeighbors();
+        timer.stop("Simple neighbors integration");
+    }
 
-    if(!userAttachedNeighborsTasks.empty())
+    if(!userAttachedNeighborsTasks.empty()){
+        timer.start();
         integrateOverAttachedNeighbors();
+        timer.stop("Attached neighbors integration");
+    }
 
-    if(!userNotNeighborsTasks.empty())
-        integrateOverNotNeighbors();    
+    if(!userNotNeighborsTasks.empty()){
+        timer.start();
+        integrateOverNotNeighbors();
+        timer.stop("Non-neighbors integration");
+    }    
 }
 
 int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs)
