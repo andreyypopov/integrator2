@@ -37,4 +37,32 @@ inline void __getLastCudaError(const char *errorMessage, const char *file,
     }
 }
 
+__global__ void kFillOrdinal(int n, int *indices);
+
+__global__ void kExtractIndices(int n, int *indices, int *counter, const unsigned char *mask);
+
+template<class T>
+__global__ void kFillValue(int n, T *array, T value, int *indices = nullptr)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        if(indices)
+            idx = indices[idx];
+        
+        array[idx] = value;
+    }
+}
+
+template<class T>
+__global__ void kIncreaseValue(int n, T *array, T value, int *indices = nullptr)
+{
+    unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx < n){
+        if(indices)
+            idx = indices[idx];
+
+        array[idx] += value;
+    }
+}
+
 #endif // CUDA_HELPER_CUH

@@ -6,11 +6,13 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 enum class neighbour_type_enum {
     simple_neighbors = 0,
     attached_neighbors = 1,
-    not_neighbors = 2
+    not_neighbors = 2,
+    undefined = -1
 };
 
 class Mesh3D
@@ -69,11 +71,16 @@ private:
     int *d_simpleNeighborsNum = nullptr;
     int *d_attachedNeighborsNum = nullptr;
     int *d_notNeighborsNum = nullptr;
-    deviceVector<int2> simpleNeighbors;
-    deviceVector<int2> attachedNeighbors;
-    deviceVector<int2> notNeighbors;
+    deviceVector<int3> simpleNeighbors;
+    deviceVector<int3> attachedNeighbors;
+    deviceVector<int3> notNeighbors;
 };
 
 void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells);
+
+void exportMeshToVtk(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells,
+        const std::array<std::vector<unsigned char>, 3> &refinementsRequired);
+
+std::string neighborTypeString(neighbour_type_enum neighborType);
 
 #endif // MESH3D_CUH

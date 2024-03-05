@@ -23,6 +23,17 @@ public:
         return size * sizeof(T);
     }
 
+    void swap(deviceVector<T> &other){
+        T *tmpData = other.data;
+        int tmpSize = other.size;
+
+        other.data = this->data;
+        other.size = this->size;
+
+        this->data = tmpData;
+        this->size = tmpSize;
+    }
+
 private:
     void free(){
         if(data){
