@@ -688,7 +688,9 @@ void EvaluatorJ3DK::integrateOverNotNeighbors()
 
 void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
 {
-    const deviceVector<int3> *tasks, *refinedTasks;
+    const deviceVector<int3> *tasks = &getTasks(neighborType);
+    const deviceVector<int3> *refinedTasks = &numIntegrator.getRefinedTasks(neighborType);
+
     deviceVector<int> *restTasks;
     deviceVector<double4> *integrals, *tempIntegrals;
 
@@ -697,22 +699,16 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
     switch (neighborType)
     {
     case neighbour_type_enum::simple_neighbors:
-        tasks = &simpleNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
         restTasks = &simpleNeighborsTasksRest;
         integrals = &d_simpleNeighborsIntegrals;
         tempIntegrals = &d_tempSimpleNeighborsIntegrals;
         break;
     case neighbour_type_enum::attached_neighbors:
-        tasks = &attachedNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
         restTasks = &attachedNeighborsTasksRest;
         integrals = &d_attachedNeighborsIntegrals;
         tempIntegrals = &d_tempAttachedNeighborsIntegrals;
         break;
     case neighbour_type_enum::not_neighbors:
-        tasks = &notNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
         restTasks = &notNeighborsTasksRest;
         integrals = &d_notNeighborsIntegrals;
         tempIntegrals = &d_tempNotNeighborsIntegrals;
@@ -726,17 +722,17 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
         switch(neighborType)
         {
         case neighbour_type_enum::simple_neighbors:
-            kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getSimpleNeighborsResults().data, refinedTasks.data, tasks->data,
+            kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType).data, refinedTasks.data, tasks->data,
                 mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data,
                 numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         case neighbour_type_enum::attached_neighbors:
-            kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getAttachedNeighborsResults().data, refinedTasks.data, tasks->data,
+            kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType).data, refinedTasks.data, tasks->data,
                 mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, numIntegrator.getRefinedVertices().data,
                 numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         case neighbour_type_enum::not_neighbors:
-            kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getNotNeighborsResults().data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
+            kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType).data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
                 numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         default:
@@ -773,18 +769,7 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
             numIntegrator.refineMesh(neighborType);
             integrals->swap(*tempIntegrals);
 
-            switch (neighborType)
-            {
-            case neighbour_type_enum::simple_neighbors:
-                refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
-                break;
-            case neighbour_type_enum::attached_neighbors:
-                refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
-                break;
-            case neighbour_type_enum::not_neighbors:
-                refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
-                break;
-            }
+            refinedTasks = &numIntegrator.getRefinedTasks(neighborType);
 
             printf("Iteration %d, integrating %d tasks\n", iteration, refinedTasks->size);
 

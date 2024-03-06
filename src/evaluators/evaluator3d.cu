@@ -124,14 +124,17 @@ void Evaluator3D::runAllPairs(bool checkCorrectness)
     timer.start();
     integrateOverSimpleNeighbors();
     timer.stop("Simple neighbors integration");
+    requestFreeDeviceMemoryAmount();
 
     timer.start();
     integrateOverAttachedNeighbors();
     timer.stop("Attached neighbors integration");
+    requestFreeDeviceMemoryAmount();
 
     timer.start();    
     integrateOverNotNeighbors();
     timer.stop("Non-neighbors integration");
+    requestFreeDeviceMemoryAmount();
 
     if(checkCorrectness){
         simpleNeighborsErrors.allocate(simpleNeighborsTasksNum);
@@ -210,18 +213,21 @@ void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, co
         timer.start();
         integrateOverSimpleNeighbors();
         timer.stop("Simple neighbors integration");
+        requestFreeDeviceMemoryAmount();
     }
 
     if(!userAttachedNeighborsTasks.empty()){
         timer.start();
         integrateOverAttachedNeighbors();
         timer.stop("Attached neighbors integration");
+        requestFreeDeviceMemoryAmount();
     }
 
     if(!userNotNeighborsTasks.empty()){
         timer.start();
         integrateOverNotNeighbors();
         timer.stop("Non-neighbors integration");
+        requestFreeDeviceMemoryAmount();
     }    
 }
 

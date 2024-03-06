@@ -65,4 +65,6 @@ __global__ void kIncreaseValue(int n, T *array, T value, int *indices = nullptr)
     }
 }
 
+size_t requestFreeDeviceMemoryAmount();
+
 #endif // CUDA_HELPER_CUH

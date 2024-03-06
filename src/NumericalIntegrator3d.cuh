@@ -44,28 +44,28 @@ public:
 		return errorControlType;
 	}
 
-    const auto &getRefinedSimpleNeighborsTasks() const {
-        return refinedSimpleNeighborsTasks;
+    const auto &getRefinedTasks(neighbour_type_enum neighborType) const {
+        switch(neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            return refinedSimpleNeighborsTasks;
+        case neighbour_type_enum::attached_neighbors:
+            return refinedAttachedNeighborsTasks;
+        case neighbour_type_enum::not_neighbors:
+            return refinedNotNeighborsTasks;
+        }
     }
 
-    const auto &getSimpleNeighborsResults() const {
-        return d_simpleNeighborsResults;
-    }
-
-    const auto &getRefinedAttachedNeighborsTasks() const {
-        return refinedAttachedNeighborsTasks;
-    }
-
-    const auto &getAttachedNeighborsResults() const {
-        return d_attachedNeighborsResults;
-    }
-
-    const auto &getRefinedNotNeighborsTasks() const {
-        return refinedNotNeighborsTasks;
-    }
-
-    const auto &getNotNeighborsResults() const {
-        return d_notNeighborsResults;
+    const auto &getResults(neighbour_type_enum neighborType) const {
+        switch(neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            return d_simpleNeighborsResults;
+        case neighbour_type_enum::attached_neighbors:
+            return d_attachedNeighborsResults;
+        case neighbour_type_enum::not_neighbors:
+            return d_notNeighborsResults;
+        }
     }
 
     const auto &getRefinedVertices() const {
