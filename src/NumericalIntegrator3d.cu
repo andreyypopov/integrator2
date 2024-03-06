@@ -192,7 +192,7 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
 
             refinedSimpleNeighborsTasks.allocate(taskSize);
             copy_d2d(simpleNeighborsTasks.data, refinedSimpleNeighborsTasks.data, simpleNeighborsTasks.size);
-            refinedSimpleNeighborsTasks.size = simpleNeighborsTasks.size;
+            refinedSimpleNeighborsTasks.resize(simpleNeighborsTasks.size);
 
             d_simpleNeighborsResults.allocate(taskSize);
             if(errorControlType == error_control_type_enum::automatic_error_control)
@@ -209,7 +209,7 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
 
             refinedAttachedNeighborsTasks.allocate(taskSize);
             copy_d2d(attachedNeighborsTasks.data, refinedAttachedNeighborsTasks.data, attachedNeighborsTasks.size);
-            refinedAttachedNeighborsTasks.size = attachedNeighborsTasks.size;
+            refinedAttachedNeighborsTasks.resize(attachedNeighborsTasks.size);
 
             d_attachedNeighborsResults.allocate(taskSize);
             if(errorControlType == error_control_type_enum::automatic_error_control)
@@ -226,7 +226,7 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
 
             refinedNotNeighborsTasks.allocate(taskSize);
             copy_d2d(notNeighborsTasks.data, refinedNotNeighborsTasks.data, notNeighborsTasks.size);
-            refinedNotNeighborsTasks.size = notNeighborsTasks.size;
+            refinedNotNeighborsTasks.resize(notNeighborsTasks.size);
 
             d_notNeighborsResults.allocate(taskSize);
             if(errorControlType == error_control_type_enum::automatic_error_control)
@@ -289,7 +289,7 @@ void NumericalIntegrator3D::prepareTasksAndMesh(const deviceVector<int3> &simple
         d_notNeighborsResults.allocate(hostTaskCount);
     }
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
     printf("Refined mesh contains %d vertices and %d cells. Number of tasks: simple neighbors - %d, attached neighbors - %d, non-neighbors - %d\n",
             verticesCellsNum.x, verticesCellsNum.y, refinedSimpleNeighborsTasks.size, refinedAttachedNeighborsTasks.size, refinedNotNeighborsTasks.size);
 }
@@ -388,21 +388,17 @@ void NumericalIntegrator3D::resetMesh()
 
 int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> &tasks, neighbour_type_enum neighborType)
 {
-    deviceVector<int3> *refinedTasks;
     deviceVector<unsigned char> *refinementsRequired;
 
     switch (neighborType)
     {
     case neighbour_type_enum::simple_neighbors:
-        refinedTasks = &refinedSimpleNeighborsTasks;
         refinementsRequired = &simpleNeighborsRefinementsRequired;
         break;
     case neighbour_type_enum::attached_neighbors:
-        refinedTasks = &refinedAttachedNeighborsTasks;
         refinementsRequired = &attachedNeighborsRefinementsRequired;
         break;
     case neighbour_type_enum::not_neighbors:
-        refinedTasks = &refinedNotNeighborsTasks;
         refinementsRequired = &notNeighborsRefinementsRequired;
         break;
     default:
@@ -417,7 +413,7 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
     blocks = blocksForSize(cellRequiresRefinement.size);
     kExtractIndices<<<blocks, gpuThreads>>>(cellRequiresRefinement.size, cellsToBeRefined.data, d_cellsToBeRefinedCount, cellRequiresRefinement.data);
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
 
     int cellsToBeRefinedCount;
     copy_d2h(d_cellsToBeRefinedCount, &cellsToBeRefinedCount, 1);
@@ -425,7 +421,7 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
     blocks = blocksForSize(cellsToBeRefinedCount);
     kIncreaseValue<unsigned char><<<blocks, gpuThreads>>>(cellsToBeRefinedCount, refinementsRequired->data, 1, cellsToBeRefined.data);
 
-    cellsToBeRefined.size = cellsToBeRefinedCount;
+    cellsToBeRefined.resize(cellsToBeRefinedCount);
 
     return cellsToBeRefinedCount;
 }
@@ -461,12 +457,32 @@ int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, 
     
     kCountOrCreateTasks<<<blocks, gpuThreadsMax>>>(originalTasks.size, verticesCellsNum.y, taskCount, originalTasks.data, originalCells.data, tempOriginalCells.data, refinedCellParents.data, integralsConverged);
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
     copy_d2h(taskCount, &hostTaskCount, 1);
 
-    if(refinedTasks->data)
-        refinedTasks->size = hostTaskCount;
-    else
+    if(refinedTasks->data){
+        refinedTasks->resize(hostTaskCount);
+
+        deviceVector<double4> *results;
+        switch (neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            results = &d_simpleNeighborsResults;
+            break;
+        case neighbour_type_enum::attached_neighbors:
+            results = &d_attachedNeighborsResults;
+            break;
+        case neighbour_type_enum::not_neighbors:
+            results = &d_notNeighborsResults;
+            break;
+        default:
+            results = nullptr;
+            break;
+        }
+
+        if(results)
+            results->resize(hostTaskCount);
+    } else
         refinedTasks->allocate(hostTaskCount);
 
     zero_value_device(taskCount, 1);

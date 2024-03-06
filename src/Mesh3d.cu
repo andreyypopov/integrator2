@@ -159,7 +159,7 @@ void Mesh3D::prepareMesh(){
     calculateMeasures();
     fillNeightborsLists();
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
 }
 
 void Mesh3D::calculateNormals(){

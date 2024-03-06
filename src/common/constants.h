@@ -19,6 +19,7 @@ struct CONSTANTS {
     //algorithmic and program/memory assumptions
     static constexpr int MAX_SIMPLE_NEIGHBORS_PER_CELL = 10;
     static constexpr int MAX_AUTO_REFINEMENT_TASK_COEFFICIENT = 4;
+    static constexpr double MEMOTY_REALLOCATION_COEFFICIENT = 1.25;
 
     //limiting constants
     static constexpr int MAX_REFINE_LEVEL = 5;

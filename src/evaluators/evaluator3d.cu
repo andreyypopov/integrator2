@@ -264,7 +264,7 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     int notConvergedTaskCount;
     
     copy_d2h(d_restTaskCount, &notConvergedTaskCount, 1);
-    restTasks->size = notConvergedTaskCount;
+    restTasks->resize(notConvergedTaskCount);
     
     printf("Out of %d tasks: %d converged, %d did not converge\n", taskCount, taskCount - notConvergedTaskCount, notConvergedTaskCount);
     
