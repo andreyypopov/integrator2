@@ -32,7 +32,7 @@ public:
             checkCudaErrors(cudaEventElapsedTime(&time, startEvent, stopEvent));
 
             if(message)
-                printf("Time for %s: %f ms\n", message, time);
+                printf("Time for %s: %6.3f ms\n", message, time);
 
             return time;
         } else
