@@ -77,13 +77,14 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
 
 		if(idx < tasksNum){
 			const int3 oldTask = tasks[idx];
+            const int taskOriginalCellI = tempOriginalCells[oldTask.x];
 
 			if(!taskConverged || !taskConverged[oldTask.z])
 				for(int cell = 0; cell < gpuThreadsMax; ++cell)
 					if(blockStart + cell < refinedCellsNum){
 						const int originalCell = originalCellsSh[cell];
 
-						if(tempOriginalCells[oldTask.x] == originalCell && (!refinedCellParents || cellParentsSh[cell] == oldTask.x)){
+						if(taskOriginalCellI == originalCell && (!refinedCellParents || cellParentsSh[cell] == oldTask.x)){
 							int pos = atomicAdd(counter, 1);
 
 							if(refinedTasks)
