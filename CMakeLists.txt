@@ -11,27 +11,50 @@ INCLUDE(${PROJECT_ROOT_PATH}/cmake/functions.cmake)
 SET(PROJECT_SOURCE_PATH ${PROJECT_ROOT_PATH}/src)
 
 file(GLOB src_files
-	${PROJECT_SOURCE_PATH}/common/cuda_helper.cu
-	${PROJECT_SOURCE_PATH}/common/cuda_math.cu
 	${PROJECT_SOURCE_PATH}/Mesh3d.cu
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cu
+	)
+file(GLOB src_common_files
+	${PROJECT_SOURCE_PATH}/common/cuda_helper.cu
+	${PROJECT_SOURCE_PATH}/common/cuda_math.cu
+	)
+file(GLOB src_evaluators_files
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cu
 	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cu
 	)
+
 file(GLOB header_files
+	${PROJECT_SOURCE_PATH}/Mesh3d.cuh
+	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cuh
+	${PROJECT_SOURCE_PATH}/QuadratureFormula3d.cuh
+	)
+file(GLOB header_common_files
 	${PROJECT_SOURCE_PATH}/common/constants.h
 	${PROJECT_SOURCE_PATH}/common/cuda_helper.cuh
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cuh
 	${PROJECT_SOURCE_PATH}/common/cuda_memory.cuh
 	${PROJECT_SOURCE_PATH}/common/device_vector.cuh
 	${PROJECT_SOURCE_PATH}/common/gpu_timer.cuh
-	${PROJECT_SOURCE_PATH}/Mesh3d.cuh
-	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cuh
-	${PROJECT_SOURCE_PATH}/QuadratureFormula3d.cuh
+	)
+file(GLOB header_evaluators_files
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cuh
 	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cuh
 	)
 
+source_group("library" FILES
+	${src_files}
+	${header_files}
+)
+
+source_group("library/common" FILES
+	${src_common_files}
+	${header_common_files}
+)
+
+source_group("library/evaluators" FILES
+	${src_evaluators_files}
+	${header_evaluators_files}
+)
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 	set(CMAKE_INSTALL_PREFIX "${PROJECT_ROOT_PATH}/install" CACHE PATH "..." FORCE)
@@ -41,12 +64,14 @@ add_library(integrator2 SHARED)
 
 setup_cuda(${PROJECT_NAME})
 
-target_sources(integrator2 PUBLIC ${src_files})
+target_sources(integrator2 PUBLIC ${src_files} ${src_common_files} ${src_evaluators_files})
 
 add_subdirectory(tests/integrator3D)
 
 install(TARGETS integrator2)
 install(FILES ${header_files} DESTINATION include)
+install(FILES ${header_common_files} DESTINATION include/common)
+install(FILES ${header_evaluators_files} DESTINATION include/evaluators)
 
 set_target_properties(integrator2 PROPERTIES VERSION 2.0)
 set_target_properties(integrator2 PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
