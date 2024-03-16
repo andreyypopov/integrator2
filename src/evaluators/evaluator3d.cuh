@@ -7,6 +7,11 @@
 #include "../NumericalIntegrator3d.cuh"
 #include "../Mesh3d.cuh"
 
+enum class output_format_enum {
+    plainText = 1,
+    csv = 2
+};
+
 class Evaluator3D
 {
 public:
@@ -21,7 +26,7 @@ public:
 
     void runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks);
 
-    bool outputResultsToFile(neighbour_type_enum neighborType) const;
+    bool outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const;
 
     const auto &getTasks(neighbour_type_enum neighborType) const {
         switch(neighborType){

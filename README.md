@@ -9,9 +9,9 @@ CUDA-based library for integration of the Newtonian potential and its gradient i
 
 ### Dependencies
 
-- C++ compiler (tested on MS VC++ 2022 and GCC 9.4.0);
+- C++ compiler (tested on MS VC++ 2022 and GCC 7.4.0 and 9.4.0);
 - CMake 3.18 or newer;
-- CUDA Toolkit (tested on versions 12.1 and 12.3).
+- CUDA Toolkit (tested on versions 10.1, 12.1 and 12.3).
 
 ### Build process
 
@@ -35,6 +35,7 @@ Available command line options:
 | -s \<number\> | --scale=\<number\> | Scale factor for the input mesh |
 |              | --exporttoobj | Export the original/refined mesh to the OBJ file |
 |              | --exporttovtk | Export the original/refined mesh to the VTK (.vtp) file. Number of refinements is saved for each original cell in case of automatic error control |
+|              | --exporttocsv | Export the results of integration into csv files (different files for different types of neighbors) |
 |              | --exportresults | Export the results of integration into text files (different files for different types of neighbors) |
 | -r \<number\> | --refine=\<number\> | Number of refinement iterations for the whole mesh (in case of 0 the original mesh is used) |
 | -c            | --checkresults | Check correctness of integration by comparing integrals for (i, j) and (j, i) pairs. Resulting error can be saved together with integral values |

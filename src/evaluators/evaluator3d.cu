@@ -277,7 +277,7 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     return notConvergedTaskCount;
 }
 
-bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
+bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const
 {
     int3 *tasks;
     int tasksSize;
@@ -293,7 +293,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_simpleNeighborsResults.data;
         if(simpleNeighborsErrors.data)
             errors = simpleNeighborsErrors.data;
-        filename = "SimpleNeighbors.dat";
+        filename = "SimpleNeighbors";
         break;
     case neighbour_type_enum::attached_neighbors:
         tasks = attachedNeighborsTasks.data;
@@ -301,7 +301,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_attachedNeighborsResults.data;
         if(attachedNeighborsErrors.data)
             errors = attachedNeighborsErrors.data;
-        filename = "AttachedNeighbors.dat";
+        filename = "AttachedNeighbors";
         break;
     case neighbour_type_enum::not_neighbors:
         tasks = notNeighborsTasks.data;
@@ -309,7 +309,17 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_notNeighborsResults.data;
         if(notNeighborsErrors.data)
             errors = notNeighborsErrors.data;
-        filename = "NotNeighbors.dat";
+        filename = "NotNeighbors";
+        break;
+    }
+
+    switch (outputFormat)
+    {
+    case output_format_enum::plainText:
+        filename += ".dat";
+        break;    
+    case output_format_enum::csv:
+        filename += ".csv";
         break;
     }
 
@@ -331,12 +341,32 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
     std::ofstream resultsFile(filename.c_str());
 
     if(resultsFile.is_open()){
+        //header for csv
+        if(outputFormat == output_format_enum::csv){
+            resultsFile << "\"TaskI\";\"TaskJ\";\"IntegralX\";\"IntegralY\";\"IntegralZ\"";
+            if(errors)
+                resultsFile << ";\"Error\"";
+            resultsFile << std::endl;
+        }
+
         for(int i = 0; i < tasksSize; ++i){
-            resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
+            switch (outputFormat)
+            {
+            case output_format_enum::plainText:
+                resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
                     << hostResults[i].x << ", " << hostResults[i].y << ", " << hostResults[i].z << "]";
 
-            if(errors)
-                resultsFile << ", error = " << hostErrors[i];
+                if(errors)
+                    resultsFile << ", error = " << hostErrors[i];
+                break;
+            case output_format_enum::csv:
+                resultsFile << hostTasks[i].x << ";" << hostTasks[i].y << ";"
+                    << hostResults[i].x << ";" << hostResults[i].y << ";" << hostResults[i].z;
+
+                if(errors)
+                    resultsFile << ";" << hostErrors[i];
+                break;
+            }
 
             resultsFile << std::endl;
         }

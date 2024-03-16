@@ -54,7 +54,7 @@ struct Arg: public option::Arg
     }
 };
 
-enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTTOOBJ, EXPORTTOVTK, EXPORTRESULTS, REFINELEVEL, CHECKRESULTS };
+enum optionIndex { UNKNOWN, HELP, MESHFILENAME, SCALE, EXPORTTOOBJ, EXPORTTOVTK, EXPORTTOCSV, EXPORTRESULTS, REFINELEVEL, CHECKRESULTS };
 
 const option::Descriptor usage[] = 
 {
@@ -65,6 +65,7 @@ const option::Descriptor usage[] =
     { SCALE,            0, "s", "scale",        Arg::Numeric,   "   -s <arg>, \t--scale=<arg> \tMesh scale factor." },
     { EXPORTTOOBJ,      0, "",  "exporttoobj",  Arg::None,      "   \t--exporttoobj \tExport original and refined meshes to OBJ files."},
     { EXPORTTOVTK,      0, "",  "exporttovtk",  Arg::None,      "   \t--exporttovtk \tExport original and refined meshes to VTK (VTP) files."},
+    { EXPORTTOCSV,      0, "",  "exporttocsv",  Arg::None,      "   \t--exporttocsv \tExport results of integration to csv files."},
     { EXPORTRESULTS,    0, "",  "exportresults",Arg::None,      "   \t--exportresults \tExport results of integration to text files."},
     { REFINELEVEL,      0, "r", "refine",       Arg::Numeric,   "   -r <arg>, \t--refine=<arg> \tRefine the whole mesh N times." },
     { CHECKRESULTS,     0, "c", "checkresults", Arg::None,      "   -c, \t--checkresults  \tCheck correctness of pairs of results." },
@@ -139,10 +140,16 @@ int main(int argc, char *argv[]){
 
     evaluator.runAllPairs(options[CHECKRESULTS]);
 
-    if(options[EXPORTRESULTS]){
-        evaluator.outputResultsToFile(neighbour_type_enum::simple_neighbors);
-        evaluator.outputResultsToFile(neighbour_type_enum::attached_neighbors);
-        evaluator.outputResultsToFile(neighbour_type_enum::not_neighbors);
+    if(options[EXPORTRESULTS] || options[EXPORTTOCSV]){
+        output_format_enum outputFormat;
+        if(options[EXPORTRESULTS])
+            outputFormat == output_format_enum::plainText;
+        if(options[EXPORTTOCSV])
+            outputFormat == output_format_enum::csv;
+
+        evaluator.outputResultsToFile(neighbour_type_enum::simple_neighbors, outputFormat);
+        evaluator.outputResultsToFile(neighbour_type_enum::attached_neighbors, outputFormat);
+        evaluator.outputResultsToFile(neighbour_type_enum::not_neighbors, outputFormat);
     }
 
     //if refinement level is set > 0 then export the refined mesh to OBJ or VTK, if needed
