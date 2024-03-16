@@ -143,9 +143,9 @@ int main(int argc, char *argv[]){
     if(options[EXPORTRESULTS] || options[EXPORTTOCSV]){
         output_format_enum outputFormat;
         if(options[EXPORTRESULTS])
-            outputFormat == output_format_enum::plainText;
+            outputFormat = output_format_enum::plainText;
         if(options[EXPORTTOCSV])
-            outputFormat == output_format_enum::csv;
+            outputFormat = output_format_enum::csv;
 
         evaluator.outputResultsToFile(neighbour_type_enum::simple_neighbors, outputFormat);
         evaluator.outputResultsToFile(neighbour_type_enum::attached_neighbors, outputFormat);
