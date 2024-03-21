@@ -64,7 +64,8 @@ add_library(integrator2 SHARED)
 
 setup_cuda(${PROJECT_NAME})
 
-target_sources(integrator2 PUBLIC ${src_files} ${src_common_files} ${src_evaluators_files})
+target_sources(integrator2 PUBLIC ${src_files} ${src_common_files} ${src_evaluators_files}
+	${header_files} ${header_common_files} ${header_evaluators_files})
 
 add_subdirectory(tests/integrator3D)
 
