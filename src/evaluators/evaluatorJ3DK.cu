@@ -98,7 +98,7 @@ __global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const do
         const Point3 normal = cellNormals[task.y];
 
         int p = 0;
-        const double refTheta = CONSTANTS::TWO_PI * cellMeasures[task.y];
+        const double refTheta = CONSTANTS::TWO_PI * cellMeasures[task.x];
         if(integral.w > refTheta)
             p = -((int)trunc((integral.w - refTheta) / (2.0 * refTheta)) + 1);
         else if(integral.w < -refTheta)
