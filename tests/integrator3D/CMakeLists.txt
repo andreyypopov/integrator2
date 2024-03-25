@@ -5,8 +5,6 @@ include(CMakePrintHelpers)
 SET(PROJECT_NAME "integrator2test3D")
 SET(PROJECT_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-PROJECT(${PROJECT_NAME})
-
 INCLUDE(${PROJECT_ROOT_PATH}/../../cmake/functions.cmake)
 
 if(NOT DEFINED INTEGRATOR_LIB_DIR)

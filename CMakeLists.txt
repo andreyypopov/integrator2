@@ -10,25 +10,25 @@ INCLUDE(${PROJECT_ROOT_PATH}/cmake/functions.cmake)
 
 SET(PROJECT_SOURCE_PATH ${PROJECT_ROOT_PATH}/src)
 
-file(GLOB src_files
+SET(src_files
 	${PROJECT_SOURCE_PATH}/Mesh3d.cu
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cu
 	)
-file(GLOB src_common_files
+SET(src_common_files
 	${PROJECT_SOURCE_PATH}/common/cuda_helper.cu
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cu
 	)
-file(GLOB src_evaluators_files
+SET(src_evaluators_files
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cu
 	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cu
 	)
 
-file(GLOB header_files
+SET(header_files
 	${PROJECT_SOURCE_PATH}/Mesh3d.cuh
 	${PROJECT_SOURCE_PATH}/NumericalIntegrator3d.cuh
 	${PROJECT_SOURCE_PATH}/QuadratureFormula3d.cuh
 	)
-file(GLOB header_common_files
+SET(header_common_files
 	${PROJECT_SOURCE_PATH}/common/constants.h
 	${PROJECT_SOURCE_PATH}/common/cuda_helper.cuh
 	${PROJECT_SOURCE_PATH}/common/cuda_math.cuh
@@ -36,7 +36,7 @@ file(GLOB header_common_files
 	${PROJECT_SOURCE_PATH}/common/device_vector.cuh
 	${PROJECT_SOURCE_PATH}/common/gpu_timer.cuh
 	)
-file(GLOB header_evaluators_files
+SET(header_evaluators_files
 	${PROJECT_SOURCE_PATH}/evaluators/evaluator3d.cuh
 	${PROJECT_SOURCE_PATH}/evaluators/evaluatorJ3DK.cuh
 	)
