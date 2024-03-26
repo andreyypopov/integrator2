@@ -7,15 +7,17 @@ SET(PROJECT_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(${PROJECT_ROOT_PATH}/../../cmake/functions.cmake)
 
-if(NOT DEFINED INTEGRATOR_LIB_DIR)
+if(NOT INTEGRATOR_LIB_DIR)
     SET(INTEGRATOR_LIB_DIR "${PROJECT_ROOT_PATH}/../../install")
 endif()
 
 add_executable(${PROJECT_NAME} main.cu)
 setup_cuda(${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${INTEGRATOR_LIB_DIR}/include)
-target_link_directories(${PROJECT_NAME} PRIVATE ${INTEGRATOR_LIB_DIR}/lib)
 target_link_libraries(${PROJECT_NAME} PRIVATE integrator2)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_WITH_INSTALL_RPATH FALSE)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${INTEGRATOR_LIB_DIR}/lib")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

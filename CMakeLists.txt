@@ -6,6 +6,10 @@ PROJECT(integrator2 DESCRIPTION "The Integrator 2.0 library" LANGUAGES CXX CUDA)
 SET(PROJECT_NAME "integrator2")
 SET(PROJECT_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
+if (MSVC)
+	SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 INCLUDE(${PROJECT_ROOT_PATH}/cmake/functions.cmake)
 
 SET(PROJECT_SOURCE_PATH ${PROJECT_ROOT_PATH}/src)
@@ -57,15 +61,13 @@ source_group("library/evaluators" FILES
 )
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-	set(CMAKE_INSTALL_PREFIX "${PROJECT_ROOT_PATH}/install" CACHE PATH "..." FORCE)
+	set(CMAKE_INSTALL_PREFIX "${PROJECT_ROOT_PATH}/install" CACHE PATH "Library installation path" FORCE)
 endif()
 
-add_library(integrator2 SHARED)
+add_library(integrator2 SHARED ${src_files} ${src_common_files} ${src_evaluators_files}
+	${header_files} ${header_common_files} ${header_evaluators_files})
 
 setup_cuda(${PROJECT_NAME})
-
-target_sources(integrator2 PUBLIC ${src_files} ${src_common_files} ${src_evaluators_files}
-	${header_files} ${header_common_files} ${header_evaluators_files})
 
 add_subdirectory(tests/integrator3D)
 
@@ -77,8 +79,13 @@ install(FILES ${header_evaluators_files} DESTINATION include/evaluators)
 set_target_properties(integrator2 PROPERTIES VERSION 2.0)
 set_target_properties(integrator2 PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-if(NOT DEFINED CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
+SET(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "Available build configurations" FORCE)
+if(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build configuration (available options: ${CMAKE_CONFIGURATION_TYPES})" FORCE)
+endif()
+
+if (MSVC)
+	set_property(DIRECTORY ${PROJECT_ROOT_PATH} PROPERTY VS_STARTUP_PROJECT integrator2test3D)
 endif()
 
 MESSAGE("The ${PROJECT_NAME} library will be installed to ${CMAKE_INSTALL_PREFIX}")
