@@ -236,7 +236,7 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     zero_value_device(d_restTaskCount, 1);
     deviceVector<double4> *integrals, *tempIntegrals;
     deviceVector<int> *restTasks, *tempRestTasks;
-    unsigned char *tasksConverged = numIntegrator.getIntegralsConverged(neighborType).data;
+    unsigned char *tasksConverged = numIntegrator.getIntegralsConverged(neighborType)->data;
 
     switch (neighborType)
     {

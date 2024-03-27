@@ -387,7 +387,7 @@ void NumericalIntegrator3D::resetMesh()
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 }
 
-int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> &tasks, neighbour_type_enum neighborType)
+int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> *tasks, neighbour_type_enum neighborType)
 {
     deviceVector<unsigned char> *refinementsRequired;
 
@@ -408,7 +408,7 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
 
     zero_value_device(cellRequiresRefinement.data, cellRequiresRefinement.size);
     unsigned int blocks = blocksForSize(restTasks.size);
-    kExtractCellNeedsRefinement<<<blocks, gpuThreads>>>(restTasks.size, cellRequiresRefinement.data, restTasks.data, tasks.data);
+    kExtractCellNeedsRefinement<<<blocks, gpuThreads>>>(restTasks.size, cellRequiresRefinement.data, restTasks.data, tasks->data);
 
     zero_value_device(d_cellsToBeRefinedCount, 1);
     blocks = blocksForSize(cellRequiresRefinement.size);

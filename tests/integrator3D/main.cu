@@ -172,10 +172,10 @@ int main(int argc, char *argv[]){
     if(options[EXPORTTOVTK] && !options[REFINELEVEL]){
         std::array<std::vector<unsigned char>, 3> refinements;
         for(int i = 0; i < 3; ++i){
-            const auto &d_refinementsRequired = numIntegrator.getRefinementsRequired(neighbour_type_enum(i));
-            if(d_refinementsRequired.size){
-                refinements[i].resize(d_refinementsRequired.size);
-                copy_d2h(d_refinementsRequired.data, refinements[i].data(), d_refinementsRequired.size);
+            const auto *d_refinementsRequired = numIntegrator.getRefinementsRequired(neighbour_type_enum(i));
+            if(d_refinementsRequired->size){
+                refinements[i].resize(d_refinementsRequired->size);
+                copy_d2h(d_refinementsRequired->data, refinements[i].data(), d_refinementsRequired->size);
             }
         }
 

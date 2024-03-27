@@ -15,17 +15,19 @@ CUDA-based library for integration of the Newtonian potential and its gradient i
 
 ### Build process
 
+CMake `BUILD_TESTS` option (`ON` by default) controls the build of the test application.
+
 ```
 mkdir build
 mkdir install
 cd build
 cmake ..
-make install
+make -j install
 ```
 
 ## Test application
 
-Test app reads the mesh and performs calculation over all existing pairs of neighboring cells. Refinement is done for all cells exactly 3 times.
+Test app reads the mesh and performs calculation over all existing pairs of neighboring cells.
 
 Available command line options:
 | Short option | Long option | Purpose |

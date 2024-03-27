@@ -6,6 +6,8 @@ PROJECT(integrator2 DESCRIPTION "The Integrator 2.0 library" LANGUAGES CXX CUDA)
 SET(PROJECT_NAME "integrator2")
 SET(PROJECT_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
+option(BUILD_TESTS "Build 3D test application" ON)
+
 if (MSVC)
 	SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
@@ -69,7 +71,13 @@ add_library(integrator2 SHARED ${src_files} ${src_common_files} ${src_evaluators
 
 setup_cuda(${PROJECT_NAME})
 
-add_subdirectory(tests/integrator3D)
+if(BUILD_TESTS)
+	add_subdirectory(tests/integrator3D)
+	
+	if (MSVC)
+		set_property(DIRECTORY ${PROJECT_ROOT_PATH} PROPERTY VS_STARTUP_PROJECT integrator2test3D)
+	endif()
+endif()
 
 install(TARGETS integrator2)
 install(FILES ${header_files} DESTINATION include)
@@ -82,10 +90,6 @@ set_target_properties(integrator2 PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 SET(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "Available build configurations" FORCE)
 if(NOT CMAKE_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build configuration (available options: ${CMAKE_CONFIGURATION_TYPES})" FORCE)
-endif()
-
-if (MSVC)
-	set_property(DIRECTORY ${PROJECT_ROOT_PATH} PROPERTY VS_STARTUP_PROJECT integrator2test3D)
 endif()
 
 MESSAGE("The ${PROJECT_NAME} library will be installed to ${CMAKE_INSTALL_PREFIX}")

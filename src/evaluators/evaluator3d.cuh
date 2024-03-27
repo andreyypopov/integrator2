@@ -28,14 +28,16 @@ public:
 
     bool outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const;
 
-    const auto &getTasks(neighbour_type_enum neighborType) const {
+    const deviceVector<int3> *getTasks(neighbour_type_enum neighborType) const {
         switch(neighborType){
             case neighbour_type_enum::simple_neighbors:
-                return simpleNeighborsTasks;
+                return &simpleNeighborsTasks;
             case neighbour_type_enum::attached_neighbors:
-                return attachedNeighborsTasks;
+                return &attachedNeighborsTasks;
             case neighbour_type_enum::not_neighbors:
-                return notNeighborsTasks;
+                return &notNeighborsTasks;
+            default:
+                return nullptr;
         }
     }
 
