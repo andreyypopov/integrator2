@@ -17,8 +17,9 @@ struct CONSTANTS {
     static constexpr double RECIPROCAL_FOUR_PI = 0.079577471545947667884;
 
     //algorithmic and program/memory assumptions
-    static constexpr int MAX_SIMPLE_NEIGHBORS_PER_VERTEX = 10;
+    static constexpr int MAX_SIMPLE_NEIGHBORS_PER_CELL = 12;
     static constexpr int MAX_AUTO_REFINEMENT_TASK_COEFFICIENT = 4;
+    static constexpr double MEMOTY_REALLOCATION_COEFFICIENT = 1.25;
 
     //limiting constants
     static constexpr int MAX_REFINE_LEVEL = 5;

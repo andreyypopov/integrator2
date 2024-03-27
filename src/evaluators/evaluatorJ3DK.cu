@@ -98,7 +98,7 @@ __global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const do
         const Point3 normal = cellNormals[task.y];
 
         int p = 0;
-        const double refTheta = CONSTANTS::TWO_PI * cellMeasures[task.y];
+        const double refTheta = CONSTANTS::TWO_PI * cellMeasures[task.x];
         if(integral.w > refTheta)
             p = -((int)trunc((integral.w - refTheta) / (2.0 * refTheta)) + 1);
         else if(integral.w < -refTheta)
@@ -236,23 +236,23 @@ __device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Poin
 	else
 		e = normalize(e);
 
-    auto getDeltas = [e, taua, taub, normalJ](){
+    auto getDeltas = [taua, taub, normalJ](const Point3 &e){
         double2 res;
         res.x = atan2(dot(cross(taua, e), normalJ), -dot(e, taua));
         res.y = atan2(dot(cross(e, taub), normalJ), dot(e, taub));
         return res;
     };
 
-    double2 delta = getDeltas();
+    double2 delta = getDeltas(e);
 
     if((CONSTANTS::PI - fabs(delta.x) < CONSTANTS::EPS_ZERO) || (CONSTANTS::PI - fabs(delta.y) < CONSTANTS::EPS_ZERO)){
         e *= -1;
-        delta = getDeltas();
+        delta = getDeltas(e);
     }
 
-    if((delta.x * delta.y < 0) || (fabs(delta.x - delta.y) > CONSTANTS::PI)){
+    if((delta.x * delta.y < 0) && (fabs(delta.x - delta.y) > CONSTANTS::PI)){
         e *= -1;
-        delta = getDeltas();
+        delta = getDeltas(e);
     }
 
 	const double invAri = rsqrt(measures[i]);
@@ -497,23 +497,23 @@ __device__ double4 integrateSingularPartSimple(int i, int j, const Point3 *verti
     } else
         e = normalize(e);
 
-    auto getDeltas = [e, taua, taub, normalJ](){
+    auto getDeltas = [taua, taub, normalJ](const Point3 &e){
         double2 res;
         res.x = atan2(dot(cross(taua, e), normalJ), -dot(e, taua));
         res.y = atan2(dot(cross(e, taub), normalJ), dot(e, taub));
         return res;
     };
 
-    double2 delta = getDeltas();
+    double2 delta = getDeltas(e);
 
     if((CONSTANTS::PI - fabs(delta.x) < CONSTANTS::EPS_ZERO) || (CONSTANTS::PI - fabs(delta.y) < CONSTANTS::EPS_ZERO)){
         e *= -1;
-        delta = getDeltas();
+        delta = getDeltas(e);
     }
 
-    if((delta.x * delta.y < 0) || (fabs(delta.x - delta.y) > CONSTANTS::PI)){
+    if((delta.x * delta.y < 0) && (fabs(delta.x - delta.y) > CONSTANTS::PI)){
         e *= -1;
-        delta = getDeltas();
+        delta = getDeltas(e);
     }
 
     const double xi = atan2(dot(cross(normalI, normalJ), e), dot(normalI, normalJ));
@@ -647,7 +647,7 @@ void EvaluatorJ3DK::integrateOverSimpleNeighbors()
     //1. Integrate the regular part numerically
     numericalIntegration(neighbour_type_enum::simple_neighbors);
 
-    //1. Integrate the singular part analytically
+    //2. Integrate the singular part analytically
     unsigned int blocks = blocksForSize(simpleNeighborsTasks.size);
     kIntegrateSingularPartSimple<<<blocks, gpuThreads>>>(simpleNeighborsTasks.size, d_simpleNeighborsIntegrals.data, simpleNeighborsTasks.data, 
                         mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data);
@@ -688,7 +688,9 @@ void EvaluatorJ3DK::integrateOverNotNeighbors()
 
 void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
 {
-    const deviceVector<int3> *tasks, *refinedTasks;
+    const deviceVector<int3> *tasks = getTasks(neighborType);
+    const deviceVector<int3> *refinedTasks = numIntegrator.getRefinedTasks(neighborType);
+
     deviceVector<int> *restTasks;
     deviceVector<double4> *integrals, *tempIntegrals;
 
@@ -697,22 +699,16 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
     switch (neighborType)
     {
     case neighbour_type_enum::simple_neighbors:
-        tasks = &simpleNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
         restTasks = &simpleNeighborsTasksRest;
         integrals = &d_simpleNeighborsIntegrals;
         tempIntegrals = &d_tempSimpleNeighborsIntegrals;
         break;
     case neighbour_type_enum::attached_neighbors:
-        tasks = &attachedNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
         restTasks = &attachedNeighborsTasksRest;
         integrals = &d_attachedNeighborsIntegrals;
         tempIntegrals = &d_tempAttachedNeighborsIntegrals;
         break;
     case neighbour_type_enum::not_neighbors:
-        tasks = &notNeighborsTasks;
-        refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
         restTasks = &notNeighborsTasksRest;
         integrals = &d_notNeighborsIntegrals;
         tempIntegrals = &d_tempNotNeighborsIntegrals;
@@ -726,17 +722,17 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
         switch(neighborType)
         {
         case neighbour_type_enum::simple_neighbors:
-            kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getSimpleNeighborsResults().data, refinedTasks.data, tasks->data,
+            kIntegrateRegularPartSimple<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType)->data, refinedTasks.data, tasks->data,
                 mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, mesh.getCellMeasures().data,
                 numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         case neighbour_type_enum::attached_neighbors:
-            kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getAttachedNeighborsResults().data, refinedTasks.data, tasks->data,
+            kIntegrateRegularPartAttached<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType)->data, refinedTasks.data, tasks->data,
                 mesh.getVertices().data, mesh.getCells().data, mesh.getCellNormals().data, numIntegrator.getRefinedVertices().data,
                 numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         case neighbour_type_enum::not_neighbors:
-            kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getNotNeighborsResults().data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
+            kIntegrateNotNeighbors<<<blocks, gpuThreads>>>(refinedTasks.size, numIntegrator.getResults(neighborType)->data, refinedTasks.data, mesh.getVertices().data, mesh.getCells().data,
                 numIntegrator.getRefinedVertices().data, numIntegrator.getRefinedCells().data, numIntegrator.getRefinedCellMeasures().data, numIntegrator.getGaussPointsNumber());
             break;
         default:
@@ -773,18 +769,7 @@ void EvaluatorJ3DK::numericalIntegration(neighbour_type_enum neighborType)
             numIntegrator.refineMesh(neighborType);
             integrals->swap(*tempIntegrals);
 
-            switch (neighborType)
-            {
-            case neighbour_type_enum::simple_neighbors:
-                refinedTasks = &numIntegrator.getRefinedSimpleNeighborsTasks();
-                break;
-            case neighbour_type_enum::attached_neighbors:
-                refinedTasks = &numIntegrator.getRefinedAttachedNeighborsTasks();
-                break;
-            case neighbour_type_enum::not_neighbors:
-                refinedTasks = &numIntegrator.getRefinedNotNeighborsTasks();
-                break;
-            }
+            refinedTasks = numIntegrator.getRefinedTasks(neighborType);
 
             printf("Iteration %d, integrating %d tasks\n", iteration, refinedTasks->size);
 

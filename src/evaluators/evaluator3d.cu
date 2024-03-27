@@ -121,9 +121,20 @@ void Evaluator3D::runAllPairs(bool checkCorrectness)
     
     numIntegrator.prepareTasksAndMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
+    timer.start();
     integrateOverSimpleNeighbors();
+    timer.stop("Simple neighbors integration");
+    requestFreeDeviceMemoryAmount();
+
+    timer.start();
     integrateOverAttachedNeighbors();
+    timer.stop("Attached neighbors integration");
+    requestFreeDeviceMemoryAmount();
+
+    timer.start();    
     integrateOverNotNeighbors();
+    timer.stop("Non-neighbors integration");
+    requestFreeDeviceMemoryAmount();
 
     if(checkCorrectness){
         simpleNeighborsErrors.allocate(simpleNeighborsTasksNum);
@@ -198,14 +209,26 @@ void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, co
 
     numIntegrator.prepareTasksAndMesh(simpleNeighborsTasks, attachedNeighborsTasks, notNeighborsTasks);
 
-    if(!userSimpleNeighborsTasks.empty())
+    if(!userSimpleNeighborsTasks.empty()){
+        timer.start();
         integrateOverSimpleNeighbors();
+        timer.stop("Simple neighbors integration");
+        requestFreeDeviceMemoryAmount();
+    }
 
-    if(!userAttachedNeighborsTasks.empty())
+    if(!userAttachedNeighborsTasks.empty()){
+        timer.start();
         integrateOverAttachedNeighbors();
+        timer.stop("Attached neighbors integration");
+        requestFreeDeviceMemoryAmount();
+    }
 
-    if(!userNotNeighborsTasks.empty())
-        integrateOverNotNeighbors();    
+    if(!userNotNeighborsTasks.empty()){
+        timer.start();
+        integrateOverNotNeighbors();
+        timer.stop("Non-neighbors integration");
+        requestFreeDeviceMemoryAmount();
+    }    
 }
 
 int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs)
@@ -213,7 +236,7 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     zero_value_device(d_restTaskCount, 1);
     deviceVector<double4> *integrals, *tempIntegrals;
     deviceVector<int> *restTasks, *tempRestTasks;
-    unsigned char *tasksConverged = numIntegrator.getIntegralsConverged(neighborType).data;
+    unsigned char *tasksConverged = numIntegrator.getIntegralsConverged(neighborType)->data;
 
     switch (neighborType)
     {
@@ -247,14 +270,14 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     int notConvergedTaskCount;
     
     copy_d2h(d_restTaskCount, &notConvergedTaskCount, 1);
-    restTasks->size = notConvergedTaskCount;
+    restTasks->resize(notConvergedTaskCount);
     
     printf("Out of %d tasks: %d converged, %d did not converge\n", taskCount, taskCount - notConvergedTaskCount, notConvergedTaskCount);
     
     return notConvergedTaskCount;
 }
 
-bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
+bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const
 {
     int3 *tasks;
     int tasksSize;
@@ -270,7 +293,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_simpleNeighborsResults.data;
         if(simpleNeighborsErrors.data)
             errors = simpleNeighborsErrors.data;
-        filename = "SimpleNeighbors.dat";
+        filename = "SimpleNeighbors";
         break;
     case neighbour_type_enum::attached_neighbors:
         tasks = attachedNeighborsTasks.data;
@@ -278,7 +301,7 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_attachedNeighborsResults.data;
         if(attachedNeighborsErrors.data)
             errors = attachedNeighborsErrors.data;
-        filename = "AttachedNeighbors.dat";
+        filename = "AttachedNeighbors";
         break;
     case neighbour_type_enum::not_neighbors:
         tasks = notNeighborsTasks.data;
@@ -286,7 +309,17 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
         deviceResults = d_notNeighborsResults.data;
         if(notNeighborsErrors.data)
             errors = notNeighborsErrors.data;
-        filename = "NotNeighbors.dat";
+        filename = "NotNeighbors";
+        break;
+    }
+
+    switch (outputFormat)
+    {
+    case output_format_enum::plainText:
+        filename += ".dat";
+        break;    
+    case output_format_enum::csv:
+        filename += ".csv";
         break;
     }
 
@@ -308,12 +341,32 @@ bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType) const
     std::ofstream resultsFile(filename.c_str());
 
     if(resultsFile.is_open()){
+        //header for csv
+        if(outputFormat == output_format_enum::csv){
+            resultsFile << "\"TaskI\";\"TaskJ\";\"IntegralX\";\"IntegralY\";\"IntegralZ\"";
+            if(errors)
+                resultsFile << ";\"Error\"";
+            resultsFile << std::endl;
+        }
+
         for(int i = 0; i < tasksSize; ++i){
-            resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
+            switch (outputFormat)
+            {
+            case output_format_enum::plainText:
+                resultsFile << "(" << hostTasks[i].x << ", " << hostTasks[i].y << "): ["
                     << hostResults[i].x << ", " << hostResults[i].y << ", " << hostResults[i].z << "]";
 
-            if(errors)
-                resultsFile << ", error = " << hostErrors[i];
+                if(errors)
+                    resultsFile << ", error = " << hostErrors[i];
+                break;
+            case output_format_enum::csv:
+                resultsFile << hostTasks[i].x << ";" << hostTasks[i].y << ";"
+                    << hostResults[i].x << ";" << hostResults[i].y << ";" << hostResults[i].z;
+
+                if(errors)
+                    resultsFile << ";" << hostErrors[i];
+                break;
+            }
 
             resultsFile << std::endl;
         }

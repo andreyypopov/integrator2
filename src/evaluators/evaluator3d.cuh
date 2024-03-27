@@ -3,8 +3,14 @@
 
 #include <vector>
 
+#include "../common/gpu_timer.cuh"
 #include "../NumericalIntegrator3d.cuh"
 #include "../Mesh3d.cuh"
+
+enum class output_format_enum {
+    plainText = 1,
+    csv = 2
+};
 
 class Evaluator3D
 {
@@ -20,16 +26,18 @@ public:
 
     void runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks);
 
-    bool outputResultsToFile(neighbour_type_enum neighborType) const;
+    bool outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const;
 
-    const auto &getTasks(neighbour_type_enum neighborType) const {
+    const deviceVector<int3> *getTasks(neighbour_type_enum neighborType) const {
         switch(neighborType){
             case neighbour_type_enum::simple_neighbors:
-                return simpleNeighborsTasks;
+                return &simpleNeighborsTasks;
             case neighbour_type_enum::attached_neighbors:
-                return attachedNeighborsTasks;
+                return &attachedNeighborsTasks;
             case neighbour_type_enum::not_neighbors:
-                return notNeighborsTasks;
+                return &notNeighborsTasks;
+            default:
+                return nullptr;
         }
     }
 
@@ -67,6 +75,8 @@ protected:
 
     const Mesh3D &mesh;
     NumericalIntegrator3D &numIntegrator;
+
+    GpuTimer timer;
 
 private:
     deviceVector<double> simpleNeighborsErrors;

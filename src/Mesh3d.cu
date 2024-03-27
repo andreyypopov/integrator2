@@ -159,7 +159,7 @@ void Mesh3D::prepareMesh(){
     calculateMeasures();
     fillNeightborsLists();
 
-    cudaDeviceSynchronize();
+    checkCudaErrors(cudaDeviceSynchronize());
 }
 
 void Mesh3D::calculateNormals(){
@@ -185,7 +185,7 @@ void Mesh3D::fillNeightborsLists(){
     zero_value_device(d_attachedNeighborsNum, 1);
     zero_value_device(d_notNeighborsNum, 1);
 
-    simpleNeighbors.allocate(cells.size * CONSTANTS::MAX_SIMPLE_NEIGHBORS_PER_VERTEX / 2);    // number of triangles * (3 neighbors * 3 vertices per triangle) / 2 (discard duplicated pairs)
+    simpleNeighbors.allocate(cells.size * CONSTANTS::MAX_SIMPLE_NEIGHBORS_PER_CELL / 2);    // number of triangles * a certain number of neighbours per cell / 2 (discard duplicated pairs)
     attachedNeighbors.allocate(cells.size * 3 / 2);  // number of triangles * (3 vertices edges per triangle) / 2 (discard duplicated pairs)
     notNeighbors.allocate(cells.size * cells.size / 2);  // all pairs of triangls
 

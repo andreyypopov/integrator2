@@ -16,3 +16,12 @@ __global__ void kExtractIndices(int n, int *indices, int *counter, const unsigne
             indices[pos] = idx;
         }
 }
+
+size_t requestFreeDeviceMemoryAmount()
+{
+    size_t freeMemory, totalMemory;
+    checkCudaErrors(cudaMemGetInfo(&freeMemory, &totalMemory));
+    printf("GPU memory usage: %5.1f MBytes free out of total %5.1f MBytes\n", freeMemory / 1048576.0f, totalMemory / 1048576.0f);
+
+    return freeMemory;
+}

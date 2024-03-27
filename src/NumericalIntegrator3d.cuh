@@ -30,7 +30,7 @@ public:
 
     void resetMesh();
 
-    int determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> &tasks, neighbour_type_enum neighborType);
+    int determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> *tasks, neighbour_type_enum neighborType);
 
 	int getGaussPointsNumber() const {
 		return GaussPointsNum;
@@ -44,28 +44,32 @@ public:
 		return errorControlType;
 	}
 
-    const auto &getRefinedSimpleNeighborsTasks() const {
-        return refinedSimpleNeighborsTasks;
+    const deviceVector<int3> *getRefinedTasks(neighbour_type_enum neighborType) const {
+        switch(neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            return &refinedSimpleNeighborsTasks;
+        case neighbour_type_enum::attached_neighbors:
+            return &refinedAttachedNeighborsTasks;
+        case neighbour_type_enum::not_neighbors:
+            return &refinedNotNeighborsTasks;
+        default:
+            return nullptr;
+        }
     }
 
-    const auto &getSimpleNeighborsResults() const {
-        return d_simpleNeighborsResults;
-    }
-
-    const auto &getRefinedAttachedNeighborsTasks() const {
-        return refinedAttachedNeighborsTasks;
-    }
-
-    const auto &getAttachedNeighborsResults() const {
-        return d_attachedNeighborsResults;
-    }
-
-    const auto &getRefinedNotNeighborsTasks() const {
-        return refinedNotNeighborsTasks;
-    }
-
-    const auto &getNotNeighborsResults() const {
-        return d_notNeighborsResults;
+    const deviceVector<double4> *getResults(neighbour_type_enum neighborType) const {
+        switch(neighborType)
+        {
+        case neighbour_type_enum::simple_neighbors:
+            return &d_simpleNeighborsResults;
+        case neighbour_type_enum::attached_neighbors:
+            return &d_attachedNeighborsResults;
+        case neighbour_type_enum::not_neighbors:
+            return &d_notNeighborsResults;
+        default:
+            return nullptr;
+        }
     }
 
     const auto &getRefinedVertices() const {
@@ -84,25 +88,29 @@ public:
         return cellsToBeRefined;
     }
 
-    auto &getIntegralsConverged(neighbour_type_enum neighborType){
+    deviceVector<unsigned char> *getIntegralsConverged(neighbour_type_enum neighborType){
         switch(neighborType){
             case neighbour_type_enum::simple_neighbors:
-                return simpleNeighborsIntegralsConverged;
+                return &simpleNeighborsIntegralsConverged;
             case neighbour_type_enum::attached_neighbors:
-                return attachedNeighborsIntegralsConverged;
+                return &attachedNeighborsIntegralsConverged;
             case neighbour_type_enum::not_neighbors:
-                return notNeighborsIntegralsConverged;
+                return &notNeighborsIntegralsConverged;
+            default:
+                return nullptr;
         }
     }
 
-    auto &getRefinementsRequired(neighbour_type_enum neighborType){
+    deviceVector<unsigned char> *getRefinementsRequired(neighbour_type_enum neighborType){
         switch(neighborType){
             case neighbour_type_enum::simple_neighbors:
-                return simpleNeighborsRefinementsRequired;
+                return &simpleNeighborsRefinementsRequired;
             case neighbour_type_enum::attached_neighbors:
-                return attachedNeighborsRefinementsRequired;
+                return &attachedNeighborsRefinementsRequired;
             case neighbour_type_enum::not_neighbors:
-                return notNeighborsRefinementsRequired;
+                return &notNeighborsRefinementsRequired;
+            default:
+                return nullptr;
         }
     }
 
