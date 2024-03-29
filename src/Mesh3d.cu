@@ -93,6 +93,15 @@ Mesh3D::~Mesh3D(){
     free_device(d_notNeighborsNum);
 }
 
+/*!
+ * Mesh file is supposed to contain the following data:
+ * -# Number of vertices, number of cells (triagnles).
+ * -# Vertex data in the form of: index, x, y, z.
+ * -# Triangle data in the form of: 203, index1, index2, index3 (203 is the triangle element type,
+ * vertices are referenced by their indices, base-1).
+ * 
+ * Vertex and cell data are immediately transferred to the GPU vectors.
+ */
 bool Mesh3D::loadMeshFromFile(const std::string &filename, double scale)
 {
     std::ifstream meshFile(filename);

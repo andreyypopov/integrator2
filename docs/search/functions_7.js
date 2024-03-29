@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['gatherresults_0',['gatherResults',['../class_numerical_integrator3_d.html#a22fe152d3e7a9ad1de95857f5191b29d',1,'NumericalIntegrator3D']]],
+  ['getattachedneighbors_1',['getAttachedNeighbors',['../class_mesh3_d.html#ae4e4df6dc714d0f32c779f8ef68784b3',1,'Mesh3D']]],
+  ['getcellmeasures_2',['getCellMeasures',['../class_mesh3_d.html#af933452392b4920d80ed4ca0d2727c04',1,'Mesh3D']]],
+  ['getcellnormals_3',['getCellNormals',['../class_mesh3_d.html#a835fb1a448d7d01438af7738ed37f03a',1,'Mesh3D']]],
+  ['getcells_4',['getCells',['../class_mesh3_d.html#ac881c2920499faa332937364c764519b',1,'Mesh3D']]],
+  ['getcellstoberefined_5',['getCellsToBeRefined',['../class_numerical_integrator3_d.html#a5be924a775975731f2bc587a5da4459c',1,'NumericalIntegrator3D']]],
+  ['geterrorcontroltype_6',['getErrorControlType',['../class_numerical_integrator3_d.html#a6569bfcf131ae540cf3c434ab8455da1',1,'NumericalIntegrator3D']]],
+  ['getgausspointsnumber_7',['getGaussPointsNumber',['../class_numerical_integrator3_d.html#a2bc832bfc967e32f463dc8cebdf14404',1,'NumericalIntegrator3D']]],
+  ['getintegralsconverged_8',['getIntegralsConverged',['../class_numerical_integrator3_d.html#ae36a254041c4cd7e61886b5ae6f73ba7',1,'NumericalIntegrator3D']]],
+  ['getnotneighbors_9',['getNotNeighbors',['../class_mesh3_d.html#a0112d48c469dc4b06a14a8371730e999',1,'Mesh3D']]],
+  ['getquadratureformulaorder_10',['getQuadratureFormulaOrder',['../class_numerical_integrator3_d.html#ad59c7d39fabdc91179608d50926e9d3d',1,'NumericalIntegrator3D']]],
+  ['getrefinedcellmeasures_11',['getRefinedCellMeasures',['../class_numerical_integrator3_d.html#a75e7e86b9399d3c88decf212101ed473',1,'NumericalIntegrator3D']]],
+  ['getrefinedcells_12',['getRefinedCells',['../class_numerical_integrator3_d.html#a732baba2145a1bb794a104a19704a09e',1,'NumericalIntegrator3D']]],
+  ['getrefinedtasks_13',['getRefinedTasks',['../class_numerical_integrator3_d.html#add2326a950c756147c5f4b884df5028c',1,'NumericalIntegrator3D']]],
+  ['getrefinedvertices_14',['getRefinedVertices',['../class_numerical_integrator3_d.html#a62d40cf4a60a8f2a42902ea13c99e33a',1,'NumericalIntegrator3D']]],
+  ['getrefinementsrequired_15',['getRefinementsRequired',['../class_numerical_integrator3_d.html#a3a05ef8c7935be2e06b75bff0ed8c84b',1,'NumericalIntegrator3D']]],
+  ['getresults_16',['getResults',['../class_numerical_integrator3_d.html#ae8d2a7eb1bed2afd47c96f91d7b7838c',1,'NumericalIntegrator3D']]],
+  ['getsimpleneighbors_17',['getSimpleNeighbors',['../class_mesh3_d.html#ad3d2030e37954b16ac920be89a97916c',1,'Mesh3D']]],
+  ['gettasks_18',['getTasks',['../class_evaluator3_d.html#a32d429cfc4a57b53ffc37e9021e16954',1,'Evaluator3D']]],
+  ['getvertices_19',['getVertices',['../class_mesh3_d.html#a28dacb908f784f537b90bd9f8f01a0a7',1,'Mesh3D']]],
+  ['gputimer_20',['GpuTimer',['../class_gpu_timer.html#a9352500562e2eb8f07512d00ef6beae2',1,'GpuTimer']]]
+];

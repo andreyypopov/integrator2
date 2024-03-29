@@ -1,0 +1,13 @@
+var _quadrature_formula3d_8cuh =
+[
+    [ "QuadratureFormula3D", "struct_quadrature_formula3_d.html", "struct_quadrature_formula3_d" ],
+    [ "QUADRATURE_FORMULA_3D_CUH", "_quadrature_formula3d_8cuh.html#a2efdd466bdf579a1a58ec6c4f012a76f", null ],
+    [ "qf3D1", "_quadrature_formula3d_8cuh.html#a76859074e87973370ff1b9a01c111d9f", null ],
+    [ "qf3D12", "_quadrature_formula3d_8cuh.html#a3f4ccd08666789d6290fcd8d81ab7605", null ],
+    [ "qf3D13", "_quadrature_formula3d_8cuh.html#a034fbe3f3ca75f549ff90f0e49c8f643", null ],
+    [ "qf3D3", "_quadrature_formula3d_8cuh.html#a5d971740ca1208798c2f428a48686a6b", null ],
+    [ "qf3D4", "_quadrature_formula3d_8cuh.html#acd003d9e9086fb8b31aef3b52ecab974", null ],
+    [ "qf3D6", "_quadrature_formula3d_8cuh.html#a3e3888404fc84c869d0721c1ed1a0bd3", null ],
+    [ "qf3D7", "_quadrature_formula3d_8cuh.html#a0922afd7d7966ba12cb424d939f8d794", null ],
+    [ "qf3D9", "_quadrature_formula3d_8cuh.html#af90443766a0085369dbe739a64eddf64", null ]
+];
