@@ -3,7 +3,7 @@ var class_evaluator3_d =
     [ "Evaluator3D", "class_evaluator3_d.html#ad5be9cb3720057d7f9ae287a940983f2", null ],
     [ "~Evaluator3D", "class_evaluator3_d.html#a4d62ea24b104626dead2d8fc18724ab5", null ],
     [ "compareIntegrationResults", "class_evaluator3_d.html#af26abdd4ada4208c9e7746373e6cf456", null ],
-    [ "getTasks", "class_evaluator3_d.html#a32d429cfc4a57b53ffc37e9021e16954", null ],
+    [ "getTasks", "class_evaluator3_d.html#a24b833f84d7369cb4a31db36e31ae758", null ],
     [ "integrateOverAttachedNeighbors", "class_evaluator3_d.html#aa56bd1c9c229c3042458332db6aaa70f", null ],
     [ "integrateOverNotNeighbors", "class_evaluator3_d.html#a5ca0ea33aed884ba64bff56d2827d526", null ],
     [ "integrateOverSimpleNeighbors", "class_evaluator3_d.html#a9f0928f4a58a42b332542b431410770a", null ],
