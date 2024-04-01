@@ -99,26 +99,37 @@ $(function(){initNavTree('class_gpu_timer.html',''); initResizable(); });
   <div class="headertitle"><div class="title">GpuTimer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for time measurement using CUDA event mechanism.  
+ <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9352500562e2eb8f07512d00ef6beae2" id="r_a9352500562e2eb8f07512d00ef6beae2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9352500562e2eb8f07512d00ef6beae2">GpuTimer</a> ()</td></tr>
+<tr class="memdesc:a9352500562e2eb8f07512d00ef6beae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Gpu Timer object.  <br /></td></tr>
 <tr class="separator:a9352500562e2eb8f07512d00ef6beae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e2816186e0aa37a866b29ea845874ea" id="r_a6e2816186e0aa37a866b29ea845874ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e2816186e0aa37a866b29ea845874ea">~GpuTimer</a> ()</td></tr>
+<tr class="memdesc:a6e2816186e0aa37a866b29ea845874ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Gpu Timer object.  <br /></td></tr>
 <tr class="separator:a6e2816186e0aa37a866b29ea845874ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb35764b50a7549edaf07f8b1b24d98a" id="r_acb35764b50a7549edaf07f8b1b24d98a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb35764b50a7549edaf07f8b1b24d98a">start</a> (cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:acb35764b50a7549edaf07f8b1b24d98a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start measuring time.  <br /></td></tr>
 <tr class="separator:acb35764b50a7549edaf07f8b1b24d98a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad99d61db2bcb450ae79e8849f4533c00" id="r_ad99d61db2bcb450ae79e8849f4533c00"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad99d61db2bcb450ae79e8849f4533c00">stop</a> (const char *message=nullptr, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:ad99d61db2bcb450ae79e8849f4533c00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finish measuring time.  <br /></td></tr>
 <tr class="separator:ad99d61db2bcb450ae79e8849f4533c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8a7e7488cbcbe8fd501e82f5b8e30c95" id="r_a8a7e7488cbcbe8fd501e82f5b8e30c95"><td class="memItemLeft" align="right" valign="top">cudaEvent_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a7e7488cbcbe8fd501e82f5b8e30c95">startEvent</a> = nullptr</td></tr>
+<tr class="memdesc:a8a7e7488cbcbe8fd501e82f5b8e30c95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start event.  <br /></td></tr>
 <tr class="separator:a8a7e7488cbcbe8fd501e82f5b8e30c95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08f23d8fad14989bc0572323ef2125e5" id="r_a08f23d8fad14989bc0572323ef2125e5"><td class="memItemLeft" align="right" valign="top">cudaEvent_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08f23d8fad14989bc0572323ef2125e5">stopEvent</a> = nullptr</td></tr>
+<tr class="memdesc:a08f23d8fad14989bc0572323ef2125e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">End event.  <br /></td></tr>
 <tr class="separator:a08f23d8fad14989bc0572323ef2125e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for time measurement using CUDA event mechanism. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9352500562e2eb8f07512d00ef6beae2" name="a9352500562e2eb8f07512d00ef6beae2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9352500562e2eb8f07512d00ef6beae2">&#9670;&#160;</a></span>GpuTimer()</h2>
 
@@ -141,6 +152,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Construct a new Gpu Timer object. </p>
+<p>Events are created </p>
 
 </div>
 </div>
@@ -167,6 +181,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Destroy the Gpu Timer object. </p>
+<p>Events are destroyed </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -192,6 +209,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Start measuring time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Start event is recorded </p>
 
 </div>
 </div>
@@ -222,6 +248,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Finish measuring time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>Name of the time period/operation (optional) </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Measured time in milliseconds </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -245,6 +281,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Start event. </p>
+
 </div>
 </div>
 <a id="a08f23d8fad14989bc0572323ef2125e5" name="a08f23d8fad14989bc0572323ef2125e5"></a>
@@ -266,6 +304,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>End event. </p>
 
 </div>
 </div>

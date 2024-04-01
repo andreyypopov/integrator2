@@ -111,30 +111,39 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a3670d0cd5518145e59eb29770d0f5152" id="r_a3670d0cd5518145e59eb29770d0f5152"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a3670d0cd5518145e59eb29770d0f5152"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a3670d0cd5518145e59eb29770d0f5152">allocate_device</a> (T **ptr, size_t elements_num)</td></tr>
+<tr class="memdesc:a3670d0cd5518145e59eb29770d0f5152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a certain amount of device memory in number of items.  <br /></td></tr>
 <tr class="separator:a3670d0cd5518145e59eb29770d0f5152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04d26aee6076e9cf6c52707969cd88d4" id="r_a04d26aee6076e9cf6c52707969cd88d4"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a04d26aee6076e9cf6c52707969cd88d4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a04d26aee6076e9cf6c52707969cd88d4">allocate_host</a> (T **ptr, size_t elements_num)</td></tr>
+<tr class="memdesc:a04d26aee6076e9cf6c52707969cd88d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a certain amount of host (pinned) memory in number of items.  <br /></td></tr>
 <tr class="separator:a04d26aee6076e9cf6c52707969cd88d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b69a008ce09c4146ca83083a54cee7d" id="r_a6b69a008ce09c4146ca83083a54cee7d"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a6b69a008ce09c4146ca83083a54cee7d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a6b69a008ce09c4146ca83083a54cee7d">free_device</a> (T *ptr)</td></tr>
+<tr class="memdesc:a6b69a008ce09c4146ca83083a54cee7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free device memory.  <br /></td></tr>
 <tr class="separator:a6b69a008ce09c4146ca83083a54cee7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59002ed921cb4c039005353de9b26fbe" id="r_a59002ed921cb4c039005353de9b26fbe"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a59002ed921cb4c039005353de9b26fbe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a59002ed921cb4c039005353de9b26fbe">free_host</a> (T *ptr)</td></tr>
+<tr class="memdesc:a59002ed921cb4c039005353de9b26fbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free host memory.  <br /></td></tr>
 <tr class="separator:a59002ed921cb4c039005353de9b26fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f9895bad5293b9d7505fa305680ec9b" id="r_a8f9895bad5293b9d7505fa305680ec9b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a8f9895bad5293b9d7505fa305680ec9b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a8f9895bad5293b9d7505fa305680ec9b">zero_value_device</a> (T *ptr, size_t elements_num, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:a8f9895bad5293b9d7505fa305680ec9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a certain array to zero.  <br /></td></tr>
 <tr class="separator:a8f9895bad5293b9d7505fa305680ec9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a564d1e31a364747c593c03da8e0af468" id="r_a564d1e31a364747c593c03da8e0af468"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a564d1e31a364747c593c03da8e0af468"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a564d1e31a364747c593c03da8e0af468">copy_h2d</a> (const T *src, const T *dst, size_t elements_num, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:a564d1e31a364747c593c03da8e0af468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from host to device memory.  <br /></td></tr>
 <tr class="separator:a564d1e31a364747c593c03da8e0af468"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b7233f9b4964fb6bf772d4652e0b9a8" id="r_a3b7233f9b4964fb6bf772d4652e0b9a8"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a3b7233f9b4964fb6bf772d4652e0b9a8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a3b7233f9b4964fb6bf772d4652e0b9a8">copy_d2h</a> (const T *src, const T *dst, size_t elements_num, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:a3b7233f9b4964fb6bf772d4652e0b9a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from device to host memory.  <br /></td></tr>
 <tr class="separator:a3b7233f9b4964fb6bf772d4652e0b9a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7e6f1f29650b605049bc966d2839b4b" id="r_af7e6f1f29650b605049bc966d2839b4b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:af7e6f1f29650b605049bc966d2839b4b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#af7e6f1f29650b605049bc966d2839b4b">copy_d2d</a> (const T *src, const T *dst, size_t elements_num, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:af7e6f1f29650b605049bc966d2839b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from device to device memory.  <br /></td></tr>
 <tr class="separator:af7e6f1f29650b605049bc966d2839b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eaf08edb95f3efd567888f4cbc5efc1" id="r_a0eaf08edb95f3efd567888f4cbc5efc1"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a0eaf08edb95f3efd567888f4cbc5efc1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a0eaf08edb95f3efd567888f4cbc5efc1">copy_h2const</a> (const T *src, const void *dst, size_t elements_num, cudaStream_t stream=nullptr)</td></tr>
+<tr class="memdesc:a0eaf08edb95f3efd567888f4cbc5efc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from host to constant memory.  <br /></td></tr>
 <tr class="separator:a0eaf08edb95f3efd567888f4cbc5efc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -174,6 +183,21 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Allocate a certain amount of device memory in number of items. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Raw pointer to data for allocation </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a04d26aee6076e9cf6c52707969cd88d4" name="a04d26aee6076e9cf6c52707969cd88d4"></a>
@@ -196,6 +220,21 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Allocate a certain amount of host (pinned) memory in number of items. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Raw pointer to data for allocation </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -230,6 +269,23 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Copy data from device to device memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>Raw pointer in the device memory to copy from </td></tr>
+    <tr><td class="paramname">dst</td><td>Raw pointer in the device memory to copy to </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a3b7233f9b4964fb6bf772d4652e0b9a8" name="a3b7233f9b4964fb6bf772d4652e0b9a8"></a>
@@ -262,6 +318,23 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Copy data from device to host memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>Raw pointer in the device memory to copy from </td></tr>
+    <tr><td class="paramname">dst</td><td>Raw pointer in the host memory to copy to </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -296,6 +369,23 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Copy data from host to constant memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>Raw pointer in the host memory to copy from </td></tr>
+    <tr><td class="paramname">dst</td><td>Raw pointer in the constant memory to copy to </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a564d1e31a364747c593c03da8e0af468" name="a564d1e31a364747c593c03da8e0af468"></a>
@@ -329,6 +419,23 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Copy data from host to device memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>Raw pointer in the host memory to copy from </td></tr>
+    <tr><td class="paramname">dst</td><td>Raw pointer in the device memory to copy to </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a6b69a008ce09c4146ca83083a54cee7d" name="a6b69a008ce09c4146ca83083a54cee7d"></a>
@@ -348,6 +455,20 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Free device memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Raw pointer to data to be deallocated </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a59002ed921cb4c039005353de9b26fbe" name="a59002ed921cb4c039005353de9b26fbe"></a>
@@ -366,6 +487,20 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Free host memory. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Raw pointer to data to be deallocated </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -394,6 +529,22 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set a certain array to zero. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Raw pointer to the data to be set to zero </td></tr>
+    <tr><td class="paramname">elements_num</td><td>Number of elements of the template data type </td></tr>
+    <tr><td class="paramname">stream</td><td>CUDA stream (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

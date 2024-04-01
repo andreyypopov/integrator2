@@ -106,18 +106,22 @@ $(function(){initNavTree('_mesh3d_8cu.html',''); initResizable(); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a014d510ca14ed2e5684aabf9d2e4ff7c" id="r_a014d510ca14ed2e5684aabf9d2e4ff7c"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a014d510ca14ed2e5684aabf9d2e4ff7c">kCalculateCellNormal</a> (int n, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals)</td></tr>
+<tr class="memdesc:a014d510ca14ed2e5684aabf9d2e4ff7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for calculation of cell normals.  <br /></td></tr>
 <tr class="separator:a014d510ca14ed2e5684aabf9d2e4ff7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5876b2ffc2146f74aa101add882acb3c" id="r_a5876b2ffc2146f74aa101add882acb3c"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5876b2ffc2146f74aa101add882acb3c">kCalculateCellCenter</a> (int n, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *centers)</td></tr>
+<tr class="memdesc:a5876b2ffc2146f74aa101add882acb3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for calculation of cell centers.  <br /></td></tr>
 <tr class="separator:a5876b2ffc2146f74aa101add882acb3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa97c330d39ec88bd621735683567162d" id="r_aa97c330d39ec88bd621735683567162d"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa97c330d39ec88bd621735683567162d">kCalculateCellMeasure</a> (int n, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, double *measures)</td></tr>
+<tr class="memdesc:aa97c330d39ec88bd621735683567162d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for calculation of cell centers.  <br /></td></tr>
 <tr class="separator:aa97c330d39ec88bd621735683567162d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace0535dc60513cb1f9473a6ba3e33f44" id="r_ace0535dc60513cb1f9473a6ba3e33f44"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace0535dc60513cb1f9473a6ba3e33f44">kDetermineNeighborType</a> (int n, const int3 *cells, int3 *simpleNeighbors, int *simpleNeighborsNum, int3 *attachedNeighbors, int *attachedNeighborsNum, int3 *notNeighbors, int *notNeighborsNum)</td></tr>
+<tr class="memdesc:ace0535dc60513cb1f9473a6ba3e33f44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for filling the lists of cell neighbors pairs of different types.  <br /></td></tr>
 <tr class="separator:ace0535dc60513cb1f9473a6ba3e33f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac793b803536c949c048895cf6dda316b" id="r_ac793b803536c949c048895cf6dda316b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac793b803536c949c048895cf6dda316b">exportMeshToObj</a> (const std::string &amp;filename, const std::vector&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt; &amp;vertices, const std::vector&lt; int3 &gt; &amp;cells)</td></tr>
-<tr class="memdesc:ac793b803536c949c048895cf6dda316b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh to OBJ file.  <br /></td></tr>
+<tr class="memdesc:ac793b803536c949c048895cf6dda316b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh to an OBJ file.  <br /></td></tr>
 <tr class="separator:ac793b803536c949c048895cf6dda316b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0d3785e47f73d7c16cbac8ff0b39e5c" id="r_ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0d3785e47f73d7c16cbac8ff0b39e5c">exportMeshToVtk</a> (const std::string &amp;filename, const std::vector&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt; &amp;vertices, const std::vector&lt; int3 &gt; &amp;cells, const std::array&lt; std::vector&lt; unsigned char &gt;, 3 &gt; &amp;refinementsRequired)</td></tr>
-<tr class="memdesc:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh (and optionally mesh refinement information) to VTK file.  <br /></td></tr>
+<tr class="memdesc:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh (and optionally mesh refinement information) to a VTK file.  <br /></td></tr>
 <tr class="separator:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ad4e3599012b2d6dc2d1eba6bb3517a" id="r_a9ad4e3599012b2d6dc2d1eba6bb3517a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ad4e3599012b2d6dc2d1eba6bb3517a">neighborTypeString</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
 <tr class="memdesc:a9ad4e3599012b2d6dc2d1eba6bb3517a"><td class="mdescLeft">&#160;</td><td class="mdescRight">String for a specific neighbor type (for message generation)  <br /></td></tr>
@@ -148,7 +152,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Export mesh to OBJ file. </p>
+<p>Export mesh to an OBJ file. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Resulting file name </td></tr>
@@ -190,7 +194,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Export mesh (and optionally mesh refinement information) to VTK file. </p>
+<p>Export mesh (and optionally mesh refinement information) to a VTK file. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Resulting file name </td></tr>
@@ -200,7 +204,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Data is exported to .vtp (polygonal data) XML-type file. <br  />
+<p>Data is exported to a .vtp (polygonal data) XML-type VTK file. <br  />
  </p>
 
 </div>
@@ -234,6 +238,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for calculation of cell centers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of cells </td></tr>
+    <tr><td class="paramname">vertices</td><td>Coordinates of mesh vertices </td></tr>
+    <tr><td class="paramname">cells</td><td>Indices of vertices for cells </td></tr>
+    <tr><td class="paramname">centers</td><td>Resulting vector of coordinates of cell centers</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>For each triangle its center coordinates are calculated as mean value of its vertex coordinates. </p>
+
 </div>
 </div>
 <a id="aa97c330d39ec88bd621735683567162d" name="aa97c330d39ec88bd621735683567162d"></a>
@@ -265,6 +281,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for calculation of cell centers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of cells </td></tr>
+    <tr><td class="paramname">vertices</td><td>Coordinates of mesh vertices </td></tr>
+    <tr><td class="paramname">cells</td><td>Indices of vertices for cells </td></tr>
+    <tr><td class="paramname">measures</td><td>Resulting vector of cell measures</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>For each triangle its measure (area) is calculated as 1/2 of the magnitude of the cross-product of its 2 edges with a common vertex. </p>
+
 </div>
 </div>
 <a id="a014d510ca14ed2e5684aabf9d2e4ff7c" name="a014d510ca14ed2e5684aabf9d2e4ff7c"></a>
@@ -295,6 +323,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for calculation of cell normals. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of cells </td></tr>
+    <tr><td class="paramname">vertices</td><td>Coordinates of mesh vertices </td></tr>
+    <tr><td class="paramname">cells</td><td>Indices of vertices for cells </td></tr>
+    <tr><td class="paramname">normals</td><td>Resulting vector of coordinates of cell normals</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>For each cell normal a cross-product is calculated for vectors of 2 triangle edges with a common vertex and then normalized </p>
 
 </div>
 </div>
@@ -346,6 +386,23 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for filling the lists of cell neighbors pairs of different types. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of cells </td></tr>
+    <tr><td class="paramname">cells</td><td>Indices of vertices for cells </td></tr>
+    <tr><td class="paramname">simpleNeighbors</td><td>Pairs of simple neighbors </td></tr>
+    <tr><td class="paramname">simpleNeighborsNum</td><td>Simple neighbors counter </td></tr>
+    <tr><td class="paramname">attachedNeighbors</td><td>Pairs of attached neighbors </td></tr>
+    <tr><td class="paramname">attachedNeighborsNum</td><td>Attached neighbors counter </td></tr>
+    <tr><td class="paramname">notNeighbors</td><td>Pairs of non-neighbors </td></tr>
+    <tr><td class="paramname">notNeighborsNum</td><td>Non-neighbors counter</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Resulting list contain only pairs (<em>i,j</em>), where <em>i&lt;j</em>, 3rd coordinate is equal to the index of pair in the corresponding list (is used further in the integration process if the <em>i</em>-th cell is refined).</p>
+<p>Each thread checks neighbors for 1 cell, but the cells to check against are loaded in chunks to the shared memory by the block. Once the chunk of cells to be checked against is loaded, each thread counts the number of coinciding vertex indices of 2 triagnles. Depending on this number the pair is added to the list of simple neighbors (1 common vertex), attached neighbors (2 common vertices) or non-neighbors (0 common vertices). </p>
 
 </div>
 </div>

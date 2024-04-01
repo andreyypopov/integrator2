@@ -102,10 +102,13 @@ $(function(){initNavTree('cuda__helper_8cu.html',''); initResizable(); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad1c33253b53e7b944302c3e780976af9" id="r_ad1c33253b53e7b944302c3e780976af9"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1c33253b53e7b944302c3e780976af9">kFillOrdinal</a> (int n, int *indices)</td></tr>
+<tr class="memdesc:ad1c33253b53e7b944302c3e780976af9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function which fill the vector with values (0, n-1)  <br /></td></tr>
 <tr class="separator:ad1c33253b53e7b944302c3e780976af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23ef0d80df1ba1d86cc1a57948f218e8" id="r_a23ef0d80df1ba1d86cc1a57948f218e8"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23ef0d80df1ba1d86cc1a57948f218e8">kExtractIndices</a> (int n, int *indices, int *counter, const unsigned char *mask)</td></tr>
+<tr class="memdesc:a23ef0d80df1ba1d86cc1a57948f218e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for extraction of indices of mask array elements which are non-zero.  <br /></td></tr>
 <tr class="separator:a23ef0d80df1ba1d86cc1a57948f218e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade1126a7b7e1cc5a1750bb36e1f1f85e" id="r_ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade1126a7b7e1cc5a1750bb36e1f1f85e">requestFreeDeviceMemoryAmount</a> ()</td></tr>
+<tr class="memdesc:ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the amount of free device memory.  <br /></td></tr>
 <tr class="separator:ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -138,6 +141,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for extraction of indices of mask array elements which are non-zero. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of elements in the mask array </td></tr>
+    <tr><td class="paramname">indices</td><td>Raw pointer to the target array with indices of non-zero element </td></tr>
+    <tr><td class="paramname">counter</td><td>Counter of the non-zero element </td></tr>
+    <tr><td class="paramname">mask</td><td>Mask array to extract indices from </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ad1c33253b53e7b944302c3e780976af9" name="ad1c33253b53e7b944302c3e780976af9"></a>
@@ -159,6 +173,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function which fill the vector with values (0, n-1) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of elements in the vector </td></tr>
+    <tr><td class="paramname">indices</td><td>Raw pointer to the vector to be filled </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ade1126a7b7e1cc5a1750bb36e1f1f85e" name="ade1126a7b7e1cc5a1750bb36e1f1f85e"></a>
@@ -175,6 +198,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get the amount of free device memory. </p>
+<dl class="section return"><dt>Returns</dt><dd>size_t Amount of free device memory in bytes</dd></dl>
+<p>Message is printed with total and free amounts of device memory in MBytes </p>
 
 </div>
 </div>

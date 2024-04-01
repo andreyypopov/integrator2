@@ -132,10 +132,10 @@ Enumerations</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac793b803536c949c048895cf6dda316b" id="r_ac793b803536c949c048895cf6dda316b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac793b803536c949c048895cf6dda316b">exportMeshToObj</a> (const std::string &amp;filename, const std::vector&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt; &amp;vertices, const std::vector&lt; int3 &gt; &amp;cells)</td></tr>
-<tr class="memdesc:ac793b803536c949c048895cf6dda316b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh to OBJ file.  <br /></td></tr>
+<tr class="memdesc:ac793b803536c949c048895cf6dda316b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh to an OBJ file.  <br /></td></tr>
 <tr class="separator:ac793b803536c949c048895cf6dda316b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0d3785e47f73d7c16cbac8ff0b39e5c" id="r_ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0d3785e47f73d7c16cbac8ff0b39e5c">exportMeshToVtk</a> (const std::string &amp;filename, const std::vector&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt; &amp;vertices, const std::vector&lt; int3 &gt; &amp;cells, const std::array&lt; std::vector&lt; unsigned char &gt;, 3 &gt; &amp;refinementsRequired)</td></tr>
-<tr class="memdesc:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh (and optionally mesh refinement information) to VTK file.  <br /></td></tr>
+<tr class="memdesc:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export mesh (and optionally mesh refinement information) to a VTK file.  <br /></td></tr>
 <tr class="separator:ae0d3785e47f73d7c16cbac8ff0b39e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ad4e3599012b2d6dc2d1eba6bb3517a" id="r_a9ad4e3599012b2d6dc2d1eba6bb3517a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ad4e3599012b2d6dc2d1eba6bb3517a">neighborTypeString</a> (<a class="el" href="#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
 <tr class="memdesc:a9ad4e3599012b2d6dc2d1eba6bb3517a"><td class="mdescLeft">&#160;</td><td class="mdescRight">String for a specific neighbor type (for message generation)  <br /></td></tr>
@@ -216,7 +216,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Export mesh to OBJ file. </p>
+<p>Export mesh to an OBJ file. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Resulting file name </td></tr>
@@ -258,7 +258,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Export mesh (and optionally mesh refinement information) to VTK file. </p>
+<p>Export mesh (and optionally mesh refinement information) to a VTK file. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Resulting file name </td></tr>
@@ -268,7 +268,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Data is exported to .vtp (polygonal data) XML-type file. <br  />
+<p>Data is exported to a .vtp (polygonal data) XML-type VTK file. <br  />
  </p>
 
 </div>

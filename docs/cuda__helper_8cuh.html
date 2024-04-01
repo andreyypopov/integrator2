@@ -108,39 +108,52 @@ Macros</h2></td></tr>
 <tr class="memitem:a851d53e5bea3bae8ee27fed5c1923a0d" id="r_a851d53e5bea3bae8ee27fed5c1923a0d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a851d53e5bea3bae8ee27fed5c1923a0d">CUDA_HELPER_CUH</a></td></tr>
 <tr class="separator:a851d53e5bea3bae8ee27fed5c1923a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af956e3938f5abff900fb99c4a25446a5" id="r_af956e3938f5abff900fb99c4a25446a5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af956e3938f5abff900fb99c4a25446a5">checkCudaErrors</a>(val)&#160;&#160;&#160;<a class="el" href="#a8170bd02e7804fbab5e561bf676decd0">check</a>((val), #val, __FILE__, __LINE__)</td></tr>
+<tr class="memdesc:af956e3938f5abff900fb99c4a25446a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro for CUDA error checks.  <br /></td></tr>
 <tr class="separator:af956e3938f5abff900fb99c4a25446a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ef7f1f3a9741043e03db66082a47a42" id="r_a2ef7f1f3a9741043e03db66082a47a42"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ef7f1f3a9741043e03db66082a47a42">getLastCudaError</a>(msg)&#160;&#160;&#160;<a class="el" href="#a318525272d28382dc2c9ecccc0d0402b">__getLastCudaError</a>(msg, __FILE__, __LINE__)</td></tr>
+<tr class="memdesc:a2ef7f1f3a9741043e03db66082a47a42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro for asynchronous error checking.  <br /></td></tr>
 <tr class="separator:a2ef7f1f3a9741043e03db66082a47a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ab041f369038e947fd8b65cc157b229c1" id="r_ab041f369038e947fd8b65cc157b229c1"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab041f369038e947fd8b65cc157b229c1">blocksForSize</a> (unsigned int n, unsigned int maxThreads=<a class="el" href="#adabafc478d1036ff1d3279a9af6ac6e7">gpuThreads</a>)</td></tr>
+<tr class="memdesc:ab041f369038e947fd8b65cc157b229c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the size of CUDA grid for the size of the data to be processed.  <br /></td></tr>
 <tr class="separator:ab041f369038e947fd8b65cc157b229c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8170bd02e7804fbab5e561bf676decd0" id="r_a8170bd02e7804fbab5e561bf676decd0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8170bd02e7804fbab5e561bf676decd0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a8170bd02e7804fbab5e561bf676decd0">check</a> (T result, char const *const func, const char *const file, int const line)</td></tr>
+<tr class="memdesc:a8170bd02e7804fbab5e561bf676decd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for checking CUDA errors.  <br /></td></tr>
 <tr class="separator:a8170bd02e7804fbab5e561bf676decd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a318525272d28382dc2c9ecccc0d0402b" id="r_a318525272d28382dc2c9ecccc0d0402b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a318525272d28382dc2c9ecccc0d0402b">__getLastCudaError</a> (const char *errorMessage, const char *file, const int line)</td></tr>
+<tr class="memdesc:a318525272d28382dc2c9ecccc0d0402b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for asynchronous error checking.  <br /></td></tr>
 <tr class="separator:a318525272d28382dc2c9ecccc0d0402b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1c33253b53e7b944302c3e780976af9" id="r_ad1c33253b53e7b944302c3e780976af9"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1c33253b53e7b944302c3e780976af9">kFillOrdinal</a> (int n, int *indices)</td></tr>
+<tr class="memdesc:ad1c33253b53e7b944302c3e780976af9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function which fill the vector with values (0, n-1)  <br /></td></tr>
 <tr class="separator:ad1c33253b53e7b944302c3e780976af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23ef0d80df1ba1d86cc1a57948f218e8" id="r_a23ef0d80df1ba1d86cc1a57948f218e8"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23ef0d80df1ba1d86cc1a57948f218e8">kExtractIndices</a> (int n, int *indices, int *counter, const unsigned char *mask)</td></tr>
+<tr class="memdesc:a23ef0d80df1ba1d86cc1a57948f218e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for extraction of indices of mask array elements which are non-zero.  <br /></td></tr>
 <tr class="separator:a23ef0d80df1ba1d86cc1a57948f218e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa159e0e4821a0b855b1a73535627139a" id="r_aa159e0e4821a0b855b1a73535627139a"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:aa159e0e4821a0b855b1a73535627139a"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aa159e0e4821a0b855b1a73535627139a">kFillValue</a> (int n, T *array, T value, int *indices=nullptr)</td></tr>
+<tr class="memdesc:aa159e0e4821a0b855b1a73535627139a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function to fill the elements of the vector (all or only with certain indices) with one specified value.  <br /></td></tr>
 <tr class="separator:aa159e0e4821a0b855b1a73535627139a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a748d66b5ee074f108f09357309e87e65" id="r_a748d66b5ee074f108f09357309e87e65"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a748d66b5ee074f108f09357309e87e65"><td class="memTemplItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a748d66b5ee074f108f09357309e87e65">kIncreaseValue</a> (int n, T *array, T value, int *indices=nullptr)</td></tr>
+<tr class="memdesc:a748d66b5ee074f108f09357309e87e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function to increase/decrease the elements of the vector (all or only with certain indices) by one specified increment/decrement.  <br /></td></tr>
 <tr class="separator:a748d66b5ee074f108f09357309e87e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade1126a7b7e1cc5a1750bb36e1f1f85e" id="r_ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade1126a7b7e1cc5a1750bb36e1f1f85e">requestFreeDeviceMemoryAmount</a> ()</td></tr>
+<tr class="memdesc:ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the amount of free device memory.  <br /></td></tr>
 <tr class="separator:ade1126a7b7e1cc5a1750bb36e1f1f85e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:adabafc478d1036ff1d3279a9af6ac6e7" id="r_adabafc478d1036ff1d3279a9af6ac6e7"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adabafc478d1036ff1d3279a9af6ac6e7">gpuThreads</a> = 256</td></tr>
+<tr class="memdesc:adabafc478d1036ff1d3279a9af6ac6e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard CUDA block size for most part of the kernel functions.  <br /></td></tr>
 <tr class="separator:adabafc478d1036ff1d3279a9af6ac6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa8d004113cfe08727a1789c73a01371" id="r_afa8d004113cfe08727a1789c73a01371"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa8d004113cfe08727a1789c73a01371">gpuThreadsMax</a> = 1024</td></tr>
+<tr class="memdesc:afa8d004113cfe08727a1789c73a01371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increased size of the CUDA block for kernel functions that use shared memory.  <br /></td></tr>
 <tr class="separator:afa8d004113cfe08727a1789c73a01371"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60485c02a8a8d8ac4a408d8aca0cd023" id="r_a60485c02a8a8d8ac4a408d8aca0cd023"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60485c02a8a8d8ac4a408d8aca0cd023">gpuThreads2D</a> = 16</td></tr>
+<tr class="memdesc:a60485c02a8a8d8ac4a408d8aca0cd023"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreased size of the CUDA block for kernel functions that use 2D geometry.  <br /></td></tr>
 <tr class="separator:a60485c02a8a8d8ac4a408d8aca0cd023"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -158,6 +171,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Macro for CUDA error checks. </p>
 
 </div>
 </div>
@@ -189,6 +204,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Macro for asynchronous error checking. </p>
 
 </div>
 </div>
@@ -225,6 +242,16 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Function for asynchronous error checking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorMessage</td><td>Error message </td></tr>
+    <tr><td class="paramname">file</td><td>Name of the file which caused the error </td></tr>
+    <tr><td class="paramname">line</td><td>Line of the file which caused the error </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ab041f369038e947fd8b65cc157b229c1" name="ab041f369038e947fd8b65cc157b229c1"></a>
@@ -253,6 +280,16 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Calculate the size of CUDA grid for the size of the data to be processed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of elements to be processed </td></tr>
+    <tr><td class="paramname">maxThreads</td><td>Number of threads in a block </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of blocks in the grid </dd></dl>
 
 </div>
 </div>
@@ -287,6 +324,23 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Function for checking CUDA errors. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type of the result of the function to be checked (cudaError_t) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result</td><td>Result of the function execution </td></tr>
+    <tr><td class="paramname">func</td><td>Function name </td></tr>
+    <tr><td class="paramname">file</td><td>Name of the source file containg the function </td></tr>
+    <tr><td class="paramname">line</td><td>Line containing the function </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a23ef0d80df1ba1d86cc1a57948f218e8" name="a23ef0d80df1ba1d86cc1a57948f218e8"></a>
@@ -318,6 +372,17 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for extraction of indices of mask array elements which are non-zero. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of elements in the mask array </td></tr>
+    <tr><td class="paramname">indices</td><td>Raw pointer to the target array with indices of non-zero element </td></tr>
+    <tr><td class="paramname">counter</td><td>Counter of the non-zero element </td></tr>
+    <tr><td class="paramname">mask</td><td>Mask array to extract indices from </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ad1c33253b53e7b944302c3e780976af9" name="ad1c33253b53e7b944302c3e780976af9"></a>
@@ -338,6 +403,15 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function which fill the vector with values (0, n-1) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of elements in the vector </td></tr>
+    <tr><td class="paramname">indices</td><td>Raw pointer to the vector to be filled </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -372,6 +446,23 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function to fill the elements of the vector (all or only with certain indices) with one specified value. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of element to fill </td></tr>
+    <tr><td class="paramname">array</td><td>Raw pointer to the target array to be filled </td></tr>
+    <tr><td class="paramname">value</td><td>Value to be assigned to each element </td></tr>
+    <tr><td class="paramname">indices</td><td>Indices of elements which should be assigned the specified value (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a748d66b5ee074f108f09357309e87e65" name="a748d66b5ee074f108f09357309e87e65"></a>
@@ -405,6 +496,23 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function to increase/decrease the elements of the vector (all or only with certain indices) by one specified increment/decrement. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of element to increase/decrease their value </td></tr>
+    <tr><td class="paramname">array</td><td>Raw pointer to the target array to be modified </td></tr>
+    <tr><td class="paramname">value</td><td>The increase/decrease for each element's value </td></tr>
+    <tr><td class="paramname">indices</td><td>Indices of elements for which the value should be modified (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ade1126a7b7e1cc5a1750bb36e1f1f85e" name="ade1126a7b7e1cc5a1750bb36e1f1f85e"></a>
@@ -422,6 +530,10 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Get the amount of free device memory. </p>
+<dl class="section return"><dt>Returns</dt><dd>size_t Amount of free device memory in bytes</dd></dl>
+<p>Message is printed with total and free amounts of device memory in MBytes </p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -437,6 +549,8 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Standard CUDA block size for most part of the kernel functions. </p>
+
 </div>
 </div>
 <a id="a60485c02a8a8d8ac4a408d8aca0cd023" name="a60485c02a8a8d8ac4a408d8aca0cd023"></a>
@@ -451,6 +565,8 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Decreased size of the CUDA block for kernel functions that use 2D geometry. </p>
+
 </div>
 </div>
 <a id="afa8d004113cfe08727a1789c73a01371" name="afa8d004113cfe08727a1789c73a01371"></a>
@@ -464,6 +580,8 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Increased size of the CUDA block for kernel functions that use shared memory. </p>
 
 </div>
 </div>

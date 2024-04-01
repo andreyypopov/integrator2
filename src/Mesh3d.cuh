@@ -139,7 +139,7 @@ private:
     /*!
      * @brief Calculation of cell measures
      * 
-     * A kernel function is called which computes each cell's measure as 1/2 of magnitude of cross-product of its 2 edges with a common vertex
+     * A kernel function is called which computes each cell's measure as 1/2 of the magnitude of cross-product of its 2 edges with a common vertex
      */
     void calculateMeasures();
 
@@ -173,7 +173,7 @@ private:
 };
 
 /*!
- * @brief Export mesh to OBJ file
+ * @brief Export mesh to an OBJ file
  * 
  * @param filename Resulting file name
  * @param vertices (Host) vector of vertices coordinates
@@ -184,14 +184,14 @@ private:
 void exportMeshToObj(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells);
 
 /*!
- * @brief Export mesh (and optionally mesh refinement information) to VTK file
+ * @brief Export mesh (and optionally mesh refinement information) to a VTK file
  * 
  * @param filename Resulting file name
  * @param vertices (Host) vector of vertices coordinates
  * @param cells (Host) vector of indices of cell vertices
  * @param refinementsRequired 3 vectors with numbers of necessary refinement levels for cells (obtained after integration), can empty
  * 
- * Data is exported to .vtp (polygonal data) XML-type file.  
+ * Data is exported to a .vtp (polygonal data) XML-type VTK file.  
  */
 void exportMeshToVtk(const std::string &filename, const std::vector<Point3> &vertices, const std::vector<int3> &cells,
         const std::array<std::vector<unsigned char>, 3> &refinementsRequired);

@@ -3,28 +3,55 @@
 
 #include "cuda_memory.cuh"
 
+/*!
+ * @brief Vector for data stored in the GPU memory
+ * 
+ * @tparam T Data type
+ */
 template<class T>
 struct deviceVector
 {
 public:
-    T *data = nullptr;
-    int size = 0;
-    int capacity = 0;
+    T *data = nullptr;      //!< Raw pointer to the array
+    int size = 0;           //!< Exact size of the data (can be changed manually)
+    int capacity = 0;       //!< Allocated capacity of the array
 
+    /*!
+     * @brief Destroy the device Vector object
+     * 
+     * Memory is freed
+     */
     ~deviceVector(){
         free();
     }
 
+    /*!
+     * @brief Allocation for a specified number of items
+     * 
+     * @param new_size Number of items in the vector
+     */
     void allocate(int new_size){
         allocate_device(&data, new_size);
         size = new_size;
         capacity = new_size;
     }
 
+    /*!
+     * @brief Get the actual size of vector in bytes
+     * 
+     * @return Size of vector in bytes
+     */
     size_t bytes() const {
         return size * sizeof(T);
     }
 
+    /*!
+     * @brief Swap the current vector with another one 
+     * 
+     * @param other Another vector to swap the current with
+     * 
+     * All properties including raw pointer, size and capacity are swapped
+     */
     void swap(deviceVector<T> &other){
         T *tmpData = other.data;
         int tmpSize = other.size;
@@ -39,6 +66,15 @@ public:
         this->capacity = tmpCapacity;
     }
 
+    /*!
+     * @brief Resize the vector to the new size
+     * 
+     * @param new_size New size in number of elements
+     * 
+     * If the new size does not exceed the vector capacity, only the size is updated.
+     * Otherwise memory reallocation is performed: free the memory (completely, without copying the data),
+     * allocate new memory (new size + a certain additional amount), set the size to the requested size.
+     */
     void resize(int new_size){
         if(new_size <= capacity)
             size = new_size;
@@ -53,6 +89,11 @@ public:
     }
 
 private:
+    /*!
+     * @brief Free the device memory
+     * 
+     * If memory was previously allocated, then it is freed and both size and capacity are set to zero.
+     */
     void free(){
         if(data){
             free_device(data);

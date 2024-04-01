@@ -6,6 +6,16 @@
 #include <array>
 #include <fstream>
 
+/*!
+ * @brief Kernel function for calculation of cell normals
+ * 
+ * @param n Number of cells
+ * @param vertices Coordinates of mesh vertices
+ * @param cells Indices of vertices for cells
+ * @param normals Resulting vector of coordinates of cell normals
+ * 
+ * For each cell normal a cross-product is calculated for vectors of 2 triangle edges with a common vertex and then normalized
+ */
 __global__ void kCalculateCellNormal(int n, const Point3 *vertices, const int3 *cells, Point3 *normals){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
@@ -17,6 +27,16 @@ __global__ void kCalculateCellNormal(int n, const Point3 *vertices, const int3 *
     }
 }
 
+/*!
+ * @brief Kernel function for calculation of cell centers
+ * 
+ * @param n Number of cells
+ * @param vertices Coordinates of mesh vertices
+ * @param cells Indices of vertices for cells
+ * @param centers Resulting vector of coordinates of cell centers
+ * 
+ * For each triangle its center coordinates are calculated as mean value of its vertex coordinates.
+ */
 __global__ void kCalculateCellCenter(int n, const Point3 *vertices, const int3 *cells, Point3 *centers){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
@@ -25,6 +45,16 @@ __global__ void kCalculateCellCenter(int n, const Point3 *vertices, const int3 *
     }
 }
 
+/*!
+ * @brief Kernel function for calculation of cell centers
+ * 
+ * @param n Number of cells
+ * @param vertices Coordinates of mesh vertices
+ * @param cells Indices of vertices for cells
+ * @param measures Resulting vector of cell measures
+ * 
+ * For each triangle its measure (area) is calculated as 1/2 of the magnitude of the cross-product of its 2 edges with a common vertex. 
+ */
 __global__ void kCalculateCellMeasure(int n, const Point3 *vertices, const int3 *cells, double *measures){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if(idx < n){
@@ -36,6 +66,26 @@ __global__ void kCalculateCellMeasure(int n, const Point3 *vertices, const int3 
     }
 }
 
+/*!
+ * @brief Kernel function for filling the lists of cell neighbors pairs of different types
+ * 
+ * @param n Number of cells
+ * @param cells Indices of vertices for cells
+ * @param simpleNeighbors Pairs of simple neighbors
+ * @param simpleNeighborsNum Simple neighbors counter
+ * @param attachedNeighbors Pairs of attached neighbors
+ * @param attachedNeighborsNum Attached neighbors counter
+ * @param notNeighbors Pairs of non-neighbors
+ * @param notNeighborsNum Non-neighbors counter
+ * 
+ * Resulting list contain only pairs (*i,j*), where *i<j*, 3rd coordinate is equal to the index of pair in the corresponding list
+ * (is used further in the integration process if the *i*-th cell is refined).
+ * 
+ * Each thread checks neighbors for 1 cell, but the cells to check against are loaded in chunks to the shared memory by the block.
+ * Once the chunk of cells to be checked against is loaded, each thread counts the number of coinciding vertex indices of 2 triagnles.
+ * Depending on this number the pair is added to the list of simple neighbors (1 common vertex), attached neighbors (2 common vertices)
+ * or non-neighbors (0 common vertices).
+ */
 __global__ void kDetermineNeighborType(int n, const int3 *cells, int3 *simpleNeighbors, int *simpleNeighborsNum,
     int3 *attachedNeighbors, int *attachedNeighborsNum, int3 *notNeighbors, int *notNeighborsNum){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
