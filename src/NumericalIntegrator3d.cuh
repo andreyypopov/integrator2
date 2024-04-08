@@ -5,13 +5,33 @@
 #include "Mesh3d.cuh"
 #include "QuadratureFormula3d.cuh"
 
+/*!
+ * @brief Enumerator for the error control mode
+ */
 enum class error_control_type_enum {
-    fixed_refinement_level = 0,
-    automatic_error_control = 1
+    fixed_refinement_level = 0,     //!< Fixed level of refinement for the whole mesh (memory-consuming)
+    automatic_error_control = 1     //!< Automatic error control using the Rungle rule
 };
 
+/*!
+ * @brief Actual evaluation of the quadrature formula
+ * 
+ * @param functionValues Previously evaluated values of the function in the Gauss points
+ * @return Resulting value of the integral
+ * 
+ * Number of Gauss points and their weights are read from the constant memory
+ */
 __device__ double4 integrate4D(const double4 *functionValues);
 
+/*!
+ * @brief Computation of positions of Gauss points for the triangle
+ * 
+ * @param quadraturePoints Vector of Gauss points positions to be filled
+ * @param vertices Vector of all vertices positions
+ * @param triangle Indices of the vertices of the triangle
+ * 
+ * L-coordinates of the Gauss points are read from the constant memory
+ */
 __device__ void calculateQuadraturePoints(Point3 *quadraturePoints, const Point3 *vertices, const int3 &triangle);
 
 class NumericalIntegrator3D

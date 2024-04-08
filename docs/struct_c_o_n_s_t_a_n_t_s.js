@@ -10,7 +10,7 @@ var struct_c_o_n_s_t_a_n_t_s =
     [ "MAX_GAUSS_POINTS", "struct_c_o_n_s_t_a_n_t_s.html#a2842e0f1ee5a427999715f452576f843", null ],
     [ "MAX_REFINE_LEVEL", "struct_c_o_n_s_t_a_n_t_s.html#af6487a0dd8768e3cae2f4bc6224a02ac", null ],
     [ "MAX_SIMPLE_NEIGHBORS_PER_CELL", "struct_c_o_n_s_t_a_n_t_s.html#aacbc89336ee96a65e60b4303e6b7c285", null ],
-    [ "MEMOTY_REALLOCATION_COEFFICIENT", "struct_c_o_n_s_t_a_n_t_s.html#a734f393a721f638a4cd6dc980d08ca1a", null ],
+    [ "MEMORY_REALLOCATION_COEFFICIENT", "struct_c_o_n_s_t_a_n_t_s.html#a868e127fa6ee298de658b16d6856b007", null ],
     [ "ONE_THIRD", "struct_c_o_n_s_t_a_n_t_s.html#aa9fe4f6d31ca98e51840a112b2bffcec", null ],
     [ "PI", "struct_c_o_n_s_t_a_n_t_s.html#a13f26a1a858cee820287a90ee6133378", null ],
     [ "RECIPROCAL_FOUR_PI", "struct_c_o_n_s_t_a_n_t_s.html#a4118011e81def55bfccf9cb14cf059ee", null ],

@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -121,13 +128,16 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a9ab58cb389e76d256ba909cefae8d806" id="r_a9ab58cb389e76d256ba909cefae8d806"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ab58cb389e76d256ba909cefae8d806">error_control_type_enum</a> { <a class="el" href="#a9ab58cb389e76d256ba909cefae8d806ad593f6ff89aeef428d22d9d320fc153d">fixed_refinement_level</a> = 0
 , <a class="el" href="#a9ab58cb389e76d256ba909cefae8d806ad28788c0ad4ad5acc54f634a21f6adc2">automatic_error_control</a> = 1
  }</td></tr>
+<tr class="memdesc:a9ab58cb389e76d256ba909cefae8d806"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator for the error control mode.  <a href="#a9ab58cb389e76d256ba909cefae8d806">More...</a><br /></td></tr>
 <tr class="separator:a9ab58cb389e76d256ba909cefae8d806"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a190ee80af176023b2a45fb9217cc90a0" id="r_a190ee80af176023b2a45fb9217cc90a0"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a190ee80af176023b2a45fb9217cc90a0">integrate4D</a> (const double4 *functionValues)</td></tr>
+<tr class="memdesc:a190ee80af176023b2a45fb9217cc90a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual evaluation of the quadrature formula.  <br /></td></tr>
 <tr class="separator:a190ee80af176023b2a45fb9217cc90a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf143e4a3e93ea3174e06a713f682c05" id="r_adf143e4a3e93ea3174e06a713f682c05"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf143e4a3e93ea3174e06a713f682c05">calculateQuadraturePoints</a> (<a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *quadraturePoints, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 &amp;triangle)</td></tr>
+<tr class="memdesc:adf143e4a3e93ea3174e06a713f682c05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of positions of Gauss points for the triangle.  <br /></td></tr>
 <tr class="separator:adf143e4a3e93ea3174e06a713f682c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -165,9 +175,13 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Enumerator for the error control mode. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9ab58cb389e76d256ba909cefae8d806ad593f6ff89aeef428d22d9d320fc153d" name="a9ab58cb389e76d256ba909cefae8d806ad593f6ff89aeef428d22d9d320fc153d"></a>fixed_refinement_level&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9ab58cb389e76d256ba909cefae8d806ad28788c0ad4ad5acc54f634a21f6adc2" name="a9ab58cb389e76d256ba909cefae8d806ad28788c0ad4ad5acc54f634a21f6adc2"></a>automatic_error_control&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9ab58cb389e76d256ba909cefae8d806ad593f6ff89aeef428d22d9d320fc153d" name="a9ab58cb389e76d256ba909cefae8d806ad593f6ff89aeef428d22d9d320fc153d"></a>fixed_refinement_level&#160;</td><td class="fielddoc"><p>Fixed level of refinement for the whole mesh (memory-consuming) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ab58cb389e76d256ba909cefae8d806ad28788c0ad4ad5acc54f634a21f6adc2" name="a9ab58cb389e76d256ba909cefae8d806ad28788c0ad4ad5acc54f634a21f6adc2"></a>automatic_error_control&#160;</td><td class="fielddoc"><p>Automatic error control using the Rungle rule. </p>
+</td></tr>
 </table>
 
 </div>
@@ -197,6 +211,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Computation of positions of Gauss points for the triangle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quadraturePoints</td><td>Vector of Gauss points positions to be filled </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of all vertices positions </td></tr>
+    <tr><td class="paramname">triangle</td><td>Indices of the vertices of the triangle</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>L-coordinates of the Gauss points are read from the constant memory </p>
+
 </div>
 </div>
 <a id="a190ee80af176023b2a45fb9217cc90a0" name="a190ee80af176023b2a45fb9217cc90a0"></a>
@@ -213,6 +238,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Actual evaluation of the quadrature formula. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">functionValues</td><td>Previously evaluated values of the function in the Gauss points </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting value of the integral</dd></dl>
+<p>Number of Gauss points and their weights are read from the constant memory </p>
 
 </div>
 </div>

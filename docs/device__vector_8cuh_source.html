@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -157,7 +164,7 @@ $(function(){initNavTree('device__vector_8cuh_source.html',''); initResizable();
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <a class="code hl_function" href="structdevice_vector.html#a42d620ab6e35d84a045fa29d43bbe8b7">free</a>();</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            <a class="code hl_function" href="structdevice_vector.html#a5459811873d28159c929cc70320e1c3e">allocate</a>(<a class="code hl_variable" href="struct_c_o_n_s_t_a_n_t_s.html#a734f393a721f638a4cd6dc980d08ca1a">CONSTANTS::MEMOTY_REALLOCATION_COEFFICIENT</a> * new_size);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            <a class="code hl_function" href="structdevice_vector.html#a5459811873d28159c929cc70320e1c3e">allocate</a>(<a class="code hl_variable" href="struct_c_o_n_s_t_a_n_t_s.html#a868e127fa6ee298de658b16d6856b007">CONSTANTS::MEMORY_REALLOCATION_COEFFICIENT</a> * new_size);</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <a class="code hl_variable" href="structdevice_vector.html#a2b476016423128677f286a9be2d7cc1a">size</a> = new_size;</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            printf(<span class="stringliteral">&quot;Reallocation performed\n&quot;</span>);</div>
@@ -183,7 +190,7 @@ $(function(){initNavTree('device__vector_8cuh_source.html',''); initResizable();
 <div class="ttc" id="acuda__memory_8cuh_html"><div class="ttname"><a href="cuda__memory_8cuh.html">cuda_memory.cuh</a></div></div>
 <div class="ttc" id="acuda__memory_8cuh_html_a3670d0cd5518145e59eb29770d0f5152"><div class="ttname"><a href="cuda__memory_8cuh.html#a3670d0cd5518145e59eb29770d0f5152">allocate_device</a></div><div class="ttdeci">void allocate_device(T **ptr, size_t elements_num)</div><div class="ttdoc">Allocate a certain amount of device memory in number of items.</div><div class="ttdef"><b>Definition</b> cuda_memory.cuh:14</div></div>
 <div class="ttc" id="acuda__memory_8cuh_html_a6b69a008ce09c4146ca83083a54cee7d"><div class="ttname"><a href="cuda__memory_8cuh.html#a6b69a008ce09c4146ca83083a54cee7d">free_device</a></div><div class="ttdeci">void free_device(T *ptr)</div><div class="ttdoc">Free device memory.</div><div class="ttdef"><b>Definition</b> cuda_memory.cuh:43</div></div>
-<div class="ttc" id="astruct_c_o_n_s_t_a_n_t_s_html_a734f393a721f638a4cd6dc980d08ca1a"><div class="ttname"><a href="struct_c_o_n_s_t_a_n_t_s.html#a734f393a721f638a4cd6dc980d08ca1a">CONSTANTS::MEMOTY_REALLOCATION_COEFFICIENT</a></div><div class="ttdeci">static constexpr double MEMOTY_REALLOCATION_COEFFICIENT</div><div class="ttdef"><b>Definition</b> constants.h:22</div></div>
+<div class="ttc" id="astruct_c_o_n_s_t_a_n_t_s_html_a868e127fa6ee298de658b16d6856b007"><div class="ttname"><a href="struct_c_o_n_s_t_a_n_t_s.html#a868e127fa6ee298de658b16d6856b007">CONSTANTS::MEMORY_REALLOCATION_COEFFICIENT</a></div><div class="ttdeci">static constexpr double MEMORY_REALLOCATION_COEFFICIENT</div><div class="ttdoc">Coefficient for some additional space which is added to the vector capacity during reallocation.</div><div class="ttdef"><b>Definition</b> constants.h:44</div></div>
 <div class="ttc" id="astructdevice_vector_html"><div class="ttname"><a href="structdevice_vector.html">deviceVector</a></div><div class="ttdoc">Vector for data stored in the GPU memory.</div><div class="ttdef"><b>Definition</b> device_vector.cuh:13</div></div>
 <div class="ttc" id="astructdevice_vector_html_a2b476016423128677f286a9be2d7cc1a"><div class="ttname"><a href="structdevice_vector.html#a2b476016423128677f286a9be2d7cc1a">deviceVector::size</a></div><div class="ttdeci">int size</div><div class="ttdoc">Exact size of the data (can be changed manually)</div><div class="ttdef"><b>Definition</b> device_vector.cuh:16</div></div>
 <div class="ttc" id="astructdevice_vector_html_a42d620ab6e35d84a045fa29d43bbe8b7"><div class="ttname"><a href="structdevice_vector.html#a42d620ab6e35d84a045fa29d43bbe8b7">deviceVector::free</a></div><div class="ttdeci">void free()</div><div class="ttdoc">Free the device memory.</div><div class="ttdef"><b>Definition</b> device_vector.cuh:97</div></div>

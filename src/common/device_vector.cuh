@@ -81,7 +81,7 @@ public:
         else {
             free();
 
-            allocate(CONSTANTS::MEMOTY_REALLOCATION_COEFFICIENT * new_size);
+            allocate(CONSTANTS::MEMORY_REALLOCATION_COEFFICIENT * new_size);
             size = new_size;
 
             printf("Reallocation performed\n");

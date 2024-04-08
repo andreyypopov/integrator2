@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -103,6 +110,7 @@ $(function(){initNavTree('cuda__math_8cu.html',''); initResizable(); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a25ae88d6c81afb8627adebab3ead3c03" id="r_a25ae88d6c81afb8627adebab3ead3c03"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25ae88d6c81afb8627adebab3ead3c03">angle</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:a25ae88d6c81afb8627adebab3ead3c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute angle between 2 3D vectors.  <br /></td></tr>
 <tr class="separator:a25ae88d6c81afb8627adebab3ead3c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -124,6 +132,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Compute angle between 2 3D vectors. </p>
+<p>If product of vector lengths is less than EPS_ZERO constant then 0 is returned. Otherwise angle is computed as \( \arccos\frac{\mathbf a\cdot\mathbf b}{|\mathbf a|\cdot|\mathbf b|} \). If for the reason of numerical errors the arccosine argument is greater than 1.0 then zero angle is returned, if the argument is less than -1.0 then \(\pi\) is returned. </p>
 
 </div>
 </div>

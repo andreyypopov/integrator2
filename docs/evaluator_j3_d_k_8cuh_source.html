@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -149,8 +156,8 @@ $(function(){initNavTree('evaluator_j3_d_k_8cuh_source.html',''); initResizable(
 <div class="ttc" id="aclass_evaluator_j3_d_k_html_af283af043d4bcb6532ba73d7b40de1a9"><div class="ttname"><a href="class_evaluator_j3_d_k.html#af283af043d4bcb6532ba73d7b40de1a9">EvaluatorJ3DK::integrateOverAttachedNeighbors</a></div><div class="ttdeci">virtual void integrateOverAttachedNeighbors() override</div><div class="ttdef"><b>Definition</b> evaluatorJ3DK.cu:660</div></div>
 <div class="ttc" id="aclass_evaluator_j3_d_k_html_af4a2e86b9c27adf86b2a29b6bab11d6b"><div class="ttname"><a href="class_evaluator_j3_d_k.html#af4a2e86b9c27adf86b2a29b6bab11d6b">EvaluatorJ3DK::integrateOverNotNeighbors</a></div><div class="ttdeci">virtual void integrateOverNotNeighbors() override</div><div class="ttdef"><b>Definition</b> evaluatorJ3DK.cu:677</div></div>
 <div class="ttc" id="aclass_mesh3_d_html"><div class="ttname"><a href="class_mesh3_d.html">Mesh3D</a></div><div class="ttdoc">Class for storage of mesh information.</div><div class="ttdef"><b>Definition</b> Mesh3d.cuh:34</div></div>
-<div class="ttc" id="aclass_numerical_integrator3_d_html"><div class="ttname"><a href="class_numerical_integrator3_d.html">NumericalIntegrator3D</a></div><div class="ttdef"><b>Definition</b> NumericalIntegrator3d.cuh:18</div></div>
-<div class="ttc" id="acuda__math_8cuh_html_a16b7f1b886fa3763a23e6ae41602aa63"><div class="ttname"><a href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a></div><div class="ttdeci">double3 Point3</div><div class="ttdef"><b>Definition</b> cuda_math.cuh:6</div></div>
+<div class="ttc" id="aclass_numerical_integrator3_d_html"><div class="ttname"><a href="class_numerical_integrator3_d.html">NumericalIntegrator3D</a></div><div class="ttdef"><b>Definition</b> NumericalIntegrator3d.cuh:38</div></div>
+<div class="ttc" id="acuda__math_8cuh_html_a16b7f1b886fa3763a23e6ae41602aa63"><div class="ttname"><a href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a></div><div class="ttdeci">double3 Point3</div><div class="ttdoc">Typedef for 3D vector.</div><div class="ttdef"><b>Definition</b> cuda_math.cuh:9</div></div>
 <div class="ttc" id="aevaluator3d_8cuh_html"><div class="ttname"><a href="evaluator3d_8cuh.html">evaluator3d.cuh</a></div></div>
 <div class="ttc" id="aevaluator_j3_d_k_8cuh_html_a044254ee74fc1bb96291ff5f533e967e"><div class="ttname"><a href="evaluator_j3_d_k_8cuh.html#a044254ee74fc1bb96291ff5f533e967e">shiftsForSimpleNeighbors</a></div><div class="ttdeci">__device__ int2 shiftsForSimpleNeighbors(const int3 &amp;triangle1, const int3 &amp;triangle2)</div><div class="ttdef"><b>Definition</b> evaluatorJ3DK.cu:576</div></div>
 <div class="ttc" id="aevaluator_j3_d_k_8cuh_html_a2819f3ea369e621c9c428b470ce7bb73"><div class="ttname"><a href="evaluator_j3_d_k_8cuh.html#a2819f3ea369e621c9c428b470ce7bb73">integrateSingularPartSimple</a></div><div class="ttdeci">__device__ double4 integrateSingularPartSimple(int i, int j, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)</div><div class="ttdef"><b>Definition</b> evaluatorJ3DK.cu:468</div></div>

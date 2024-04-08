@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -99,42 +106,62 @@ $(function(){initNavTree('struct_c_o_n_s_t_a_n_t_s.html',''); initResizable(); }
 </div><!--header-->
 <div class="contents">
 
+<p>Structure with static constant fields for values with different purposes (tolerance, mathematical and other parameters) *.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="constants_8h_source.html">constants.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ae8d58998ba4a25d0458253daddbbd866" id="r_ae8d58998ba4a25d0458253daddbbd866"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8d58998ba4a25d0458253daddbbd866">DOUBLE_MIN</a> = 2e-6</td></tr>
+<tr class="memdesc:ae8d58998ba4a25d0458253daddbbd866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance for check of double numbers against zero in mathematical functions.  <br /></td></tr>
 <tr class="separator:ae8d58998ba4a25d0458253daddbbd866"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eee5a5b40516d0f0cec58c9e64e2216" id="r_a2eee5a5b40516d0f0cec58c9e64e2216"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2eee5a5b40516d0f0cec58c9e64e2216">EPS_ZERO</a> = 1e-6</td></tr>
+<tr class="memdesc:a2eee5a5b40516d0f0cec58c9e64e2216"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance for check of double numbers against zero in the integration procedure.  <br /></td></tr>
 <tr class="separator:a2eee5a5b40516d0f0cec58c9e64e2216"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a863a7aeb2298c3d149e03e783981d600" id="r_a863a7aeb2298c3d149e03e783981d600"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a863a7aeb2298c3d149e03e783981d600">EPS_ZERO2</a> = <a class="el" href="#a2eee5a5b40516d0f0cec58c9e64e2216">EPS_ZERO</a> * <a class="el" href="#a2eee5a5b40516d0f0cec58c9e64e2216">EPS_ZERO</a></td></tr>
+<tr class="memdesc:a863a7aeb2298c3d149e03e783981d600"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance squared.  <br /></td></tr>
 <tr class="separator:a863a7aeb2298c3d149e03e783981d600"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7cd3ed905712fd0121b5ce62d79028b" id="r_ad7cd3ed905712fd0121b5ce62d79028b"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7cd3ed905712fd0121b5ce62d79028b">EPS_PSI_THETA</a> = <a class="el" href="#a2eee5a5b40516d0f0cec58c9e64e2216">EPS_ZERO</a></td></tr>
+<tr class="memdesc:ad7cd3ed905712fd0121b5ce62d79028b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance for check of closeness of angles to \(\pm\pi\).  <br /></td></tr>
 <tr class="separator:ad7cd3ed905712fd0121b5ce62d79028b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76d5dd57546ebe2d17544230f689bc01" id="r_a76d5dd57546ebe2d17544230f689bc01"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76d5dd57546ebe2d17544230f689bc01">EPS_PSI_THETA2</a> = <a class="el" href="#ad7cd3ed905712fd0121b5ce62d79028b">EPS_PSI_THETA</a> * <a class="el" href="#ad7cd3ed905712fd0121b5ce62d79028b">EPS_PSI_THETA</a></td></tr>
+<tr class="memdesc:a76d5dd57546ebe2d17544230f689bc01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance squared used in check \(1+\cos\delta &lt; \frac{\varepsilon^2}2 \).  <br /></td></tr>
 <tr class="separator:a76d5dd57546ebe2d17544230f689bc01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4f3e456f855427da9b508a83fa4aa69" id="r_ae4f3e456f855427da9b508a83fa4aa69"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4f3e456f855427da9b508a83fa4aa69">EPS_INTEGRATION</a> = 1e-5</td></tr>
+<tr class="memdesc:ae4f3e456f855427da9b508a83fa4aa69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance for check of criterion in the Runge rule.  <br /></td></tr>
 <tr class="separator:ae4f3e456f855427da9b508a83fa4aa69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9fe4f6d31ca98e51840a112b2bffcec" id="r_aa9fe4f6d31ca98e51840a112b2bffcec"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9fe4f6d31ca98e51840a112b2bffcec">ONE_THIRD</a> = 0.3333333333333333</td></tr>
+<tr class="memdesc:aa9fe4f6d31ca98e51840a112b2bffcec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Math constant \(\frac13\).  <br /></td></tr>
 <tr class="separator:aa9fe4f6d31ca98e51840a112b2bffcec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13f26a1a858cee820287a90ee6133378" id="r_a13f26a1a858cee820287a90ee6133378"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13f26a1a858cee820287a90ee6133378">PI</a> = 3.14159265358979323846</td></tr>
+<tr class="memdesc:a13f26a1a858cee820287a90ee6133378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Math constant \(\pi\).  <br /></td></tr>
 <tr class="separator:a13f26a1a858cee820287a90ee6133378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a501c750adc003a62f057ebd7047fa215" id="r_a501c750adc003a62f057ebd7047fa215"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a501c750adc003a62f057ebd7047fa215">TWO_PI</a> = 6.28318530717958647692</td></tr>
+<tr class="memdesc:a501c750adc003a62f057ebd7047fa215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Math constant \(2\pi\).  <br /></td></tr>
 <tr class="separator:a501c750adc003a62f057ebd7047fa215"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4118011e81def55bfccf9cb14cf059ee" id="r_a4118011e81def55bfccf9cb14cf059ee"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4118011e81def55bfccf9cb14cf059ee">RECIPROCAL_FOUR_PI</a> = 0.079577471545947667884</td></tr>
+<tr class="memdesc:a4118011e81def55bfccf9cb14cf059ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Math constant \(\frac1{4\pi}\), used in integration.  <br /></td></tr>
 <tr class="separator:a4118011e81def55bfccf9cb14cf059ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacbc89336ee96a65e60b4303e6b7c285" id="r_aacbc89336ee96a65e60b4303e6b7c285"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aacbc89336ee96a65e60b4303e6b7c285">MAX_SIMPLE_NEIGHBORS_PER_CELL</a> = 12</td></tr>
+<tr class="memdesc:aacbc89336ee96a65e60b4303e6b7c285"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum total number of simple neighbors for a single cell.  <br /></td></tr>
 <tr class="separator:aacbc89336ee96a65e60b4303e6b7c285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac4cc9601872ea86b1db03f60861766c" id="r_aac4cc9601872ea86b1db03f60861766c"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac4cc9601872ea86b1db03f60861766c">MAX_AUTO_REFINEMENT_TASK_COEFFICIENT</a> = 4</td></tr>
+<tr class="memdesc:aac4cc9601872ea86b1db03f60861766c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factor for maximum possible number of tasks in case of adaptive mesh control procedure.  <br /></td></tr>
 <tr class="separator:aac4cc9601872ea86b1db03f60861766c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734f393a721f638a4cd6dc980d08ca1a" id="r_a734f393a721f638a4cd6dc980d08ca1a"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a734f393a721f638a4cd6dc980d08ca1a">MEMOTY_REALLOCATION_COEFFICIENT</a> = 1.25</td></tr>
-<tr class="separator:a734f393a721f638a4cd6dc980d08ca1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a868e127fa6ee298de658b16d6856b007" id="r_a868e127fa6ee298de658b16d6856b007"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a868e127fa6ee298de658b16d6856b007">MEMORY_REALLOCATION_COEFFICIENT</a> = 1.25</td></tr>
+<tr class="memdesc:a868e127fa6ee298de658b16d6856b007"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coefficient for some additional space which is added to the vector capacity during reallocation.  <br /></td></tr>
+<tr class="separator:a868e127fa6ee298de658b16d6856b007"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6487a0dd8768e3cae2f4bc6224a02ac" id="r_af6487a0dd8768e3cae2f4bc6224a02ac"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6487a0dd8768e3cae2f4bc6224a02ac">MAX_REFINE_LEVEL</a> = 5</td></tr>
+<tr class="memdesc:af6487a0dd8768e3cae2f4bc6224a02ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum possible refinement level in case of adaptive mesh control procedure.  <br /></td></tr>
 <tr class="separator:af6487a0dd8768e3cae2f4bc6224a02ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2842e0f1ee5a427999715f452576f843" id="r_a2842e0f1ee5a427999715f452576f843"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2842e0f1ee5a427999715f452576f843">MAX_GAUSS_POINTS</a> = 13</td></tr>
+<tr class="memdesc:a2842e0f1ee5a427999715f452576f843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum possible number of Gauss points used in a quadrature formula.  <br /></td></tr>
 <tr class="separator:a2842e0f1ee5a427999715f452576f843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure with static constant fields for values with different purposes (tolerance, mathematical and other parameters) *. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae8d58998ba4a25d0458253daddbbd866" name="ae8d58998ba4a25d0458253daddbbd866"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8d58998ba4a25d0458253daddbbd866">&#9670;&#160;</a></span>DOUBLE_MIN</h2>
 
@@ -154,6 +181,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Tolerance for check of double numbers against zero in mathematical functions. </p>
 
 </div>
 </div>
@@ -177,6 +206,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Tolerance for check of criterion in the Runge rule. </p>
+
 </div>
 </div>
 <a id="ad7cd3ed905712fd0121b5ce62d79028b" name="ad7cd3ed905712fd0121b5ce62d79028b"></a>
@@ -198,6 +229,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Tolerance for check of closeness of angles to \(\pm\pi\). </p>
 
 </div>
 </div>
@@ -221,6 +254,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Tolerance squared used in check \(1+\cos\delta &lt; \frac{\varepsilon^2}2 \). </p>
+
 </div>
 </div>
 <a id="a2eee5a5b40516d0f0cec58c9e64e2216" name="a2eee5a5b40516d0f0cec58c9e64e2216"></a>
@@ -242,6 +277,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Tolerance for check of double numbers against zero in the integration procedure. </p>
 
 </div>
 </div>
@@ -265,6 +302,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Tolerance squared. </p>
+
 </div>
 </div>
 <a id="aac4cc9601872ea86b1db03f60861766c" name="aac4cc9601872ea86b1db03f60861766c"></a>
@@ -286,6 +325,9 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Factor for maximum possible number of tasks in case of adaptive mesh control procedure. </p>
+<p>Used before the start of the integration pipeline to allocate the memory for vectors of integration tasks, their results and temporary buffers (when the exact number of tasks is not known beforehand). </p>
 
 </div>
 </div>
@@ -309,6 +351,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Maximum possible number of Gauss points used in a quadrature formula. </p>
+<p>Used for specification of size of static arrays and constant memory. It is supposed that quadrature formulas with a greater number of Gauss points are not used. </p>
+
 </div>
 </div>
 <a id="af6487a0dd8768e3cae2f4bc6224a02ac" name="af6487a0dd8768e3cae2f4bc6224a02ac"></a>
@@ -330,6 +375,9 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Maximum possible refinement level in case of adaptive mesh control procedure. </p>
+<p>Used as a termination criterion in the integration cycle and for memory allocation of several device vectors. </p>
 
 </div>
 </div>
@@ -353,10 +401,13 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Maximum total number of simple neighbors for a single cell. </p>
+<p>Used for memory allocation of a vector of simple neighbors before pairs of them are determined. </p>
+
 </div>
 </div>
-<a id="a734f393a721f638a4cd6dc980d08ca1a" name="a734f393a721f638a4cd6dc980d08ca1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a734f393a721f638a4cd6dc980d08ca1a">&#9670;&#160;</a></span>MEMOTY_REALLOCATION_COEFFICIENT</h2>
+<a id="a868e127fa6ee298de658b16d6856b007" name="a868e127fa6ee298de658b16d6856b007"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a868e127fa6ee298de658b16d6856b007">&#9670;&#160;</a></span>MEMORY_REALLOCATION_COEFFICIENT</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -365,7 +416,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr double CONSTANTS::MEMOTY_REALLOCATION_COEFFICIENT = 1.25</td>
+          <td class="memname">constexpr double CONSTANTS::MEMORY_REALLOCATION_COEFFICIENT = 1.25</td>
         </tr>
       </table>
   </td>
@@ -374,6 +425,9 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Coefficient for some additional space which is added to the vector capacity during reallocation. </p>
+<p>The constant is not used during original memory allocation for a device vector (exact size is used), but is used in case of further reallocation so as not to perform it too often. </p>
 
 </div>
 </div>
@@ -397,6 +451,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Math constant \(\frac13\). </p>
+
 </div>
 </div>
 <a id="a13f26a1a858cee820287a90ee6133378" name="a13f26a1a858cee820287a90ee6133378"></a>
@@ -418,6 +474,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Math constant \(\pi\). </p>
 
 </div>
 </div>
@@ -441,6 +499,8 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Math constant \(\frac1{4\pi}\), used in integration. </p>
+
 </div>
 </div>
 <a id="a501c750adc003a62f057ebd7047fa215" name="a501c750adc003a62f057ebd7047fa215"></a>
@@ -462,6 +522,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Math constant \(2\pi\). </p>
 
 </div>
 </div>

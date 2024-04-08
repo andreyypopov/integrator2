@@ -18,6 +18,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -111,59 +118,85 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a16b7f1b886fa3763a23e6ae41602aa63" id="r_a16b7f1b886fa3763a23e6ae41602aa63"><td class="memItemLeft" align="right" valign="top">typedef double3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a></td></tr>
+<tr class="memdesc:a16b7f1b886fa3763a23e6ae41602aa63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedef for 3D vector.  <br /></td></tr>
 <tr class="separator:a16b7f1b886fa3763a23e6ae41602aa63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac9b1e933132f399705c36f13e1bff6cd" id="r_ac9b1e933132f399705c36f13e1bff6cd"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b1e933132f399705c36f13e1bff6cd">sqr</a> (double x)</td></tr>
+<tr class="memdesc:ac9b1e933132f399705c36f13e1bff6cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Square of a real number.  <br /></td></tr>
 <tr class="separator:ac9b1e933132f399705c36f13e1bff6cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c90b53d9e1301ef01b769c58056606a" id="r_a9c90b53d9e1301ef01b769c58056606a"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c90b53d9e1301ef01b769c58056606a">sign</a> (double x)</td></tr>
+<tr class="memdesc:a9c90b53d9e1301ef01b769c58056606a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sign of a real number.  <br /></td></tr>
 <tr class="separator:a9c90b53d9e1301ef01b769c58056606a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2da8e50e13f4733badbf8bf5c2a9e65b" id="r_a2da8e50e13f4733badbf8bf5c2a9e65b"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2da8e50e13f4733badbf8bf5c2a9e65b">arg</a> (double x)</td></tr>
+<tr class="memdesc:a2da8e50e13f4733badbf8bf5c2a9e65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate \(\arg x\).  <br /></td></tr>
 <tr class="separator:a2da8e50e13f4733badbf8bf5c2a9e65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d27629e77f477fcb67ccc0f01914877" id="r_a0d27629e77f477fcb67ccc0f01914877"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d27629e77f477fcb67ccc0f01914877">assign_vector_part</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:a0d27629e77f477fcb67ccc0f01914877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a double4 with prescribed vector part.  <br /></td></tr>
 <tr class="separator:a0d27629e77f477fcb67ccc0f01914877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f80811c44fa830c0b963e8c5e0cdd94" id="r_a3f80811c44fa830c0b963e8c5e0cdd94"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f80811c44fa830c0b963e8c5e0cdd94">extract_vector_part</a> (const double4 &amp;v)</td></tr>
+<tr class="memdesc:a3f80811c44fa830c0b963e8c5e0cdd94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract vector part from a double4 value.  <br /></td></tr>
 <tr class="separator:a3f80811c44fa830c0b963e8c5e0cdd94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab082d3647472169060c80bd40db94e39" id="r_ab082d3647472169060c80bd40db94e39"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab082d3647472169060c80bd40db94e39">operator+</a> (const double4 &amp;v1, const double4 &amp;v2)</td></tr>
+<tr class="memdesc:ab082d3647472169060c80bd40db94e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of 2 double4 values.  <br /></td></tr>
 <tr class="separator:ab082d3647472169060c80bd40db94e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0231e7eb045948e59f05bedf9b958b5c" id="r_a0231e7eb045948e59f05bedf9b958b5c"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0231e7eb045948e59f05bedf9b958b5c">operator-</a> (const double4 &amp;v1, const double4 &amp;v2)</td></tr>
+<tr class="memdesc:a0231e7eb045948e59f05bedf9b958b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtraction of one double4 value from another one.  <br /></td></tr>
 <tr class="separator:a0231e7eb045948e59f05bedf9b958b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace355c7fce3699f580f1df717ea06386" id="r_ace355c7fce3699f580f1df717ea06386"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace355c7fce3699f580f1df717ea06386">operator*</a> (double a, const double4 &amp;v)</td></tr>
+<tr class="memdesc:ace355c7fce3699f580f1df717ea06386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplication of a double4 value by a scalar.  <br /></td></tr>
 <tr class="separator:ace355c7fce3699f580f1df717ea06386"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23c5fd1bcd4b0e5cf78456709924f74b" id="r_a23c5fd1bcd4b0e5cf78456709924f74b"><td class="memItemLeft" align="right" valign="top">__host__ __device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23c5fd1bcd4b0e5cf78456709924f74b">operator+=</a> (double4 &amp;v, const double4 &amp;a)</td></tr>
+<tr class="memdesc:a23c5fd1bcd4b0e5cf78456709924f74b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a double4 value to a current one.  <br /></td></tr>
 <tr class="separator:a23c5fd1bcd4b0e5cf78456709924f74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adabbfc5150201d57e278e5f60287872a" id="r_adabbfc5150201d57e278e5f60287872a"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adabbfc5150201d57e278e5f60287872a">operator+</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:adabbfc5150201d57e278e5f60287872a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of 2 Point3 values.  <br /></td></tr>
 <tr class="separator:adabbfc5150201d57e278e5f60287872a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad799a84afc43fa1e02f0f62d8544e534" id="r_ad799a84afc43fa1e02f0f62d8544e534"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad799a84afc43fa1e02f0f62d8544e534">operator-</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:ad799a84afc43fa1e02f0f62d8544e534"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtraction of one Point3 value from another one.  <br /></td></tr>
 <tr class="separator:ad799a84afc43fa1e02f0f62d8544e534"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe099ad1beb7d6744f35d0ff071e4ea6" id="r_abe099ad1beb7d6744f35d0ff071e4ea6"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe099ad1beb7d6744f35d0ff071e4ea6">operator-</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:abe099ad1beb7d6744f35d0ff071e4ea6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Negation of a Point3 value.  <br /></td></tr>
 <tr class="separator:abe099ad1beb7d6744f35d0ff071e4ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83ff276c3fc434eab926a751219d31bd" id="r_a83ff276c3fc434eab926a751219d31bd"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83ff276c3fc434eab926a751219d31bd">operator*</a> (double a, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:a83ff276c3fc434eab926a751219d31bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplication of a Point3 value by a scalar.  <br /></td></tr>
 <tr class="separator:a83ff276c3fc434eab926a751219d31bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6923bff67178c9df306fdc1d51ce572" id="r_ac6923bff67178c9df306fdc1d51ce572"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6923bff67178c9df306fdc1d51ce572">dot</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:ac6923bff67178c9df306fdc1d51ce572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dot product of 2 3D vectors.  <br /></td></tr>
 <tr class="separator:ac6923bff67178c9df306fdc1d51ce572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab31894eac8193fe4593f15d6636805fb" id="r_ab31894eac8193fe4593f15d6636805fb"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab31894eac8193fe4593f15d6636805fb">cross</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:ab31894eac8193fe4593f15d6636805fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cross product of 2 3D vectors.  <br /></td></tr>
 <tr class="separator:ab31894eac8193fe4593f15d6636805fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42b32bb24afa21aa1d7cab81974b5f5f" id="r_a42b32bb24afa21aa1d7cab81974b5f5f"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42b32bb24afa21aa1d7cab81974b5f5f">vector_length</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:a42b32bb24afa21aa1d7cab81974b5f5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length of a 3D vector.  <br /></td></tr>
 <tr class="separator:a42b32bb24afa21aa1d7cab81974b5f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3c89e20fbb34d0ce03d1f84ee5b1c0b" id="r_ab3c89e20fbb34d0ce03d1f84ee5b1c0b"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3c89e20fbb34d0ce03d1f84ee5b1c0b">vector_length2</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:ab3c89e20fbb34d0ce03d1f84ee5b1c0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Squared length of a 3D vector.  <br /></td></tr>
 <tr class="separator:ab3c89e20fbb34d0ce03d1f84ee5b1c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb3abcc45aacfd2915bfc59d0985abc7" id="r_aeb3abcc45aacfd2915bfc59d0985abc7"><td class="memItemLeft" align="right" valign="top">__host__ __device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb3abcc45aacfd2915bfc59d0985abc7">operator+=</a> (<a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;a)</td></tr>
+<tr class="memdesc:aeb3abcc45aacfd2915bfc59d0985abc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Point3 value to a current one.  <br /></td></tr>
 <tr class="separator:aeb3abcc45aacfd2915bfc59d0985abc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0445e9d5af1e9a42669833f05ed24ae" id="r_af0445e9d5af1e9a42669833f05ed24ae"><td class="memItemLeft" align="right" valign="top">__host__ __device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0445e9d5af1e9a42669833f05ed24ae">operator*=</a> (<a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v, const double &amp;a)</td></tr>
+<tr class="memdesc:af0445e9d5af1e9a42669833f05ed24ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply a Point3 value by a scalar.  <br /></td></tr>
 <tr class="separator:af0445e9d5af1e9a42669833f05ed24ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4289d812366f4209e56f72a82967cbc7" id="r_a4289d812366f4209e56f72a82967cbc7"><td class="memItemLeft" align="right" valign="top">__host__ __device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4289d812366f4209e56f72a82967cbc7">operator/=</a> (<a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v, const double &amp;a)</td></tr>
+<tr class="memdesc:a4289d812366f4209e56f72a82967cbc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide a Point3 value by a scalar.  <br /></td></tr>
 <tr class="separator:a4289d812366f4209e56f72a82967cbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a400cebef6f14660650740e7c156a3783" id="r_a400cebef6f14660650740e7c156a3783"><td class="memItemLeft" align="right" valign="top">__host__ __device__ <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a400cebef6f14660650740e7c156a3783">normalize</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:a400cebef6f14660650740e7c156a3783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize a 3D vector.  <br /></td></tr>
 <tr class="separator:a400cebef6f14660650740e7c156a3783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d12e01dfc6f7552afc08e25415c0b16" id="r_a1d12e01dfc6f7552afc08e25415c0b16"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d12e01dfc6f7552afc08e25415c0b16">divide</a> (const double4 &amp;v1, const double4 &amp;v2)</td></tr>
+<tr class="memdesc:a1d12e01dfc6f7552afc08e25415c0b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Component-wise division of 2 double4 operands.  <br /></td></tr>
 <tr class="separator:a1d12e01dfc6f7552afc08e25415c0b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d7f4d3ee5bc15e8872232cc66b4b0de" id="r_a3d7f4d3ee5bc15e8872232cc66b4b0de"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d7f4d3ee5bc15e8872232cc66b4b0de">norm1</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v)</td></tr>
+<tr class="memdesc:a3d7f4d3ee5bc15e8872232cc66b4b0de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute 1-norm for a 3D vector.  <br /></td></tr>
 <tr class="separator:a3d7f4d3ee5bc15e8872232cc66b4b0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6f2213f8a362b209895f6e2ae7eb5af" id="r_ae6f2213f8a362b209895f6e2ae7eb5af"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6f2213f8a362b209895f6e2ae7eb5af">norm1</a> (const double4 &amp;v)</td></tr>
+<tr class="memdesc:ae6f2213f8a362b209895f6e2ae7eb5af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute 1-norm of a double4 vector.  <br /></td></tr>
 <tr class="separator:ae6f2213f8a362b209895f6e2ae7eb5af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ae88d6c81afb8627adebab3ead3c03" id="r_a25ae88d6c81afb8627adebab3ead3c03"><td class="memItemLeft" align="right" valign="top">__host__ __device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25ae88d6c81afb8627adebab3ead3c03">angle</a> (const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v1, const <a class="el" href="#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;v2)</td></tr>
+<tr class="memdesc:a25ae88d6c81afb8627adebab3ead3c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute angle between 2 3D vectors.  <br /></td></tr>
 <tr class="separator:a25ae88d6c81afb8627adebab3ead3c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -194,6 +227,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Typedef for 3D vector. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
@@ -215,6 +250,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Compute angle between 2 3D vectors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First 3D vector </td></tr>
+    <tr><td class="paramname">v2</td><td>Second 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting angle between vectors</dd></dl>
+<p>If product of vector lengths is less than EPS_ZERO constant then 0 is returned. Otherwise angle is computed as \( \arccos\frac{\mathbf a\cdot\mathbf b}{|\mathbf a|\cdot|\mathbf b|} \). If for the reason of numerical errors the arccosine argument is greater than 1.0 then zero angle is returned, if the argument is less than -1.0 then \(\pi\) is returned. </p>
 
 </div>
 </div>
@@ -241,6 +287,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Calculate \(\arg x\). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Argument of the function </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of the \(\arg\) function</dd></dl>
+<p>Formula \(\arg x = \mathrm{arctg}(0,x)\) is used for calculation, which yields either \(0\), if \(x&gt;0\) or \(\pi\), if \(x&lt;0\). </p>
+
 </div>
 </div>
 <a id="a0d27629e77f477fcb67ccc0f01914877" name="a0d27629e77f477fcb67ccc0f01914877"></a>
@@ -265,6 +321,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Construct a double4 with prescribed vector part. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Vector part </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting double4 value </dd></dl>
 
 </div>
 </div>
@@ -295,6 +360,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Cross product of 2 3D vectors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First 3D vector </td></tr>
+    <tr><td class="paramname">v2</td><td>Second 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting cross product </dd></dl>
+
 </div>
 </div>
 <a id="a1d12e01dfc6f7552afc08e25415c0b16" name="a1d12e01dfc6f7552afc08e25415c0b16"></a>
@@ -323,6 +398,17 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Component-wise division of 2 double4 operands. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>Numerator </td></tr>
+    <tr><td class="paramname">v2</td><td>Denominator </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting quotient</dd></dl>
+<p>In case both numerator and denominator are less than DOUBLE_MIN constant (for vector part components) or less than EPS_ZERO2 constant (for scalar part) the corresponding component is set to zero, other division is performed. </p>
 
 </div>
 </div>
@@ -353,6 +439,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Dot product of 2 3D vectors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First 3D vector </td></tr>
+    <tr><td class="paramname">v2</td><td>Second 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting dot product </dd></dl>
+
 </div>
 </div>
 <a id="a3f80811c44fa830c0b963e8c5e0cdd94" name="a3f80811c44fa830c0b963e8c5e0cdd94"></a>
@@ -377,6 +473,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Extract vector part from a double4 value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>double4 value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector part of the input value </dd></dl>
 
 </div>
 </div>
@@ -403,6 +508,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Compute 1-norm of a double4 vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input double4 vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting norm </dd></dl>
+
 </div>
 </div>
 <a id="a3d7f4d3ee5bc15e8872232cc66b4b0de" name="a3d7f4d3ee5bc15e8872232cc66b4b0de"></a>
@@ -428,6 +542,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Compute 1-norm for a 3D vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting norm </dd></dl>
+
 </div>
 </div>
 <a id="a400cebef6f14660650740e7c156a3783" name="a400cebef6f14660650740e7c156a3783"></a>
@@ -452,6 +575,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Normalize a 3D vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting unit vector in the direction of the input vector </dd></dl>
 
 </div>
 </div>
@@ -482,6 +614,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Multiplication of a double4 value by a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Scalar value </td></tr>
+    <tr><td class="paramname">v</td><td>double4 value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting double4 value </dd></dl>
+
 </div>
 </div>
 <a id="a83ff276c3fc434eab926a751219d31bd" name="a83ff276c3fc434eab926a751219d31bd"></a>
@@ -510,6 +652,16 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Multiplication of a Point3 value by a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Scalar value </td></tr>
+    <tr><td class="paramname">v</td><td>Point3 value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting Point3 value </dd></dl>
 
 </div>
 </div>
@@ -540,6 +692,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Multiply a Point3 value by a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Current Point3 value </td></tr>
+    <tr><td class="paramname">a</td><td>Scalar value to multiply by </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ab082d3647472169060c80bd40db94e39" name="ab082d3647472169060c80bd40db94e39"></a>
@@ -568,6 +729,16 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sum of 2 double4 values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First double4 operand </td></tr>
+    <tr><td class="paramname">v2</td><td>Second double4 operand </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting sum </dd></dl>
 
 </div>
 </div>
@@ -598,6 +769,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sum of 2 Point3 values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First Point3 operand </td></tr>
+    <tr><td class="paramname">v2</td><td>Second Point3 operand </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting sum </dd></dl>
+
 </div>
 </div>
 <a id="a23c5fd1bcd4b0e5cf78456709924f74b" name="a23c5fd1bcd4b0e5cf78456709924f74b"></a>
@@ -626,6 +807,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Add a double4 value to a current one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Current double4 value </td></tr>
+    <tr><td class="paramname">a</td><td>double4 value to be added </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -656,6 +846,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Add a Point3 value to a current one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Current Point3 value </td></tr>
+    <tr><td class="paramname">a</td><td>Point3 value to be added </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a0231e7eb045948e59f05bedf9b958b5c" name="a0231e7eb045948e59f05bedf9b958b5c"></a>
@@ -685,6 +884,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Subtraction of one double4 value from another one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First double4 operand </td></tr>
+    <tr><td class="paramname">v2</td><td>Second double4 operand </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting double4 value </dd></dl>
+
 </div>
 </div>
 <a id="abe099ad1beb7d6744f35d0ff071e4ea6" name="abe099ad1beb7d6744f35d0ff071e4ea6"></a>
@@ -709,6 +918,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Negation of a Point3 value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input Point3 value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Negated value </dd></dl>
 
 </div>
 </div>
@@ -739,6 +957,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Subtraction of one Point3 value from another one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v1</td><td>First Point3 operand </td></tr>
+    <tr><td class="paramname">v2</td><td>Second Point3 operand </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting Point3 value </dd></dl>
+
 </div>
 </div>
 <a id="a4289d812366f4209e56f72a82967cbc7" name="a4289d812366f4209e56f72a82967cbc7"></a>
@@ -768,6 +996,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Divide a Point3 value by a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Current Point3 value </td></tr>
+    <tr><td class="paramname">a</td><td>Scalar value to divide by </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a9c90b53d9e1301ef01b769c58056606a" name="a9c90b53d9e1301ef01b769c58056606a"></a>
@@ -792,6 +1029,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sign of a real number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Scalar value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Sign of the input scalar </dd></dl>
 
 </div>
 </div>
@@ -818,6 +1064,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Square of a real number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Scalar value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of the input scalar </dd></dl>
+
 </div>
 </div>
 <a id="a42b32bb24afa21aa1d7cab81974b5f5f" name="a42b32bb24afa21aa1d7cab81974b5f5f"></a>
@@ -843,6 +1098,15 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Length of a 3D vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting length </dd></dl>
+
 </div>
 </div>
 <a id="ab3c89e20fbb34d0ce03d1f84ee5b1c0b" name="ab3c89e20fbb34d0ce03d1f84ee5b1c0b"></a>
@@ -867,6 +1131,15 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Squared length of a 3D vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>Input 3D vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting squared length </dd></dl>
 
 </div>
 </div>
