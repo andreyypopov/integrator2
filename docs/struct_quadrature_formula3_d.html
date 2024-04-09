@@ -105,17 +105,28 @@ $(function(){initNavTree('struct_quadrature_formula3_d.html',''); initResizable(
   <div class="headertitle"><div class="title">QuadratureFormula3D Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Structure for storage of quadrature formula data.  
+ <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a892e9ecec8d648adcb4dbb7a1be99789" id="r_a892e9ecec8d648adcb4dbb7a1be99789"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; double2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a892e9ecec8d648adcb4dbb7a1be99789">coordinates</a></td></tr>
+<tr class="memdesc:a892e9ecec8d648adcb4dbb7a1be99789"><td class="mdescLeft">&#160;</td><td class="mdescRight">L-coordinate of Gauss points.  <br /></td></tr>
 <tr class="separator:a892e9ecec8d648adcb4dbb7a1be99789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56043a538c2ae7b6d29279ea6ed15525" id="r_a56043a538c2ae7b6d29279ea6ed15525"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56043a538c2ae7b6d29279ea6ed15525">weights</a></td></tr>
+<tr class="memdesc:a56043a538c2ae7b6d29279ea6ed15525"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weights of Gauss points.  <br /></td></tr>
 <tr class="separator:a56043a538c2ae7b6d29279ea6ed15525"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae53cf592908d39c9b544e9f6dc11f853" id="r_ae53cf592908d39c9b544e9f6dc11f853"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae53cf592908d39c9b544e9f6dc11f853">order</a></td></tr>
+<tr class="memdesc:ae53cf592908d39c9b544e9f6dc11f853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Order of the quadrature formula (used in Rungle rule for error check)  <br /></td></tr>
 <tr class="separator:ae53cf592908d39c9b544e9f6dc11f853"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure for storage of quadrature formula data. </p>
+<p>Constant instances of this class represent specific quadrature formulae for integration over triangle.</p>
+<dl class="section see"><dt>See also</dt><dd>Source for quadrature formulae:<br  />
+ Cowper, G. R. (1973). Gaussian quadrature formulas for triangles. International Journal for Numerical Methods in Engineering, 7(3), 405–408. doi: <a href="https://doi.org/10.1002/nme.1620070316">10.1002/nme.1620070316</a> </dd></dl>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a892e9ecec8d648adcb4dbb7a1be99789" name="a892e9ecec8d648adcb4dbb7a1be99789"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a892e9ecec8d648adcb4dbb7a1be99789">&#9670;&#160;</a></span>coordinates</h2>
 
@@ -127,6 +138,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>L-coordinate of Gauss points. </p>
+<p>Only \(x\) and \(y\) coordinates are defined, as \(z = 1 - x - y\). </p>
 
 </div>
 </div>
@@ -142,6 +156,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Order of the quadrature formula (used in Rungle rule for error check) </p>
+
 </div>
 </div>
 <a id="a56043a538c2ae7b6d29279ea6ed15525" name="a56043a538c2ae7b6d29279ea6ed15525"></a>
@@ -155,6 +171,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Weights of Gauss points. </p>
 
 </div>
 </div>
