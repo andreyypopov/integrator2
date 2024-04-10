@@ -112,15 +112,19 @@ $(function(){initNavTree('evaluator3d_8cu.html',''); initResizable(); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af63549565179152ee1df34c9b4155962" id="r_af63549565179152ee1df34c9b4155962"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af63549565179152ee1df34c9b4155962">kAddReversedPairs</a> (int n, int3 *pairs)</td></tr>
+<tr class="memdesc:af63549565179152ee1df34c9b4155962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for complementing the initial list of integration tasks with reversed pairs.  <br /></td></tr>
 <tr class="separator:af63549565179152ee1df34c9b4155962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a6eb3aede9efdd8a5d8a60fff70d211" id="r_a4a6eb3aede9efdd8a5d8a60fff70d211"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a6eb3aede9efdd8a5d8a60fff70d211">kCalculateIntegrationError</a> (int n, double *errors, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *results)</td></tr>
+<tr class="memdesc:a4a6eb3aede9efdd8a5d8a60fff70d211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for calculation of integration error by comparing results for \((i,j)\) and \((j,i)\) pairs.  <br /></td></tr>
 <tr class="separator:a4a6eb3aede9efdd8a5d8a60fff70d211"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba6f85d37bbf5b80a3c0746b45511871" id="r_aba6f85d37bbf5b80a3c0746b45511871"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba6f85d37bbf5b80a3c0746b45511871">kCompareIntegrationResults</a> (int n, const double4 *integrals, const double4 *tempIntegrals, int *d_restTaskCount, int *restTasks, const int *tempRestTasks, unsigned char *taskConverged)</td></tr>
+<tr class="memdesc:aba6f85d37bbf5b80a3c0746b45511871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function which checks the Runge rule and determines whether the integration process has converged or further computation for this task is needed.  <br /></td></tr>
 <tr class="separator:aba6f85d37bbf5b80a3c0746b45511871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a3e7c0a6be6560c2f934588f28360f446" id="r_a3e7c0a6be6560c2f934588f28360f446"><td class="memItemLeft" align="right" valign="top">__constant__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e7c0a6be6560c2f934588f28360f446">c_pow2p</a></td></tr>
+<tr class="memdesc:a3e7c0a6be6560c2f934588f28360f446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-computed value of \(2^p\) for use in the Runge rule.  <br /></td></tr>
 <tr class="separator:a3e7c0a6be6560c2f934588f28360f446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -142,6 +146,16 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for complementing the initial list of integration tasks with reversed pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">pairs</td><td>List of integration task (pair of triangle indices + index of the pair)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>First \(n\) values are processed and for each a new task is added with triangle indices reversed. </p>
 
 </div>
 </div>
@@ -169,6 +183,21 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for calculation of integration error by comparing results for \((i,j)\) and \((j,i)\) pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of original neighbor pairs (only \((i,j),\,i&lt;j\)) </td></tr>
+    <tr><td class="paramname">errors</td><td>Vector of integration error values </td></tr>
+    <tr><td class="paramname">results</td><td>Integration results (vector of \(2n\) length)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Error is calculate using the formula  </p><p class="formulaDsp">
+\[
+     \delta = \frac{\|\mathbf J_{3D}(K_i,\,K_j) + \mathbf J_{3D}(K_j,\,K_i)\|}{\max\{\|\mathbf J_{3D}(K_i,\,K_j)\|, \|\mathbf J_{3D}(K_j,\,K_i)\|\}}.
+\]
+</p>
+ 
 </div>
 </div>
 <a id="aba6f85d37bbf5b80a3c0746b45511871" name="aba6f85d37bbf5b80a3c0746b45511871"></a>
@@ -215,6 +244,21 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function which checks the Runge rule and determines whether the integration process has converged or further computation for this task is needed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks to be checked </td></tr>
+    <tr><td class="paramname">integrals</td><td>Vector of integration results on the current iteration </td></tr>
+    <tr><td class="paramname">tempIntegrals</td><td>Vector of integration results on the previous iteration </td></tr>
+    <tr><td class="paramname">d_restTaskCount</td><td>Counter of the integration tasks which have not converged yet </td></tr>
+    <tr><td class="paramname">restTasks</td><td>Indices of tasks which have not yet converged </td></tr>
+    <tr><td class="paramname">tempRestTasks</td><td>Indices of tasks to be integrated (a list filled on the previous iteration or nullptr, then all tasks are checked) </td></tr>
+    <tr><td class="paramname">taskConverged</td><td>Vector of flags which indicate whether integration task has converged or not</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Both current integral values and values from the previous iteration have the same length which is equal to the number of original tasks. Runge rule criterion is calculated component-wise for all 4 components of integral value, then norm is calculated and compared with tolerance. It is crucial to mark converged tasks with a flag so as not to calculate them again in order to spare computation time. There may be a situation when a cell is further refined and some of the integrals where it is \(i\)-th cell have converged (and should not be further calculated) and some have not and require splitting. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -229,6 +273,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Pre-computed value of \(2^p\) for use in the Runge rule. </p>
 
 </div>
 </div>
