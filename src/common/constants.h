@@ -8,7 +8,7 @@ struct CONSTANTS {
     //tolerance parameters
     static constexpr double DOUBLE_MIN = 2e-6;                              //!< Tolerance for check of double numbers against zero in mathematical functions
     static constexpr double EPS_ZERO = 1e-6;                                //!< Tolerance for check of double numbers against zero in the integration procedure
-    static constexpr double EPS_ZERO2 = EPS_ZERO * EPS_ZERO;                //!< Tolerance squared
+    static constexpr double EPS_ZERO2 = 1e-10;                              //!< Tolerance squared
     static constexpr double EPS_PSI_THETA = EPS_ZERO;                       //!< Tolerance for check of closeness of angles to \f$\pm\pi\f$
     static constexpr double EPS_PSI_THETA2 = EPS_PSI_THETA * EPS_PSI_THETA; //!< Tolerance squared used in check \f$1+\cos\delta < \frac{\varepsilon^2}2 \f$
     static constexpr double EPS_INTEGRATION = 1e-5;                         //!< Tolerance for check of criterion in the Runge rule
