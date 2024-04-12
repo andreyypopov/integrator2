@@ -6,13 +6,15 @@ CUDA-based library for integration of the Newtonian potential and its gradient i
 * test application for integration in 3D;
 * examples of meshes in .dat format.
 
+Doxygen-generated [documentation](https://andreyypopov.github.io/integrator2/) is available.
+
 ## Library compilation
 
 ### Dependencies
 
 * C++ compiler (tested on MS VC++ 2022 and GCC 7.4.0 and 9.4.0);
 * CMake 3.18 or newer;
-* CUDA Toolkit (tested on versions 10.1, 12.1 and 12.3).
+* CUDA Toolkit (tested on versions 10.1, 11.6, 12.1 and 12.3).
 
 ### Build process
 
@@ -46,7 +48,7 @@ Available command line options:
 Example:
 
 ```bash
-integrator2test3D.exe -f ..\..\examples\G1.dat --exportresults
+integrator2test3D.exe -f ..\..\examples\s5m.dat -s 0.0005 --exporttocsv --exporttovtk
 ```
 
 ## Noticeable examples
