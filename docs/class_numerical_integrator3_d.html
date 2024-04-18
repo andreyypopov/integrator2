@@ -107,127 +107,198 @@ $(function(){initNavTree('class_numerical_integrator3_d.html',''); initResizable
   <div class="headertitle"><div class="title">NumericalIntegrator3D Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class responsible for the whole numerical integration procedure.  
+ <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6beece1578d8737b31db031f46a258c8" id="r_a6beece1578d8737b31db031f46a258c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6beece1578d8737b31db031f46a258c8">NumericalIntegrator3D</a> (const <a class="el" href="class_mesh3_d.html">Mesh3D</a> &amp;mesh_, const <a class="el" href="struct_quadrature_formula3_d.html">QuadratureFormula3D</a> &amp;qf_)</td></tr>
+<tr class="memdesc:a6beece1578d8737b31db031f46a258c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_numerical_integrator3_d.html" title="Class responsible for the whole numerical integration procedure.">NumericalIntegrator3D</a> object.  <br /></td></tr>
 <tr class="separator:a6beece1578d8737b31db031f46a258c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a528ef4eaa86844a2cdaaca811e430be9" id="r_a528ef4eaa86844a2cdaaca811e430be9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a528ef4eaa86844a2cdaaca811e430be9">~NumericalIntegrator3D</a> ()</td></tr>
+<tr class="memdesc:a528ef4eaa86844a2cdaaca811e430be9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_numerical_integrator3_d.html" title="Class responsible for the whole numerical integration procedure.">NumericalIntegrator3D</a> object.  <br /></td></tr>
 <tr class="separator:a528ef4eaa86844a2cdaaca811e430be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ece2676a79cd5aa447a292aafe50cb9" id="r_a3ece2676a79cd5aa447a292aafe50cb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ece2676a79cd5aa447a292aafe50cb9">setFixedRefinementLevel</a> (int refinementLevel=0)</td></tr>
+<tr class="memdesc:a3ece2676a79cd5aa447a292aafe50cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the fixed refinement level for the whole mesh.  <br /></td></tr>
 <tr class="separator:a3ece2676a79cd5aa447a292aafe50cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8c6dd14524a04964910b70612b1caff" id="r_aa8c6dd14524a04964910b70612b1caff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8c6dd14524a04964910b70612b1caff">prepareTasksAndMesh</a> (const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; &amp;simpleNeighborsTasks, const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; &amp;attachedNeighborsTasks, const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; &amp;notNeighborsTasks)</td></tr>
+<tr class="memdesc:aa8c6dd14524a04964910b70612b1caff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Necessary preparations (mesh and tasks) before integral calculation.  <br /></td></tr>
 <tr class="separator:aa8c6dd14524a04964910b70612b1caff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22fe152d3e7a9ad1de95857f5191b29d" id="r_a22fe152d3e7a9ad1de95857f5191b29d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22fe152d3e7a9ad1de95857f5191b29d">gatherResults</a> (<a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double4 &gt; &amp;results, <a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType) const</td></tr>
+<tr class="memdesc:a22fe152d3e7a9ad1de95857f5191b29d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum up the results of integration over refined cells (for a specific type of neighbors) into the vector for original task results.  <br /></td></tr>
 <tr class="separator:a22fe152d3e7a9ad1de95857f5191b29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1960a91f376ae611a204003b1e25708" id="r_af1960a91f376ae611a204003b1e25708"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1960a91f376ae611a204003b1e25708">refineMesh</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> updateTasksNeighborType=<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfda5e543256c480ac577d30f76f9120eb74">neighbour_type_enum::undefined</a>)</td></tr>
+<tr class="memdesc:af1960a91f376ae611a204003b1e25708"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mesh refinement (whole mesh or specific cells)  <br /></td></tr>
 <tr class="separator:af1960a91f376ae611a204003b1e25708"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e6654d6637c0861803f971f1d148f3a" id="r_a9e6654d6637c0861803f971f1d148f3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e6654d6637c0861803f971f1d148f3a">resetMesh</a> ()</td></tr>
+<tr class="memdesc:a9e6654d6637c0861803f971f1d148f3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Re-initialization of mesh data using the original mesh in <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object.  <br /></td></tr>
 <tr class="separator:a9e6654d6637c0861803f971f1d148f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba873305b28ac2ca4153db669b982ac4" id="r_aba873305b28ac2ca4153db669b982ac4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba873305b28ac2ca4153db669b982ac4">determineCellsToBeRefined</a> (<a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt; &amp;restTasks, const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; *tasks, <a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
-<tr class="separator:aba873305b28ac2ca4153db669b982ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9bdb368b126eb637bfcf71ea970a962" id="r_af9bdb368b126eb637bfcf71ea970a962"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9bdb368b126eb637bfcf71ea970a962">determineCellsToBeRefined</a> (const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt; &amp;restTasks, const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; *tasks, <a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
+<tr class="memdesc:af9bdb368b126eb637bfcf71ea970a962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the list of indices of cells which require further refinement, using the list of integrals which have not converged.  <br /></td></tr>
+<tr class="separator:af9bdb368b126eb637bfcf71ea970a962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bc832bfc967e32f463dc8cebdf14404" id="r_a2bc832bfc967e32f463dc8cebdf14404"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bc832bfc967e32f463dc8cebdf14404">getGaussPointsNumber</a> () const</td></tr>
+<tr class="memdesc:a2bc832bfc967e32f463dc8cebdf14404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of Gauss Points.  <br /></td></tr>
 <tr class="separator:a2bc832bfc967e32f463dc8cebdf14404"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad59c7d39fabdc91179608d50926e9d3d" id="r_ad59c7d39fabdc91179608d50926e9d3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad59c7d39fabdc91179608d50926e9d3d">getQuadratureFormulaOrder</a> () const</td></tr>
+<tr class="memdesc:ad59c7d39fabdc91179608d50926e9d3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the order of the specified quadrature formula.  <br /></td></tr>
 <tr class="separator:ad59c7d39fabdc91179608d50926e9d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6569bfcf131ae540cf3c434ab8455da1" id="r_a6569bfcf131ae540cf3c434ab8455da1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_numerical_integrator3d_8cuh.html#a9ab58cb389e76d256ba909cefae8d806">error_control_type_enum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6569bfcf131ae540cf3c434ab8455da1">getErrorControlType</a> () const</td></tr>
+<tr class="memdesc:a6569bfcf131ae540cf3c434ab8455da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the type of error control.  <br /></td></tr>
 <tr class="separator:a6569bfcf131ae540cf3c434ab8455da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4a5601c741c6f0f9ef489201cb4e52b" id="r_aa4a5601c741c6f0f9ef489201cb4e52b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4a5601c741c6f0f9ef489201cb4e52b">getRefinedTasks</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType) const</td></tr>
+<tr class="memdesc:aa4a5601c741c6f0f9ef489201cb4e52b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of integration tasks for refined cells (for a specific type of neighbor cells)  <br /></td></tr>
 <tr class="separator:aa4a5601c741c6f0f9ef489201cb4e52b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ddb7fea8012d8e4442a66bbc4e9d86" id="r_ac3ddb7fea8012d8e4442a66bbc4e9d86"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double4 &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3ddb7fea8012d8e4442a66bbc4e9d86">getResults</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType) const</td></tr>
+<tr class="memdesc:ac3ddb7fea8012d8e4442a66bbc4e9d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of results of integration for refined cells (for a specific type of neighbor cells)  <br /></td></tr>
 <tr class="separator:ac3ddb7fea8012d8e4442a66bbc4e9d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62d40cf4a60a8f2a42902ea13c99e33a" id="r_a62d40cf4a60a8f2a42902ea13c99e33a"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62d40cf4a60a8f2a42902ea13c99e33a">getRefinedVertices</a> () const</td></tr>
+<tr class="memdesc:a62d40cf4a60a8f2a42902ea13c99e33a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of refined vertices.  <br /></td></tr>
 <tr class="separator:a62d40cf4a60a8f2a42902ea13c99e33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a732baba2145a1bb794a104a19704a09e" id="r_a732baba2145a1bb794a104a19704a09e"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a732baba2145a1bb794a104a19704a09e">getRefinedCells</a> () const</td></tr>
+<tr class="memdesc:a732baba2145a1bb794a104a19704a09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of refined cells.  <br /></td></tr>
 <tr class="separator:a732baba2145a1bb794a104a19704a09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75e7e86b9399d3c88decf212101ed473" id="r_a75e7e86b9399d3c88decf212101ed473"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75e7e86b9399d3c88decf212101ed473">getRefinedCellMeasures</a> () const</td></tr>
+<tr class="memdesc:a75e7e86b9399d3c88decf212101ed473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of measures (areas) of refined cells.  <br /></td></tr>
 <tr class="separator:a75e7e86b9399d3c88decf212101ed473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5be924a775975731f2bc587a5da4459c" id="r_a5be924a775975731f2bc587a5da4459c"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5be924a775975731f2bc587a5da4459c">getCellsToBeRefined</a> () const</td></tr>
+<tr class="memdesc:a5be924a775975731f2bc587a5da4459c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of indices of cells which are to be refined.  <br /></td></tr>
 <tr class="separator:a5be924a775975731f2bc587a5da4459c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a242109ec3a41e2d36705b8502f32ac7c" id="r_a242109ec3a41e2d36705b8502f32ac7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a242109ec3a41e2d36705b8502f32ac7c">getIntegralsConverged</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
+<tr class="memdesc:a242109ec3a41e2d36705b8502f32ac7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector of flags which show whether the integration of the task has already converged (for a specific type of neighbor cells)  <br /></td></tr>
 <tr class="separator:a242109ec3a41e2d36705b8502f32ac7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f91fd30d521e4a3b95441c67dd9b0c1" id="r_a1f91fd30d521e4a3b95441c67dd9b0c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f91fd30d521e4a3b95441c67dd9b0c1">getRefinementsRequired</a> (<a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
+<tr class="memdesc:a1f91fd30d521e4a3b95441c67dd9b0c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vector with number of required refinements for each cell (for a specific type of neighbor cells)  <br /></td></tr>
 <tr class="separator:a1f91fd30d521e4a3b95441c67dd9b0c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac3e035ac81e89a77573f011b845d9fd8" id="r_ac3e035ac81e89a77573f011b845d9fd8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3e035ac81e89a77573f011b845d9fd8">updateTasks</a> (const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt; &amp;originalTasks, <a class="el" href="_mesh3d_8cuh.html#a455d6c342e2f2268444f366ebc59abfd">neighbour_type_enum</a> neighborType)</td></tr>
+<tr class="memdesc:ac3e035ac81e89a77573f011b845d9fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new integration tasks for the refined cells, based on the the existing list of tasks for parent cells <br  />
+  <br /></td></tr>
 <tr class="separator:ac3e035ac81e89a77573f011b845d9fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8235749e20de0d7f64cbab82868f7e52" id="r_a8235749e20de0d7f64cbab82868f7e52"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8235749e20de0d7f64cbab82868f7e52">GaussPointsNum</a></td></tr>
+<tr class="memdesc:a8235749e20de0d7f64cbab82868f7e52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Gaussian points in the quadrature formula.  <br /></td></tr>
 <tr class="separator:a8235749e20de0d7f64cbab82868f7e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fd6c1af3c33516e17a55b11e3e479fa" id="r_a8fd6c1af3c33516e17a55b11e3e479fa"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_mesh3_d.html">Mesh3D</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd6c1af3c33516e17a55b11e3e479fa">mesh</a></td></tr>
+<tr class="memdesc:a8fd6c1af3c33516e17a55b11e3e479fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object with the original surface mesh.  <br /></td></tr>
 <tr class="separator:a8fd6c1af3c33516e17a55b11e3e479fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ae8cdb315882b26d2cd46db41d55011" id="r_a0ae8cdb315882b26d2cd46db41d55011"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_quadrature_formula3_d.html">QuadratureFormula3D</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ae8cdb315882b26d2cd46db41d55011">qf</a></td></tr>
+<tr class="memdesc:a0ae8cdb315882b26d2cd46db41d55011"><td class="mdescLeft">&#160;</td><td class="mdescRight">A quadrature formula selected for numerical integration.  <br /></td></tr>
 <tr class="separator:a0ae8cdb315882b26d2cd46db41d55011"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab706eea15d5ee8eadebf211d122b4723" id="r_ab706eea15d5ee8eadebf211d122b4723"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab706eea15d5ee8eadebf211d122b4723">refinedVertices</a></td></tr>
+<tr class="memdesc:ab706eea15d5ee8eadebf211d122b4723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device vector of coordinates of refined vertices.  <br /></td></tr>
 <tr class="separator:ab706eea15d5ee8eadebf211d122b4723"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a6575f1d859ebbd681dbe90b4e86dfa" id="r_a8a6575f1d859ebbd681dbe90b4e86dfa"><td class="memItemLeft" align="right" valign="top">int2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a6575f1d859ebbd681dbe90b4e86dfa">verticesCellsNum</a></td></tr>
+<tr class="memdesc:a8a6575f1d859ebbd681dbe90b4e86dfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current numbers of vertices and cells in the refined mesh stored on the host.  <br /></td></tr>
 <tr class="separator:a8a6575f1d859ebbd681dbe90b4e86dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade540c948ce982e88f24b5716828a4a1" id="r_ade540c948ce982e88f24b5716828a4a1"><td class="memItemLeft" align="right" valign="top">int2 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade540c948ce982e88f24b5716828a4a1">refinedVerticesCellsNum</a> = nullptr</td></tr>
+<tr class="memdesc:ade540c948ce982e88f24b5716828a4a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current numbers of vertices and cells in the refined mesh stored on the device.  <br /></td></tr>
 <tr class="separator:ade540c948ce982e88f24b5716828a4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01fb545a69963a1653356bdf274a4b1e" id="r_a01fb545a69963a1653356bdf274a4b1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01fb545a69963a1653356bdf274a4b1e">refinedCells</a></td></tr>
+<tr class="memdesc:a01fb545a69963a1653356bdf274a4b1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device vector of vertex indices for the refined cells.  <br /></td></tr>
 <tr class="separator:a01fb545a69963a1653356bdf274a4b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e53c7384fbc6db2ef04a4aacbb4789" id="r_a89e53c7384fbc6db2ef04a4aacbb4789"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e53c7384fbc6db2ef04a4aacbb4789">refinedCellMeasures</a></td></tr>
+<tr class="memdesc:a89e53c7384fbc6db2ef04a4aacbb4789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device vector of measures (areas) for the refined cells.  <br /></td></tr>
 <tr class="separator:a89e53c7384fbc6db2ef04a4aacbb4789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab58797efce612f3f69f0c480f9f9e3e1" id="r_ab58797efce612f3f69f0c480f9f9e3e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab58797efce612f3f69f0c480f9f9e3e1">originalCells</a></td></tr>
+<tr class="memdesc:ab58797efce612f3f69f0c480f9f9e3e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of indices of original triangles (belong to the refined triangles)  <br /></td></tr>
 <tr class="separator:ab58797efce612f3f69f0c480f9f9e3e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abee4ae046d39c7de95fedfbec9709093" id="r_abee4ae046d39c7de95fedfbec9709093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abee4ae046d39c7de95fedfbec9709093">refinedCellParents</a></td></tr>
+<tr class="memdesc:abee4ae046d39c7de95fedfbec9709093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of indices of direct parent cells of the refined cells.  <br /></td></tr>
 <tr class="separator:abee4ae046d39c7de95fedfbec9709093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab29bc725ac1f27d029965fb4537a605e" id="r_ab29bc725ac1f27d029965fb4537a605e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab29bc725ac1f27d029965fb4537a605e">refinedSimpleNeighborsTasks</a></td></tr>
+<tr class="memdesc:ab29bc725ac1f27d029965fb4537a605e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of tasks for integration over refined simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:ab29bc725ac1f27d029965fb4537a605e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa23fc01227839e3eb59a0b1ab2ea3658" id="r_aa23fc01227839e3eb59a0b1ab2ea3658"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa23fc01227839e3eb59a0b1ab2ea3658">refinedAttachedNeighborsTasks</a></td></tr>
+<tr class="memdesc:aa23fc01227839e3eb59a0b1ab2ea3658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of tasks for integration over refined attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:aa23fc01227839e3eb59a0b1ab2ea3658"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af14461ed94dc3b80535c52f7e7be1267" id="r_af14461ed94dc3b80535c52f7e7be1267"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af14461ed94dc3b80535c52f7e7be1267">refinedNotNeighborsTasks</a></td></tr>
+<tr class="memdesc:af14461ed94dc3b80535c52f7e7be1267"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of tasks for integration over refined non-neighbor pairs.  <br /></td></tr>
 <tr class="separator:af14461ed94dc3b80535c52f7e7be1267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab387976f65ce13ab274cb5fb649d61f8" id="r_ab387976f65ce13ab274cb5fb649d61f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab387976f65ce13ab274cb5fb649d61f8">d_simpleNeighborsResults</a></td></tr>
+<tr class="memdesc:ab387976f65ce13ab274cb5fb649d61f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of integration tasks over refined simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:ab387976f65ce13ab274cb5fb649d61f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a105ddf2ef9be7cfac5b54563ad76bbc6" id="r_a105ddf2ef9be7cfac5b54563ad76bbc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a105ddf2ef9be7cfac5b54563ad76bbc6">d_attachedNeighborsResults</a></td></tr>
+<tr class="memdesc:a105ddf2ef9be7cfac5b54563ad76bbc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of integration tasks over refined attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:a105ddf2ef9be7cfac5b54563ad76bbc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd8b5e1bd00a32a67b6d9589cc6dfd1c" id="r_abd8b5e1bd00a32a67b6d9589cc6dfd1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd8b5e1bd00a32a67b6d9589cc6dfd1c">d_notNeighborsResults</a></td></tr>
+<tr class="memdesc:abd8b5e1bd00a32a67b6d9589cc6dfd1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Results of integration tasks over refined non-neighbor pairs.  <br /></td></tr>
 <tr class="separator:abd8b5e1bd00a32a67b6d9589cc6dfd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eb0ee10587778046f90b10485f54b22" id="r_a0eb0ee10587778046f90b10485f54b22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0eb0ee10587778046f90b10485f54b22">tempRefinedSimpleNeighborsTasks</a></td></tr>
+<tr class="memdesc:a0eb0ee10587778046f90b10485f54b22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional buffer for tasks for integration over refined simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:a0eb0ee10587778046f90b10485f54b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6c2d05a5e192209dbb7bc8c84c2c768" id="r_ac6c2d05a5e192209dbb7bc8c84c2c768"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6c2d05a5e192209dbb7bc8c84c2c768">tempRefinedAttachedNeighborsTasks</a></td></tr>
+<tr class="memdesc:ac6c2d05a5e192209dbb7bc8c84c2c768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional buffer for tasks for integration over refined attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:ac6c2d05a5e192209dbb7bc8c84c2c768"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf26efb6ab77ebed85201a68cbcff8d" id="r_aebf26efb6ab77ebed85201a68cbcff8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebf26efb6ab77ebed85201a68cbcff8d">tempRefinedNotNeighborsTasks</a></td></tr>
+<tr class="memdesc:aebf26efb6ab77ebed85201a68cbcff8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional buffer for tasks for integration over refined non-neighbor pairs.  <br /></td></tr>
 <tr class="separator:aebf26efb6ab77ebed85201a68cbcff8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af755f011ad8dfc653c9e85acd4a13278" id="r_af755f011ad8dfc653c9e85acd4a13278"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af755f011ad8dfc653c9e85acd4a13278">simpleNeighborsIntegralsConverged</a></td></tr>
+<tr class="memdesc:af755f011ad8dfc653c9e85acd4a13278"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of flags which show whether the integration of the task has already converged (for the original, non-refined simple neighbor pairs)  <br /></td></tr>
 <tr class="separator:af755f011ad8dfc653c9e85acd4a13278"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d2e96dbeca2e044e21e5f976af46fd1" id="r_a5d2e96dbeca2e044e21e5f976af46fd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2e96dbeca2e044e21e5f976af46fd1">attachedNeighborsIntegralsConverged</a></td></tr>
+<tr class="memdesc:a5d2e96dbeca2e044e21e5f976af46fd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of flags which show whether the integration of the task has already converged (for the original, non-refined attached neighbor pairs)  <br /></td></tr>
 <tr class="separator:a5d2e96dbeca2e044e21e5f976af46fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb97c65e1b593e5b0b72c0e510176e15" id="r_abb97c65e1b593e5b0b72c0e510176e15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb97c65e1b593e5b0b72c0e510176e15">notNeighborsIntegralsConverged</a></td></tr>
+<tr class="memdesc:abb97c65e1b593e5b0b72c0e510176e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of flags which show whether the integration of the task has already converged (for the original, non-refined non-neighbor pairs)  <br /></td></tr>
 <tr class="separator:abb97c65e1b593e5b0b72c0e510176e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd84161188245329330592c0c52256d1" id="r_afd84161188245329330592c0c52256d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd84161188245329330592c0c52256d1">tempVertices</a></td></tr>
+<tr class="memdesc:afd84161188245329330592c0c52256d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temporary buffer for coordinates of refined mesh vertices.  <br /></td></tr>
 <tr class="separator:afd84161188245329330592c0c52256d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed1d75cf6b62430fd5d67c1568fff04b" id="r_aed1d75cf6b62430fd5d67c1568fff04b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed1d75cf6b62430fd5d67c1568fff04b">tempCells</a></td></tr>
+<tr class="memdesc:aed1d75cf6b62430fd5d67c1568fff04b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temporary buffer for vertex indices of refined mesh cells.  <br /></td></tr>
 <tr class="separator:aed1d75cf6b62430fd5d67c1568fff04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b6fd50d61c58aec2ed171c12d5d41dd" id="r_a4b6fd50d61c58aec2ed171c12d5d41dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b6fd50d61c58aec2ed171c12d5d41dd">tempCellMeasures</a></td></tr>
+<tr class="memdesc:a4b6fd50d61c58aec2ed171c12d5d41dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temporary buffer for vector of measures (areas) of refined cells.  <br /></td></tr>
 <tr class="separator:a4b6fd50d61c58aec2ed171c12d5d41dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa46af40f748281ff69c53c8a6fd969b0" id="r_aa46af40f748281ff69c53c8a6fd969b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa46af40f748281ff69c53c8a6fd969b0">tempOriginalCells</a></td></tr>
+<tr class="memdesc:aa46af40f748281ff69c53c8a6fd969b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temporary buffer for vector of indices of original triangles for refined cells.  <br /></td></tr>
 <tr class="separator:aa46af40f748281ff69c53c8a6fd969b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae58ae6c1f6bb8b21d0b27b7d418dbe92" id="r_ae58ae6c1f6bb8b21d0b27b7d418dbe92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae58ae6c1f6bb8b21d0b27b7d418dbe92">cellsToBeRefined</a></td></tr>
+<tr class="memdesc:ae58ae6c1f6bb8b21d0b27b7d418dbe92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of indices of cells which need to be refined for further calculation of integrals over them.  <br /></td></tr>
 <tr class="separator:ae58ae6c1f6bb8b21d0b27b7d418dbe92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef0bb22f74f8975620d6b492b13bebbc" id="r_aef0bb22f74f8975620d6b492b13bebbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef0bb22f74f8975620d6b492b13bebbc">cellRequiresRefinement</a></td></tr>
+<tr class="memdesc:aef0bb22f74f8975620d6b492b13bebbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate vector of flags indicating that a cell (from the original list) requires refinement.  <br /></td></tr>
 <tr class="separator:aef0bb22f74f8975620d6b492b13bebbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af138d12584ddae680b8a5921804c5340" id="r_af138d12584ddae680b8a5921804c5340"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af138d12584ddae680b8a5921804c5340">d_cellsToBeRefinedCount</a> = nullptr</td></tr>
+<tr class="memdesc:af138d12584ddae680b8a5921804c5340"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device counter of a number of cells which need to be refined.  <br /></td></tr>
 <tr class="separator:af138d12584ddae680b8a5921804c5340"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9474e90cb8ef74a8ae8a2548f7e768c2" id="r_a9474e90cb8ef74a8ae8a2548f7e768c2"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9474e90cb8ef74a8ae8a2548f7e768c2">taskCount</a> = nullptr</td></tr>
+<tr class="memdesc:a9474e90cb8ef74a8ae8a2548f7e768c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device counter of a number of refined tasks.  <br /></td></tr>
 <tr class="separator:a9474e90cb8ef74a8ae8a2548f7e768c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6e6af8bd83c6957a47fed5993aa3b2d" id="r_ac6e6af8bd83c6957a47fed5993aa3b2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_numerical_integrator3d_8cuh.html#a9ab58cb389e76d256ba909cefae8d806">error_control_type_enum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6e6af8bd83c6957a47fed5993aa3b2d">errorControlType</a></td></tr>
+<tr class="memdesc:ac6e6af8bd83c6957a47fed5993aa3b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specified mode of error control.  <br /></td></tr>
 <tr class="separator:ac6e6af8bd83c6957a47fed5993aa3b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af869655694891a0a703bfbcbf6b6d82c" id="r_af869655694891a0a703bfbcbf6b6d82c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af869655694891a0a703bfbcbf6b6d82c">meshRefinementLevel</a></td></tr>
+<tr class="memdesc:af869655694891a0a703bfbcbf6b6d82c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specified level of mesh refinement.  <br /></td></tr>
 <tr class="separator:af869655694891a0a703bfbcbf6b6d82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50a68d0a08f974fedb3bf9acde1066c4" id="r_a50a68d0a08f974fedb3bf9acde1066c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50a68d0a08f974fedb3bf9acde1066c4">simpleNeighborsRefinementsRequired</a></td></tr>
+<tr class="memdesc:a50a68d0a08f974fedb3bf9acde1066c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector with number of required refinements for each cell when integrating over simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:a50a68d0a08f974fedb3bf9acde1066c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcd0d89837697743995206cba8d26610" id="r_abcd0d89837697743995206cba8d26610"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcd0d89837697743995206cba8d26610">attachedNeighborsRefinementsRequired</a></td></tr>
+<tr class="memdesc:abcd0d89837697743995206cba8d26610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector with number of required refinements for each cell when integrating over attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:abcd0d89837697743995206cba8d26610"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a220f546abf4166066b36e742f9c56f48" id="r_a220f546abf4166066b36e742f9c56f48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a220f546abf4166066b36e742f9c56f48">notNeighborsRefinementsRequired</a></td></tr>
+<tr class="memdesc:a220f546abf4166066b36e742f9c56f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector with number of required refinements for each cell when integrating over non-neighbor pairs.  <br /></td></tr>
 <tr class="separator:a220f546abf4166066b36e742f9c56f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class responsible for the whole numerical integration procedure. </p>
+<p>The class is responsible for</p><ul>
+<li>numerical integration itself, using Gaussian quadrature rules;</li>
+<li>forming the list of cells that require refinement;</li>
+<li>mesh refinement and creation of new tasks for the refined cells;</li>
+<li>gathering of results of integration over refined cells into original integral values.</li>
+</ul>
+<p>Two modes are available:</p><ol type="1">
+<li>Fixed level of refinement for the whole mesh (can also be zero) - memory- and time-consuming;</li>
+<li>Automatic error control using the Runge rule. </li>
+</ol>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6beece1578d8737b31db031f46a258c8" name="a6beece1578d8737b31db031f46a258c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6beece1578d8737b31db031f46a258c8">&#9670;&#160;</a></span>NumericalIntegrator3D()</h2>
 
@@ -246,6 +317,17 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="class_numerical_integrator3_d.html" title="Class responsible for the whole numerical integration procedure.">NumericalIntegrator3D</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh_</td><td>Existing <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object </td></tr>
+    <tr><td class="paramname">qf_</td><td>Quadrature formula</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Vector of L-coordinates for Gaussian points is filled (initially the quadrature formula does not store the last coordinate) and copied to the device constant memory together with weights of the Gaussian points and their number.</p>
+<p>Error control mode is set to automatic error control by default. </p>
 
 </div>
 </div>
@@ -272,11 +354,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Destroy the <a class="el" href="class_numerical_integrator3_d.html" title="Class responsible for the whole numerical integration procedure.">NumericalIntegrator3D</a> object. </p>
+<p>Deallocate memory for counters of tasks, refined vertices and cells, cells requiring refinement. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aba873305b28ac2ca4153db669b982ac4" name="aba873305b28ac2ca4153db669b982ac4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba873305b28ac2ca4153db669b982ac4">&#9670;&#160;</a></span>determineCellsToBeRefined()</h2>
+<a id="af9bdb368b126eb637bfcf71ea970a962" name="af9bdb368b126eb637bfcf71ea970a962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9bdb368b126eb637bfcf71ea970a962">&#9670;&#160;</a></span>determineCellsToBeRefined()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -284,7 +369,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">int NumericalIntegrator3D::determineCellsToBeRefined </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>restTasks</em>, </span></td>
+          <td class="paramtype">const <a class="el" href="structdevice_vector.html">deviceVector</a>&lt; int &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>restTasks</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -298,6 +383,22 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Fill the list of indices of cells which require further refinement, using the list of integrals which have not converged. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">restTasks</td><td>Indices of integration tasks which have not yet converged </td></tr>
+    <tr><td class="paramname">tasks</td><td>List of all integration task on current iteration </td></tr>
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Number of cells which require refinement</dd></dl>
+<p>The following kernels are called:</p><ol type="1">
+<li>Setting to 'true' the flag of cells which are control panels of at least one integration task which has not converged.</li>
+<li>Extracting indices of the flags set to 'true'.</li>
+<li>Increasing the number of required requirements for these cells by 1 (used for output to VTK). </li>
+</ol>
 
 </div>
 </div>
@@ -319,6 +420,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum up the results of integration over refined cells (for a specific type of neighbors) into the vector for original task results. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">results</td><td>Target vector for integration results for original tasks </td></tr>
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Both input and output results contain separate values for \(\mathbf{\Psi}\) and \(\Theta\). A kernel function is called which performs summation using atomicAdd and the index of the original task for each refined one. </p>
 
 </div>
 </div>
@@ -345,6 +456,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the vector of indices of cells which are to be refined. </p>
+<dl class="section return"><dt>Returns</dt><dd>auto&amp; Device vector of indices (in the whole current list of cells) of cells which are to be refined </dd></dl>
+
 </div>
 </div>
 <a id="a6569bfcf131ae540cf3c434ab8455da1" name="a6569bfcf131ae540cf3c434ab8455da1"></a>
@@ -369,6 +483,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get the type of error control. </p>
+<dl class="section return"><dt>Returns</dt><dd>error_control_type_enum Current type of error control mode </dd></dl>
 
 </div>
 </div>
@@ -395,6 +512,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the number of Gauss Points. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of Gauss points</dd></dl>
+<p>Used for passing the number of Gaussian points to kernel functions </p>
+
 </div>
 </div>
 <a id="a242109ec3a41e2d36705b8502f32ac7c" name="a242109ec3a41e2d36705b8502f32ac7c"></a>
@@ -419,6 +540,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get the vector of flags which show whether the integration of the task has already converged (for a specific type of neighbor cells) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structdevice_vector.html">deviceVector&lt;unsigned char&gt;</a>* Pointer to device vector of flags for convergence of integration tasks</dd></dl>
+<p>The values of flags are either 'true' or 'false'. Flags are assigned during the procedure of comparing integration results between the current and previous iterations. Later new tasks are created only for the original tasks whose flag is still 'false'. </p>
 
 </div>
 </div>
@@ -445,6 +576,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the order of the specified quadrature formula. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Order of the selected quarature formula </dd></dl>
+
 </div>
 </div>
 <a id="a75e7e86b9399d3c88decf212101ed473" name="a75e7e86b9399d3c88decf212101ed473"></a>
@@ -469,6 +603,11 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get the vector of measures (areas) of refined cells. </p>
+<dl class="section return"><dt>Returns</dt><dd>const auto&amp; Device vector of measures (areas) for the refined cells</dd></dl>
+<p>The vector is used for passing as an argument to kernel functions.</p>
+<p>The values for cells may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and measures for new cells are added) </p>
 
 </div>
 </div>
@@ -495,6 +634,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the vector of refined cells. </p>
+<dl class="section return"><dt>Returns</dt><dd>const auto&amp; Device vector of vertex indices for the refined cells</dd></dl>
+<p>The vector is used for passing as an argument to kernel functions and for export to VTK. The list is filled from the beginning on each refinement iteration and does not contain cells from the previous iteration.</p>
+<p>The cells may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and new cells for them are added) </p>
+
 </div>
 </div>
 <a id="aa4a5601c741c6f0f9ef489201cb4e52b" name="aa4a5601c741c6f0f9ef489201cb4e52b"></a>
@@ -519,6 +663,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get the vector of integration tasks for refined cells (for a specific type of neighbor cells) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structdevice_vector.html">deviceVector&lt;int3&gt;</a>* Pointer to device vector of tasks </dd></dl>
 
 </div>
 </div>
@@ -545,6 +698,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the vector of refined vertices. </p>
+<dl class="section return"><dt>Returns</dt><dd>const auto&amp; Device vector of coordinates of refined vertices</dd></dl>
+<p>The vector is used for passing as an argument to kernel functions and for export to VTK. The list contains vertices from the previous refinement iteration after which new vertices are added.</p>
+<p>The vertices may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and their vertices are added) </p>
+
 </div>
 </div>
 <a id="a1f91fd30d521e4a3b95441c67dd9b0c1" name="a1f91fd30d521e4a3b95441c67dd9b0c1"></a>
@@ -570,6 +728,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Get the vector with number of required refinements for each cell (for a specific type of neighbor cells) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structdevice_vector.html">deviceVector&lt;unsigned char&gt;</a>* Pointer to device vector with number of required refinements for each cell</dd></dl>
+<p>Data of this vector is used for output to the VTK file. Unsigned char data type is used due to the number of refinements being usually not higher than 10. </p>
+
 </div>
 </div>
 <a id="ac3ddb7fea8012d8e4442a66bbc4e9d86" name="ac3ddb7fea8012d8e4442a66bbc4e9d86"></a>
@@ -594,6 +762,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get the vector of results of integration for refined cells (for a specific type of neighbor cells) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structdevice_vector.html">deviceVector&lt;double4&gt;</a>* Pointer to device vector of integration results</dd></dl>
+<p>Elements of this vector are later summed up in order to fill the vector of integral values for original integration tasks </p>
 
 </div>
 </div>
@@ -621,6 +799,27 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Necessary preparations (mesh and tasks) before integral calculation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">simpleNeighborsTasks</td><td>Device vector of integration tasks for simple neighbor cell pairs </td></tr>
+    <tr><td class="paramname">attachedNeighborsTasks</td><td>Device vector of integration tasks for attached neighbor cell pairs </td></tr>
+    <tr><td class="paramname">notNeighborsTasks</td><td>Device vector of integration tasks for non-neighbor cell pairs</td></tr>
+  </table>
+  </dd>
+</dl>
+<ol type="1">
+<li>Memory allocation for the refined mesh is performed ( \(v_0 \text{ and } t_0\) are the numbers of vertices and cells in the original mesh, \(n\) is the mesh refinement level - maximum value is used in case of adaptive error control):<ul>
+<li>number of vertices is set to \( v_0 + t_0 (4^n - 1) \);</li>
+<li>numbers of cells and cell measures are set to \( t_0\cdot 4^n \);</li>
+<li>indices pointing to the cells of original mesh (the size is equal to the size of vector of refined cells).</li>
+</ul>
+</li>
+<li>Original mesh is copied into the allocated data structures.</li>
+<li>For each type of neighbor pairs memory is allocated for the refined integration tasks, integration results and (in case of adaptive error control) flags for integration procedure convergence (according to the Runge rule) and buffer for tasks.</li>
+<li>In case of fixed refinement level (1 or more) mesh is refined and after that tasks are created for the refined cells. </li>
+</ol>
+
 </div>
 </div>
 <a id="af1960a91f376ae611a204003b1e25708" name="af1960a91f376ae611a204003b1e25708"></a>
@@ -637,6 +836,18 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Mesh refinement (whole mesh or specific cells) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">updateTasksNeighborType</td><td>Type of neighbors (may be undefined)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The function swaps buffers for vertices, cells, cell measures and indices of original cells for the refined ones, and then call a kernel function which splits the whole mesh or only selected cells. Depending on the error control mode:</p><ol type="1">
+<li>Fixed refinement level: the function is called required number of times before the start of the calculation. Creation of refined tasks is not called from here (as it is called in the mesh preparation procedure - once after all iterations of mesh refinement).</li>
+<li>Adaptive error control: the function is called after each integral calculation iteration for the selected set of cells (after 1 iteration - the whole mesh). Swap of buffer for refined tasks and update of tasks is performed after cells have been refined </li>
+</ol>
 
 </div>
 </div>
@@ -655,6 +866,10 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Re-initialization of mesh data using the original mesh in <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object. </p>
+<p>Mesh vertices, cells and measures are copied from the <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object, number of refined vertices and cells is reset using the original numbers of vertices and cells.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>This function is used for the purpose of resetting before start of calculation for another type of neighbors (the refined mesh vectors may contained fragmented mesh data from the previous integration step). </dd></dl>
+
 </div>
 </div>
 <a id="a3ece2676a79cd5aa447a292aafe50cb9" name="a3ece2676a79cd5aa447a292aafe50cb9"></a>
@@ -671,6 +886,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set the fixed refinement level for the whole mesh. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">refinementLevel</td><td>Specified mesh refinement level</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Error control method is switched to fixed refinement level (default is automatic error control using the Runge rule) </p>
 
 </div>
 </div>
@@ -701,6 +925,22 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Create new integration tasks for the refined cells, based on the the existing list of tasks for parent cells <br  />
+ </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">originalTasks</td><td>Vector of tasks to be used to create new tasks for refined cells </td></tr>
+    <tr><td class="paramname">neighborType</td><td>Type of neighbors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int New number of tasks (for the refined cells)</dd></dl>
+<p>Two (almost) identical calls of a kernel function are performed. First is needed to count the number of tasks to be created. During the second run the tasks are actually created.</p>
+<p>Situation is a bit different depending on the error control mode:</p><ul>
+<li>in case of fixed mesh refinement level tasks creation is perfomed only after the mesh has been refined the desired number of times. Then the memory for refined tasks is allocated and new tasks are created based on the original ones;</li>
+<li>in case of adaptive mesh control tasks are created after every integration procedure. In this case vectors of refined integration tasks and results are resized accordingly and new tasks are created using the tasks from the previous iteration. </li>
+</ul>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -724,6 +964,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of flags which show whether the integration of the task has already converged (for the original, non-refined attached neighbor pairs) </p>
+<p>The values of flags are either 'true' or 'false'. Flags are assigned during the procedure of comparing integration results between the current and previous iterations. Later new tasks are created only for the original tasks whose flag is still 'false'. </p>
+
 </div>
 </div>
 <a id="abcd0d89837697743995206cba8d26610" name="abcd0d89837697743995206cba8d26610"></a>
@@ -745,6 +988,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector with number of required refinements for each cell when integrating over attached neighbor pairs. </p>
+<p>The cell is consider to be \(i\)-th cell in pair \((i,j)\) (control panel). Unsigned char data type is used due to the number of refinements being usually not higher than 10. </p>
 
 </div>
 </div>
@@ -768,6 +1014,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Intermediate vector of flags indicating that a cell (from the original list) requires refinement. </p>
+<p>The values are obtained by analyzing the list of tasks which are still left for integration, the next kernel function extracts indices of such cells, which are then refined </p>
+
 </div>
 </div>
 <a id="ae58ae6c1f6bb8b21d0b27b7d418dbe92" name="ae58ae6c1f6bb8b21d0b27b7d418dbe92"></a>
@@ -789,6 +1038,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector of indices of cells which need to be refined for further calculation of integrals over them. </p>
+<p>Indices point to positions in the list of refined cells </p>
 
 </div>
 </div>
@@ -812,6 +1064,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Results of integration tasks over refined attached neighbor pairs. </p>
+<p>Values in this list are later summed up in order to obtain values of integrals for original tasks (using indices for correspondence of original and refined tasks). Each entry stores separately values for \(\mathbf{\Psi}\) and \(\Theta\) </p>
+
 </div>
 </div>
 <a id="af138d12584ddae680b8a5921804c5340" name="af138d12584ddae680b8a5921804c5340"></a>
@@ -833,6 +1088,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Device counter of a number of cells which need to be refined. </p>
 
 </div>
 </div>
@@ -856,6 +1113,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Results of integration tasks over refined non-neighbor pairs. </p>
+<p>Values in this list are later summed up in order to obtain values of integrals for original tasks (using indices for correspondence of original and refined tasks). Each entry stores separately values for \(\mathbf{\Psi}\) and \(\Theta\) </p>
+
 </div>
 </div>
 <a id="ab387976f65ce13ab274cb5fb649d61f8" name="ab387976f65ce13ab274cb5fb649d61f8"></a>
@@ -877,6 +1137,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Results of integration tasks over refined simple neighbor pairs. </p>
+<p>Values in this list are later summed up in order to obtain values of integrals for original tasks (using indices for correspondence of original and refined tasks). Each entry stores separately values for \(\mathbf{\Psi}\) and \(\Theta\) </p>
 
 </div>
 </div>
@@ -900,6 +1163,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Specified mode of error control. </p>
+<p>Default value is automatic error control procedure using the Runge rule </p>
+
 </div>
 </div>
 <a id="a8235749e20de0d7f64cbab82868f7e52" name="a8235749e20de0d7f64cbab82868f7e52"></a>
@@ -921,6 +1187,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Number of Gaussian points in the quadrature formula. </p>
 
 </div>
 </div>
@@ -944,6 +1212,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>A <a class="el" href="class_mesh3_d.html" title="Class for storage of mesh information.">Mesh3D</a> object with the original surface mesh. </p>
+<p>Vertices, cells and measures are used from the original mesh </p>
+
 </div>
 </div>
 <a id="af869655694891a0a703bfbcbf6b6d82c" name="af869655694891a0a703bfbcbf6b6d82c"></a>
@@ -965,6 +1236,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Specified level of mesh refinement. </p>
+<p>The value is only used if the mode of full mesh refinement is selected. Mesh refinement level can be set to 0, then integrals are calculated on the original mesh. </p>
 
 </div>
 </div>
@@ -988,6 +1262,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of flags which show whether the integration of the task has already converged (for the original, non-refined non-neighbor pairs) </p>
+<p>The values of flags are either 'true' or 'false'. Flags are assigned during the procedure of comparing integration results between the current and previous iterations. Later new tasks are created only for the original tasks whose flag is still 'false'. </p>
+
 </div>
 </div>
 <a id="a220f546abf4166066b36e742f9c56f48" name="a220f546abf4166066b36e742f9c56f48"></a>
@@ -1009,6 +1286,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector with number of required refinements for each cell when integrating over non-neighbor pairs. </p>
+<p>The cell is consider to be \(i\)-th cell in pair \((i,j)\) (control panel). Unsigned char data type is used due to the number of refinements being usually not higher than 10. </p>
 
 </div>
 </div>
@@ -1032,6 +1312,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of indices of original triangles (belong to the refined triangles) </p>
+<p>The index points to a cell in the original mesh.</p>
+<p>Initially the list is filled with \(0,1,\ldots,n-1\), and later during the refinements the index is handed over from parent triangle to child ones without any changes. </p>
+
 </div>
 </div>
 <a id="a0ae8cdb315882b26d2cd46db41d55011" name="a0ae8cdb315882b26d2cd46db41d55011"></a>
@@ -1053,6 +1337,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>A quadrature formula selected for numerical integration. </p>
+<p>Data from the quadrature formula (which is a static object) is copied to the device constant memory </p>
 
 </div>
 </div>
@@ -1076,6 +1363,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of tasks for integration over refined attached neighbor pairs. </p>
+<p>The tasks has the form \((i,j,k)\) where \(i,j\) correspond to the indices of refined cells and \(k\) is the index of original non-refined task. The vector of tasks is obtained from the previous vector tasks (original tasks or already refined list) after cells are refined </p>
+
 </div>
 </div>
 <a id="a89e53c7384fbc6db2ef04a4aacbb4789" name="a89e53c7384fbc6db2ef04a4aacbb4789"></a>
@@ -1097,6 +1387,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Device vector of measures (areas) for the refined cells. </p>
+<p>The values for cells may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and measures for new cells are added) </p>
 
 </div>
 </div>
@@ -1120,6 +1413,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of indices of direct parent cells of the refined cells. </p>
+<p>The index points to a cell in the list for the previous iteration.</p>
+<p>The values are used in the procedure of task creation after mesh refinement in order to decide whether a new task should be created for an old one or not. </p>
+
 </div>
 </div>
 <a id="a01fb545a69963a1653356bdf274a4b1e" name="a01fb545a69963a1653356bdf274a4b1e"></a>
@@ -1141,6 +1438,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Device vector of vertex indices for the refined cells. </p>
+<p>The cells may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and new cells for them are added) </p>
 
 </div>
 </div>
@@ -1164,6 +1464,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of tasks for integration over refined non-neighbor pairs. </p>
+<p>The tasks has the form \((i,j,k)\) where \(i,j\) correspond to the indices of refined cells and \(k\) is the index of original non-refined task. The vector of tasks is obtained from the previous vector tasks (original tasks or already refined list) after cells are refined </p>
+
 </div>
 </div>
 <a id="ab29bc725ac1f27d029965fb4537a605e" name="ab29bc725ac1f27d029965fb4537a605e"></a>
@@ -1185,6 +1488,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector of tasks for integration over refined simple neighbor pairs. </p>
+<p>The tasks has the form \((i,j,k)\) where \(i,j\) correspond to the indices of refined cells and \(k\) is the index of original non-refined task. The vector of tasks is obtained from the previous vector tasks (original tasks or already refined list) after cells are refined </p>
 
 </div>
 </div>
@@ -1208,6 +1514,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Device vector of coordinates of refined vertices. </p>
+<p>The vertices may not cover the whole mesh if adaptive mesh refinement procedure is used (only specific cells are refined and their vertices are added) </p>
+
 </div>
 </div>
 <a id="ade540c948ce982e88f24b5716828a4a1" name="ade540c948ce982e88f24b5716828a4a1"></a>
@@ -1229,6 +1538,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Current numbers of vertices and cells in the refined mesh stored on the device. </p>
+<p>The value is initialized by the value in the host memory, then it is updated in the mesh refinement procedure. 2 numbers are stored as 1 int2 value (.x refers to vertices, .y - to cells) </p>
 
 </div>
 </div>
@@ -1252,6 +1564,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Vector of flags which show whether the integration of the task has already converged (for the original, non-refined simple neighbor pairs) </p>
+<p>The values of flags are either 'true' or 'false'. Flags are assigned during the procedure of comparing integration results between the current and previous iterations. Later new tasks are created only for the original tasks whose flag is still 'false'. </p>
+
 </div>
 </div>
 <a id="a50a68d0a08f974fedb3bf9acde1066c4" name="a50a68d0a08f974fedb3bf9acde1066c4"></a>
@@ -1273,6 +1588,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Vector with number of required refinements for each cell when integrating over simple neighbor pairs. </p>
+<p>The cell is consider to be \(i\)-th cell in pair \((i,j)\) (control panel). Unsigned char data type is used due to the number of refinements being usually not higher than 10. </p>
 
 </div>
 </div>
@@ -1296,6 +1614,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Device counter of a number of refined tasks. </p>
+<p>The value is accumulated during execution of a kernel function while analyzes the existing tasks and refined cells. The value serves the purpose of determining the size (and allocating/re-allocating memory if necessary) for vectors of refined tasks and integration results. </p>
+
 </div>
 </div>
 <a id="a4b6fd50d61c58aec2ed171c12d5d41dd" name="a4b6fd50d61c58aec2ed171c12d5d41dd"></a>
@@ -1317,6 +1638,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Temporary buffer for vector of measures (areas) of refined cells. </p>
+<p>The vector is used during the refinement procedure in case of fixed mesh refinement level, or is swapped alternatively with the main vector of vector of measures (areas) of refined cells in case of adaptive error control procedure </p>
 
 </div>
 </div>
@@ -1340,6 +1664,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Temporary buffer for vertex indices of refined mesh cells. </p>
+<p>The vector is used during the refinement procedure in case of fixed mesh refinement level, or is swapped alternatively with the main vector of vertex indices of refined mesh cells in case of adaptive error control procedure </p>
+
 </div>
 </div>
 <a id="aa46af40f748281ff69c53c8a6fd969b0" name="aa46af40f748281ff69c53c8a6fd969b0"></a>
@@ -1361,6 +1688,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Temporary buffer for vector of indices of original triangles for refined cells. </p>
+<p>The vector is used during the refinement procedure in case of fixed mesh refinement level, or is swapped alternatively with the main vector of vector of indices of original triangles for refined cells in case of adaptive error control procedure </p>
 
 </div>
 </div>
@@ -1384,6 +1714,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Additional buffer for tasks for integration over refined attached neighbor pairs. </p>
+<p>Used in case of adaptive error control procedure, this buffer is swapped with the main list of refined tasks alternatively, at each integration iteration. </p>
+
 </div>
 </div>
 <a id="aebf26efb6ab77ebed85201a68cbcff8d" name="aebf26efb6ab77ebed85201a68cbcff8d"></a>
@@ -1405,6 +1738,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Additional buffer for tasks for integration over refined non-neighbor pairs. </p>
+<p>Used in case of adaptive error control procedure, this buffer is swapped with the main list of refined tasks alternatively, at each integration iteration. </p>
 
 </div>
 </div>
@@ -1428,6 +1764,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Additional buffer for tasks for integration over refined simple neighbor pairs. </p>
+<p>Used in case of adaptive error control procedure, this buffer is swapped with the main list of refined tasks alternatively, at each integration iteration. </p>
+
 </div>
 </div>
 <a id="afd84161188245329330592c0c52256d1" name="afd84161188245329330592c0c52256d1"></a>
@@ -1450,6 +1789,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Temporary buffer for coordinates of refined mesh vertices. </p>
+<p>The vector is used during the refinement procedure in case of fixed mesh refinement level, or is swapped alternatively with the main vector of coordinates of refined mesh vertices in case of adaptive error control procedure </p>
+
 </div>
 </div>
 <a id="a8a6575f1d859ebbd681dbe90b4e86dfa" name="a8a6575f1d859ebbd681dbe90b4e86dfa"></a>
@@ -1471,6 +1813,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Current numbers of vertices and cells in the refined mesh stored on the host. </p>
+<p>The value is initially assigned using the number in original mesh, then it is updated by the values from the device which are obtained in the mesh refinement procedure. 2 numbers are stored as 1 int2 value (.x refers to vertices, .y - to cells) </p>
 
 </div>
 </div>

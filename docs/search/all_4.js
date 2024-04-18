@@ -15,7 +15,7 @@ var searchData=
   ['d_5ftempnotneighborsintegrals_12',['d_tempNotNeighborsIntegrals',['../class_evaluator3_d.html#aacd257bacba989cd392ed6d739bcaea1',1,'Evaluator3D']]],
   ['d_5ftempsimpleneighborsintegrals_13',['d_tempSimpleNeighborsIntegrals',['../class_evaluator3_d.html#a8cdfb6b5af118849ed5b00207315d466',1,'Evaluator3D']]],
   ['data_14',['data',['../structdevice_vector.html#aabcbf60f296ff879a0d5d4880e2f85f2',1,'deviceVector']]],
-  ['determinecellstoberefined_15',['determineCellsToBeRefined',['../class_numerical_integrator3_d.html#aba873305b28ac2ca4153db669b982ac4',1,'NumericalIntegrator3D']]],
+  ['determinecellstoberefined_15',['determineCellsToBeRefined',['../class_numerical_integrator3_d.html#af9bdb368b126eb637bfcf71ea970a962',1,'NumericalIntegrator3D']]],
   ['device_5fvector_2ecuh_16',['device_vector.cuh',['../device__vector_8cuh.html',1,'']]],
   ['device_5fvector_5fcuh_17',['DEVICE_VECTOR_CUH',['../device__vector_8cuh.html#a634448e65bb85b83953ef45a4e343abb',1,'device_vector.cuh']]],
   ['devicevector_18',['deviceVector',['../structdevice_vector.html',1,'']]],

@@ -2,7 +2,7 @@ var class_numerical_integrator3_d =
 [
     [ "NumericalIntegrator3D", "class_numerical_integrator3_d.html#a6beece1578d8737b31db031f46a258c8", null ],
     [ "~NumericalIntegrator3D", "class_numerical_integrator3_d.html#a528ef4eaa86844a2cdaaca811e430be9", null ],
-    [ "determineCellsToBeRefined", "class_numerical_integrator3_d.html#aba873305b28ac2ca4153db669b982ac4", null ],
+    [ "determineCellsToBeRefined", "class_numerical_integrator3_d.html#af9bdb368b126eb637bfcf71ea970a962", null ],
     [ "gatherResults", "class_numerical_integrator3_d.html#a22fe152d3e7a9ad1de95857f5191b29d", null ],
     [ "getCellsToBeRefined", "class_numerical_integrator3_d.html#a5be924a775975731f2bc587a5da4459c", null ],
     [ "getErrorControlType", "class_numerical_integrator3_d.html#a6569bfcf131ae540cf3c434ab8455da1", null ],

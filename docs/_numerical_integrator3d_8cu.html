@@ -105,18 +105,25 @@ $(function(){initNavTree('_numerical_integrator3d_8cu.html',''); initResizable()
   <div class="headertitle"><div class="title">NumericalIntegrator3d.cu File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of the procedures of numerical integration, operations before (preparation of mesh and tasks) and after it (results summation, etc.)  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="_numerical_integrator3d_8cuh_source.html">NumericalIntegrator3d.cuh</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="cuda__memory_8cuh_source.html">common/cuda_memory.cuh</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a7407496704dc22c5b05146efb0126bcd" id="r_a7407496704dc22c5b05146efb0126bcd"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7407496704dc22c5b05146efb0126bcd">kSplitCell</a> (int n, <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *refinedVertices, int3 *refinedCells, double *refinedCellMeasures, int *originalCells, int2 *refinedVerticesCellsNum, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *tempVertices, const int3 *tempCells, const double *tempCellMeasures, const int *tempOriginalCells, int *refinedCellParents=nullptr, const unsigned char *cellRequiresRefinement=nullptr)</td></tr>
+<tr class="memdesc:a7407496704dc22c5b05146efb0126bcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split an existing triangular cell into 4 new ones using midpoints of its edges.  <br /></td></tr>
 <tr class="separator:a7407496704dc22c5b05146efb0126bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59cfe283cf58dea82b87abd0342c3be4" id="r_a59cfe283cf58dea82b87abd0342c3be4"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59cfe283cf58dea82b87abd0342c3be4">kCountOrCreateTasks</a> (int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, const int *tempOriginalCells, const int *refinedCellParents=nullptr, unsigned char *taskConverged=nullptr, int3 *refinedTasks=nullptr)</td></tr>
+<tr class="memdesc:a59cfe283cf58dea82b87abd0342c3be4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count and (optionally) create new integration tasks for the refined cells from the existing ones.  <br /></td></tr>
 <tr class="separator:a59cfe283cf58dea82b87abd0342c3be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dd5d93cbe49f9b19c99dfd0d2be896c" id="r_a7dd5d93cbe49f9b19c99dfd0d2be896c"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dd5d93cbe49f9b19c99dfd0d2be896c">kSumIntegrationResults</a> (int n, double4 *results, const double4 *refinedResults, const int3 *refinedTasks)</td></tr>
+<tr class="memdesc:a7dd5d93cbe49f9b19c99dfd0d2be896c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for summation of results of integration over refined cells.  <br /></td></tr>
 <tr class="separator:a7dd5d93cbe49f9b19c99dfd0d2be896c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9707ff4d49e56e1395a20a486162cb4e" id="r_a9707ff4d49e56e1395a20a486162cb4e"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9707ff4d49e56e1395a20a486162cb4e">kExtractCellNeedsRefinement</a> (int n, unsigned char *cellNeedsRefinement, const int *restTasks, const int3 *tasks)</td></tr>
+<tr class="memdesc:a9707ff4d49e56e1395a20a486162cb4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracting the set of original cells that require refinement (by setting the flag for them to 'true')  <br /></td></tr>
 <tr class="separator:a9707ff4d49e56e1395a20a486162cb4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a190ee80af176023b2a45fb9217cc90a0" id="r_a190ee80af176023b2a45fb9217cc90a0"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a190ee80af176023b2a45fb9217cc90a0">integrate4D</a> (const double4 *functionValues)</td></tr>
 <tr class="memdesc:a190ee80af176023b2a45fb9217cc90a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual evaluation of the quadrature formula.  <br /></td></tr>
@@ -128,13 +135,18 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ad867552cd5710174ea2ab57155924183" id="r_ad867552cd5710174ea2ab57155924183"><td class="memItemLeft" align="right" valign="top">__constant__ <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad867552cd5710174ea2ab57155924183">c_GaussPointsCoordinates</a> [<a class="el" href="struct_c_o_n_s_t_a_n_t_s.html#a2842e0f1ee5a427999715f452576f843">CONSTANTS::MAX_GAUSS_POINTS</a>]</td></tr>
+<tr class="memdesc:ad867552cd5710174ea2ab57155924183"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Gauss points coordinates (for use in the quadrature formula)  <br /></td></tr>
 <tr class="separator:ad867552cd5710174ea2ab57155924183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa92dd7ce051076146afb8d50e78197e1" id="r_aa92dd7ce051076146afb8d50e78197e1"><td class="memItemLeft" align="right" valign="top">__constant__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa92dd7ce051076146afb8d50e78197e1">c_GaussPointsWeights</a> [<a class="el" href="struct_c_o_n_s_t_a_n_t_s.html#a2842e0f1ee5a427999715f452576f843">CONSTANTS::MAX_GAUSS_POINTS</a>]</td></tr>
+<tr class="memdesc:aa92dd7ce051076146afb8d50e78197e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Gauss points weights (for use in the quadrature formula)  <br /></td></tr>
 <tr class="separator:aa92dd7ce051076146afb8d50e78197e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62ecab7f2f8e07d944b1573d8ef65cd1" id="r_a62ecab7f2f8e07d944b1573d8ef65cd1"><td class="memItemLeft" align="right" valign="top">__constant__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62ecab7f2f8e07d944b1573d8ef65cd1">c_GaussPointsNumber</a></td></tr>
+<tr class="memdesc:a62ecab7f2f8e07d944b1573d8ef65cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Gauss points.  <br /></td></tr>
 <tr class="separator:a62ecab7f2f8e07d944b1573d8ef65cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of the procedures of numerical integration, operations before (preparation of mesh and tasks) and after it (results summation, etc.) </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="adf143e4a3e93ea3174e06a713f682c05" name="adf143e4a3e93ea3174e06a713f682c05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf143e4a3e93ea3174e06a713f682c05">&#9670;&#160;</a></span>calculateQuadraturePoints()</h2>
 
@@ -253,6 +265,26 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Count and (optionally) create new integration tasks for the refined cells from the existing ones. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tasksNum</td><td>Number of the existing integration tasks </td></tr>
+    <tr><td class="paramname">refinedCellsNum</td><td>Number of cells in the refined mesh (for which the tasks are created/counted) </td></tr>
+    <tr><td class="paramname">counter</td><td>Counter of the new tasks </td></tr>
+    <tr><td class="paramname">tasks</td><td>Existing integration tasks from which new ones are created </td></tr>
+    <tr><td class="paramname">originalCells</td><td>Indices of cell of original mesh for the refined mesh cells </td></tr>
+    <tr><td class="paramname">tempOriginalCells</td><td>Indices of cell of original mesh for the previous mesh cells </td></tr>
+    <tr><td class="paramname">refinedCellParents</td><td>Indices of direct parents of the cells of the refined mesh </td></tr>
+    <tr><td class="paramname">taskConverged</td><td>Flags showing that the original integration task has converged </td></tr>
+    <tr><td class="paramname">refinedTasks</td><td>Vector of new tasks being created (if nullptr then the tasks are only counted)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Existing tasks are being analyzed in large blocks, indices of original cells for the new refined cells (and optionally indices of direct cell parents for them) are loaded into shared memory. After the indices of original cells have been loaded, we analyze each existing integration task. If tasks are created for all cells or this task is the part of original task has not converged we proceed further and check loaded indices of original cells for new ones. If</p><ol type="1">
+<li>These indices are the same for the \(i\)-th panel of the existing task and the new refined cell and</li>
+<li>The new refined cell has the \(i\)-th panel of the existing task as its direct parent then a new task is counted and (optionally) created for this new refined cell and the \(j\)-th panel of the existing task. </li>
+</ol>
+
 </div>
 </div>
 <a id="a9707ff4d49e56e1395a20a486162cb4e" name="a9707ff4d49e56e1395a20a486162cb4e"></a>
@@ -283,6 +315,18 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Extracting the set of original cells that require refinement (by setting the flag for them to 'true') </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks which have not converged </td></tr>
+    <tr><td class="paramname">cellNeedsRefinement</td><td>Vector of flags showing whether an original cell requires further refinement </td></tr>
+    <tr><td class="paramname">restTasks</td><td>Indices of integration tasks over refined cells which have not converged yet </td></tr>
+    <tr><td class="paramname">tasks</td><td>Vector of integration tasks for refined cells</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Remaining integration tasks for refined cells are analyzed and their 3rd indices are used to determine the original cell that needs further refinement. If the cell is the \(i\)-th control panel for at least one task its flag is set to 'true'. </p>
 
 </div>
 </div>
@@ -355,6 +399,33 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Split an existing triangular cell into 4 new ones using midpoints of its edges. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of cells in the current mesh (may be original or previous iteration of refinement) </td></tr>
+    <tr><td class="paramname">refinedVertices</td><td>Vector of new vertices to be filled (containts vertices from the previous iteration of refinement) </td></tr>
+    <tr><td class="paramname">refinedCells</td><td>Vector of new cells to be filled </td></tr>
+    <tr><td class="paramname">refinedCellMeasures</td><td>Vector of new cell measures (areas) </td></tr>
+    <tr><td class="paramname">originalCells</td><td>Indices of original cells corresponding to the new cells </td></tr>
+    <tr><td class="paramname">refinedVerticesCellsNum</td><td>Counters for refined vertices (.x) and cells (.y) </td></tr>
+    <tr><td class="paramname">tempVertices</td><td>Vector of existing vertices used for refinement </td></tr>
+    <tr><td class="paramname">tempCells</td><td>Vector of existing cells used for refinement </td></tr>
+    <tr><td class="paramname">tempCellMeasures</td><td>Vector of measures (areas) for existing cells </td></tr>
+    <tr><td class="paramname">tempOriginalCells</td><td>Indices of original cells for the existing cells </td></tr>
+    <tr><td class="paramname">refinedCellParents</td><td>Vector of direct parents for the new refined cells </td></tr>
+    <tr><td class="paramname">cellRequiresRefinement</td><td>Vector of flags showing whether the original cell requiresrefinement</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Process of splitting a single cell is organized as the following:</p><ul>
+<li>for each cell in the current mesh we check whether it belongs to an original cells which needs refinement (or the whole mesh is refined);</li>
+<li>3 new vertices are created in the midpoints of edges of the existing triangle and added to the vector of new vertices;</li>
+<li>4 new cells are created and added to the vector of new cells. Counters for numbers of new vertices and cells are increased using atomicAdd;</li>
+<li>measures are filled with the value of \(\frac14 S_i\) ( \(S_i\) is the area of triangle being split);</li>
+<li>index of the original cell is directly copied to the new cells from the cell being refined;</li>
+<li>if needed, index of the direct parent cell of the new cells is assigned to the index of cell being refined. </li>
+</ul>
+
 </div>
 </div>
 <a id="a7dd5d93cbe49f9b19c99dfd0d2be896c" name="a7dd5d93cbe49f9b19c99dfd0d2be896c"></a>
@@ -386,6 +457,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for summation of results of integration over refined cells. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of tasks of integration over refined cells </td></tr>
+    <tr><td class="paramname">results</td><td>Target vector of integration results for original tasks </td></tr>
+    <tr><td class="paramname">refinedResults</td><td>Vector of integration results for refined tasks </td></tr>
+    <tr><td class="paramname">refinedTasks</td><td>Vector of integration tasks over refined cells</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Summation is performed using atomicAdd for double-precision numbers, separately for each component of \(\mathbf{\Psi}\) and \(\theta\) </p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -401,6 +484,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Array of Gauss points coordinates (for use in the quadrature formula) </p>
+
 </div>
 </div>
 <a id="a62ecab7f2f8e07d944b1573d8ef65cd1" name="a62ecab7f2f8e07d944b1573d8ef65cd1"></a>
@@ -415,6 +500,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Number of Gauss points. </p>
+
 </div>
 </div>
 <a id="aa92dd7ce051076146afb8d50e78197e1" name="aa92dd7ce051076146afb8d50e78197e1"></a>
@@ -428,6 +515,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Array of Gauss points weights (for use in the quadrature formula) </p>
 
 </div>
 </div>
