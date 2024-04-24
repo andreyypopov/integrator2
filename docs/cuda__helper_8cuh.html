@@ -106,6 +106,9 @@ $(function(){initNavTree('cuda__helper_8cuh.html',''); initResizable(); });
   <div class="headertitle"><div class="title">cuda_helper.cuh File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Helper CUDA functions for different purposes.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
 </div>
 <p><a href="cuda__helper_8cuh_source.html">Go to the source code of this file.</a></p>
@@ -163,7 +166,15 @@ Variables</h2></td></tr>
 <tr class="memdesc:a60485c02a8a8d8ac4a408d8aca0cd023"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreased size of the CUDA block for kernel functions that use 2D geometry.  <br /></td></tr>
 <tr class="separator:a60485c02a8a8d8ac4a408d8aca0cd023"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Helper CUDA functions for different purposes. </p>
+<p>Includes several constants and the following functions:</p><ul>
+<li>count block number;</li>
+<li>error handling wrapper;</li>
+<li>basic universal kernels (fill a vector with a single value, increase/decrease value of all/specific elements, extract indices of elements corresponding to boolean (unsigned char) mask, etc.);</li>
+<li>query amount of free/total GPU memory. </li>
+</ul>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="af956e3938f5abff900fb99c4a25446a5" name="af956e3938f5abff900fb99c4a25446a5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af956e3938f5abff900fb99c4a25446a5">&#9670;&#160;</a></span>checkCudaErrors</h2>
 

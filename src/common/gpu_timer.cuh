@@ -1,3 +1,7 @@
+/*!
+ * @file gpu_timer.cuh
+ * @brief GpuTimer class for measuring time using CUDA events
+ */
 #ifndef GPU_TIMER_CUH
 #define GPU_TIMER_CUH
 

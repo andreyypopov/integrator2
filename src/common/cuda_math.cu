@@ -1,3 +1,7 @@
+/*!
+ * @file cuda_math.cu
+ * @brief Implementation for specific math functions (angle, etc.)
+ */
 #include "cuda_math.cuh"
 
 #include "constants.h"

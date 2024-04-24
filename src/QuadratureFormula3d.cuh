@@ -1,3 +1,8 @@
+/*!
+ * @file QuadratureFormula3d.cuh
+ * @brief QuadratureFormula3D class describing the Gaussian quadrature formula and a collection of constant objects
+ * for specific formulae with different numbers of Gaussian points in 3D
+ */
 #ifndef QUADRATURE_FORMULA_3D_CUH
 #define QUADRATURE_FORMULA_3D_CUH
 

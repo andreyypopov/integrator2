@@ -1,3 +1,7 @@
+/*!
+ * @file constants.h
+ * @brief A static structure with constants for various purposes (math, tolerance, algorithm parameters, etc.)
+ */
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 

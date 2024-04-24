@@ -1,3 +1,8 @@
+/*!
+ * @file evaluator3d.cuh
+ * @brief Evaluator3D abstract class which serves as a framework for 3D integral computation
+ * (actual integration procedures should be implemented in the descendent classes)
+ */
 #ifndef EVALUATOR3D_CUH
 #define EVALUATOR3D_CUH
 

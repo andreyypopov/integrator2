@@ -1,3 +1,14 @@
+/*!
+ * @file cuda_helper.cuh
+ * @brief Helper CUDA functions for different purposes
+ * 
+ * Includes several constants and the following functions:
+ * - count block number;
+ * - error handling wrapper;
+ * - basic universal kernels (fill a vector with a single value, increase/decrease value of all/specific elements,
+ * extract indices of elements corresponding to boolean (unsigned char) mask, etc.);
+ * - query amount of free/total GPU memory. 
+ */
 #ifndef CUDA_HELPER_CUH
 #define CUDA_HELPER_CUH
 

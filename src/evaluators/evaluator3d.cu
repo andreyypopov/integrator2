@@ -1,3 +1,8 @@
+/*!
+ * @file evaluator3d.cu
+ * @brief Implementation of the Evaluator3D class, including the overall procedure of integration, comparison of results of 2 iterations
+ * (using Runge rule) and output of results to plain text or CSV.
+ */
 #include "evaluator3d.cuh"
 
 #include "../common/cuda_memory.cuh"

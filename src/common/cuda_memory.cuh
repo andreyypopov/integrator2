@@ -1,3 +1,7 @@
+/*!
+ * @file cuda_memory.cuh
+ * @brief Wrapper functions for memory allocation/deallocation on host and device, memset (device only), copy operations for different configurations
+ */
 #ifndef CUDA_MEMORY_CUH
 #define CUDA_MEMORY_CUH
 

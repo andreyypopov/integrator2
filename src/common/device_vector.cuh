@@ -1,3 +1,7 @@
+/*!
+ * @file device_vector.cuh
+ * @brief The deviceVector template class for data storage, allocation and deallocation on GPU
+ */
 #ifndef DEVICE_VECTOR_CUH
 #define DEVICE_VECTOR_CUH
 

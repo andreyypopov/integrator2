@@ -1,3 +1,7 @@
+/*!
+ * @file Mesh3d.cuh
+ * @brief Mesh3D class which handles the surface mesh as well as its import from a DAT file, export procedures to VTK and OBJ files.
+ */
 #ifndef MESH3D_CUH
 #define MESH3D_CUH
 

@@ -1,3 +1,7 @@
+/*!
+ * @file Mesh3d.cu
+ * @brief Implementation of the Mesh3D class, kernel functions for mesh preparation and export functions to VTK and OBJ files.
+ */
 #include "Mesh3d.cuh"
 
 #include "common/cuda_memory.cuh"

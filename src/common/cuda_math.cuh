@@ -1,3 +1,7 @@
+/*!
+ * @file cuda_math.cuh
+ * @brief Different functions (binary operations, norm, max, etc.) for Point3 and double4 operands
+ */
 #ifndef CUDA_MATH_CUH
 #define CUDA_MATH_CUH
 
