@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "Integrator", "index.html", [
+    [ "Integrator library documentation", "index.html", "index" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

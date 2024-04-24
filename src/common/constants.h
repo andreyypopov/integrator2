@@ -6,7 +6,7 @@
 #define CONSTANTS_H
 
 /*!
- * @brief Structure with static constant fields for values with different purposes (tolerance, mathematical and other parameters) * 
+ * @brief Structure with static constant fields for values with different purposes (tolerance, mathematical and other parameters)
  */
 struct CONSTANTS {
     //tolerance parameters

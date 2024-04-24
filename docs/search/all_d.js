@@ -9,6 +9,7 @@ var searchData=
   ['operator_2f_3d_6',['operator/=',['../cuda__math_8cuh.html#a4289d812366f4209e56f72a82967cbc7',1,'cuda_math.cuh']]],
   ['order_7',['order',['../struct_quadrature_formula3_d.html#ae53cf592908d39c9b544e9f6dc11f853',1,'QuadratureFormula3D']]],
   ['originalcells_8',['originalCells',['../class_numerical_integrator3_d.html#ab58797efce612f3f69f0c480f9f9e3e1',1,'NumericalIntegrator3D']]],
-  ['output_5fformat_5fenum_9',['output_format_enum',['../evaluator3d_8cuh.html#a70366c252e534479a994ec8d7c30e239',1,'evaluator3d.cuh']]],
-  ['outputresultstofile_10',['outputResultsToFile',['../class_evaluator3_d.html#ab38ab5dc2f5079585f2e189503202e58',1,'Evaluator3D']]]
+  ['other_20important_20classes_9',['Other important classes',['../index.html#other_classes_sec',1,'']]],
+  ['output_5fformat_5fenum_10',['output_format_enum',['../evaluator3d_8cuh.html#a70366c252e534479a994ec8d7c30e239',1,'evaluator3d.cuh']]],
+  ['outputresultstofile_11',['outputResultsToFile',['../class_evaluator3_d.html#ab38ab5dc2f5079585f2e189503202e58',1,'Evaluator3D']]]
 ];

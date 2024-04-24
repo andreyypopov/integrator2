@@ -26,6 +26,7 @@ var searchData=
   ['devicevector_3c_20point3_20_3e_23',['deviceVector&lt; Point3 &gt;',['../structdevice_vector.html',1,'']]],
   ['devicevector_3c_20unsigned_20char_20_3e_24',['deviceVector&lt; unsigned char &gt;',['../structdevice_vector.html',1,'']]],
   ['divide_25',['divide',['../cuda__math_8cuh.html#a1d12e01dfc6f7552afc08e25415c0b16',1,'cuda_math.cuh']]],
-  ['dot_26',['dot',['../cuda__math_8cuh.html#ac6923bff67178c9df306fdc1d51ce572',1,'cuda_math.cuh']]],
-  ['double_5fmin_27',['DOUBLE_MIN',['../struct_c_o_n_s_t_a_n_t_s.html#ae8d58998ba4a25d0458253daddbbd866',1,'CONSTANTS']]]
+  ['documentation_26',['Integrator library documentation',['../index.html',1,'']]],
+  ['dot_27',['dot',['../cuda__math_8cuh.html#ac6923bff67178c9df306fdc1d51ce572',1,'cuda_math.cuh']]],
+  ['double_5fmin_28',['DOUBLE_MIN',['../struct_c_o_n_s_t_a_n_t_s.html#ae8d58998ba4a25d0458253daddbbd866',1,'CONSTANTS']]]
 ];
