@@ -1,14 +1,33 @@
+/*!
+ * @file QuadratureFormula3d.cuh
+ * @brief QuadratureFormula3D class describing the Gaussian quadrature formula and a collection of constant objects
+ * for specific formulae with different numbers of Gaussian points in 3D
+ */
 #ifndef QUADRATURE_FORMULA_3D_CUH
 #define QUADRATURE_FORMULA_3D_CUH
 
 #include <vector>
 
+/*!
+ * @brief Structure for storage of quadrature formula data
+ * 
+ * Constant instances of this class represent specific quadrature formulae for integration over triangle.
+ * 
+ * \sa Source for quadrature formulae:<br>
+ * Cowper, G. R. (1973). Gaussian quadrature formulas for triangles.
+ * International Journal for Numerical Methods in Engineering, 7(3), 405–408. doi: <a href="https://doi.org/10.1002/nme.1620070316">10.1002/nme.1620070316</a>
+ */
 struct QuadratureFormula3D
 {
+	/*!
+	 * @brief L-coordinate of Gauss points
+	 * 
+	 * Only \f$x\f$ and \f$y\f$ coordinates are defined, as \f$z = 1 - x - y\f$.
+	 */
     const std::vector<double2> coordinates;
-    const std::vector<double> weights;
+    const std::vector<double> weights;			//!< Weights of Gauss points
 
-    const int order;
+    const int order;							//!< Order of the quadrature formula (used in Rungle rule for error check)
 };
 
 /// Quadrature formula with 1 Gauss point (2nd order)
@@ -158,7 +177,7 @@ const QuadratureFormula3D qf3D12{
 	6
 };
 
-/// Quadrature formula with 13 Gauss points (7th order)
+/// Quadrature formula with 13 Gauss points (7th order), contains 1 point with negative weight
 const QuadratureFormula3D qf3D13{
 {
 	{ 0.333333333333333, 0.333333333333333 },

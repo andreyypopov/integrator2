@@ -1,11 +1,24 @@
+/*!
+ * @file evaluator3d.cu
+ * @brief Implementation of the Evaluator3D class, including the overall procedure of integration, comparison of results of 2 iterations
+ * (using Runge rule) and output of results to plain text or CSV.
+ */
 #include "evaluator3d.cuh"
 
 #include "../common/cuda_memory.cuh"
 
 #include <fstream>
 
-__constant__ double c_pow2p;
+__constant__ double c_pow2p;        //!< Pre-computed value of \f$2^p\f$ for use in the Runge rule
 
+/*!
+ * @brief Kernel function for complementing the initial list of integration tasks with reversed pairs
+ * 
+ * @param n Number of integration tasks
+ * @param pairs List of integration task (pair of triangle indices + index of the pair)
+ *
+ * First \f$n\f$ values are processed and for each a new task is added with triangle indices reversed.
+ */
 __global__ void kAddReversedPairs(int n, int3 *pairs)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -17,6 +30,18 @@ __global__ void kAddReversedPairs(int n, int3 *pairs)
     }
 }
 
+/*!
+ * @brief Kernel function for calculation of integration error by comparing results for \f$(i,j)\f$ and \f$(j,i)\f$ pairs
+ * 
+ * @param n Number of original neighbor pairs (only \f$(i,j),\,i<j\f$)
+ * @param errors Vector of integration error values
+ * @param results Integration results (vector of \f$2n\f$ length)
+ * 
+ * Error is calculate using the formula
+ * \f[
+ *      \delta = \frac{\|\mathbf J_{3D}(K_i,\,K_j) + \mathbf J_{3D}(K_j,\,K_i)\|}{\max\{\|\mathbf J_{3D}(K_i,\,K_j)\|, \|\mathbf J_{3D}(K_j,\,K_i)\|\}}.
+ * \f]
+ */
 __global__ void kCalculateIntegrationError(int n, double *errors, const Point3 *results)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -31,6 +56,23 @@ __global__ void kCalculateIntegrationError(int n, double *errors, const Point3 *
     }
 }
 
+/*!
+ * @brief Kernel function which checks the Runge rule and determines whether the integration process has converged or further computation for this task is needed
+ * 
+ * @param n Number of integration tasks to be checked
+ * @param integrals Vector of integration results on the current iteration
+ * @param tempIntegrals Vector of integration results on the previous iteration
+ * @param d_restTaskCount Counter of the integration tasks which have not converged yet
+ * @param restTasks Indices of tasks which have not yet converged
+ * @param tempRestTasks Indices of tasks to be integrated (a list filled on the previous iteration or nullptr, then all tasks are checked)
+ * @param taskConverged Vector of flags which indicate whether integration task has converged or not
+ * 
+ * Both current integral values and values from the previous iteration have the same length which is equal to the number of original tasks.
+ * Runge rule criterion is calculated component-wise for all 4 components of integral value, then norm is calculated and compared with tolerance.
+ * It is crucial to mark converged tasks with a flag so as not to calculate them again in order to spare computation time.
+ * There may be a situation when a cell is further refined and some of the integrals where it is \f$i\f$-th cell have converged
+ * (and should not be further calculated) and some have not and require splitting.
+ */
 __global__ void kCompareIntegrationResults(int n, const double4 *integrals, const double4 *tempIntegrals, int *d_restTaskCount, int *restTasks, const int *tempRestTasks, unsigned char *taskConverged)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -68,6 +110,13 @@ Evaluator3D::~Evaluator3D()
     free_device(d_restTaskCount);
 }
 
+/*!
+ * -# Necessary memory allocations are performed (including additional vectors if adaptive error control is used).
+ * -# Neighbor pairs are directly copied to vectors of tasks and filled with reversed pairs using a specific kernel function.
+ * -# Necessary preparation for numerical integration is performed (memory allocations, mesh refinement, etc.).
+ * -# Integration procedures are called for different types (should be implemented in the child classes).
+ * -# Integration error can optionally be calculated by comparing integrals for \f$(i,j)\f$ and \f$(j,i)\f$ pairs.
+ */
 void Evaluator3D::runAllPairs(bool checkCorrectness)
 {
     int simpleNeighborsTasksNum = 2 * mesh.getSimpleNeighbors().size;
@@ -154,6 +203,13 @@ void Evaluator3D::runAllPairs(bool checkCorrectness)
     }
 }
 
+/*!
+ * -# Memory allocation is performed for types of neighbors for which the lists of tasks are non-empty. Tasks are copied from host to device memory.
+ * -# Necessary preparation for numerical integration is performed (memory allocations, mesh refinement, etc.).
+ * -# Integration procedures are called for types with non-empty lists (should be implemented in the child classes).
+ * 
+ * Integration error is not calculated as a list may not contain the \f$(i,j)\f$ and \f$(j,i)\f$ pairs at the same time.
+ */
 void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, const std::vector<int3> &userAttachedNeighborsTasks, const std::vector<int3> &userNotNeighborsTasks)
 {
     if(userSimpleNeighborsTasks.empty() && userAttachedNeighborsTasks.empty() && userNotNeighborsTasks.empty())
@@ -231,6 +287,13 @@ void Evaluator3D::runPairs(const std::vector<int3> &userSimpleNeighborsTasks, co
     }    
 }
 
+/*!
+ * A kernel function is called for 2 vectors of integral values (double4), which are compared using the Runge rule:
+ * \f$\varepsilon = \left\|\frac{I_h - I_{h/2}}{2^p I_{h/2} - I_h}\right\|\f$, where \f$I_h\f$ and \f$I_{h/2}\f$ are values (each separate component)
+ * of the integrals for previous and current iterations of refinement, respectively. After 2 iterations (first time comparison is performed)
+ * all the integrals are compared, then the list is formed of indices of integrals which have not converged. The function
+ * prints the message and returns the number of tasks which have converged after current iteration.
+ */
 int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, bool allPairs)
 {
     zero_value_device(d_restTaskCount, 1);
@@ -277,6 +340,17 @@ int Evaluator3D::compareIntegrationResults(neighbour_type_enum neighborType, boo
     return notConvergedTaskCount;
 }
 
+/*!
+ * The following data is exported for each integral:
+ * - task - pair \f$(i,j)\f$;
+ * - integral value - 3D vector;
+ * - (optional) integration error by comparing with the \f$(j,i)\f$ pair, if previously computed.
+ * 
+ * These 3 (or only 2, if error is not exported) vectors are copied to host from device memory.
+ * 
+ * In CSV format these values are output sequentually with separators placed between them.
+ * In plain text format the values are output in the following format: "(i,j): [Ix, Iy, Iz], error = value".
+ */
 bool Evaluator3D::outputResultsToFile(neighbour_type_enum neighborType, output_format_enum outputFormat) const
 {
     int3 *tasks;

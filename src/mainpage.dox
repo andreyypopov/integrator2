@@ -1,0 +1,33 @@
+/*! \mainpage Integrator library documentation
+ *
+ *  The project is built as a shared library. Main classes are Mesh3D, Evaluator3D and its descendants
+ *  (EvaluatorJ3DK, all stored in the **evaluators** folder) and NumericalIntegrator3D (together with QuadratureFormula3D).
+ *  The **common** folder contains auxiliary classes and functions (CUDA helpers, time measurement, memory allocation, etc.).
+ *  
+ *  \section common_sec Common files
+ *  The folder contains CONSTANTS class for handling of various constants and parameters, CUDA helper, mathematical and memory
+ *  management functions, deviceVector template class for operating with vectors on GPU, GpuTimer class for time measurement
+ *  using CUDA events.
+ *
+ *  \section evaluators_sec Evaluators
+ *  -# Evaluator3D is an abstract class for organization of integration procedure in 3D. It contains fields and functions
+ *  which are independent of specific implementation:
+ *    - vectors of tasks, integration results with separate values of \f$\mathbf{\Psi}\f$ and \f$\Theta\f$ and single Point3 values,
+ *    vectors of indices of tasks which have not yet converged (in case of adaptive error control procedure),
+ *    vectors of integration error calculated for \f$(i,j)\f$ and \f$(j,i)\f$ pairs, etc.;
+ *    - functions for preparation and execution of integration tasks for cases of all tasks and a list of tasks passed by user
+ *    (these function invoke the implementation-dependent functions in descendent classes);
+ *    - function for output of results to a plain-text or CSV file;
+ *    - function for comparison of integration results of 2 consecutive integration iterations (using Runge rule);
+ *    - kernel function for calculation error for \f$(i,j)\f$ and \f$(j,i)\f$ pairs.
+ *  -# EvaluatorJ3DK is a specific class for calculation of integrals of the Newtonian potential gradient. It contains
+ *  all the necessary implementation of integration procedure for both regular and singular parts of the integrals
+ *  for simple, attached and non-neighboring cell pairs.
+ *
+ *  \section other_classes_sec Other important classes
+ *  -# Mesh3D handles the surface mesh (vertices and triangles), calculation of its normals, areas, filling of lists of neighbor pairs,
+ *      as well as export of mesh to VTK and OBJ files.
+ *  -# NumericalIntegrator3D class manages the whole procedure of numerical integration using Gaussian quadratures, mesh refinement,
+ *      creation of tasks for refined cells.
+ *  -# QuadratureFormula3D is responsible for all data in the Gaussian quadrature formula - Gaussian points and their weights.
+ */

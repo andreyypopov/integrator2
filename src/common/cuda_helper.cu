@@ -1,3 +1,7 @@
+/*!
+ * @file cuda_helper.cu
+ * @brief Implementation of CUDA helper functions
+ */
 #include "cuda_helper.cuh"
 
 __global__ void kFillOrdinal(int n, int *indices)

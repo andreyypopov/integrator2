@@ -1,11 +1,39 @@
+/*!
+ * @file NumericalIntegrator3d.cu
+ * @brief Implementation of the procedures of numerical integration, operations before (preparation of mesh and tasks) and after it (results summation, etc.)
+ */
 #include "NumericalIntegrator3d.cuh"
 
 #include "common/cuda_memory.cuh"
 
-__constant__ Point3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];
-__constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];
-__constant__ int    c_GaussPointsNumber;
+__constant__ Point3 c_GaussPointsCoordinates[CONSTANTS::MAX_GAUSS_POINTS];      //!< Array of Gauss points coordinates (for use in the quadrature formula)
+__constant__ double c_GaussPointsWeights[CONSTANTS::MAX_GAUSS_POINTS];          //!< Array of Gauss points weights (for use in the quadrature formula)
+__constant__ int    c_GaussPointsNumber;                                        //!< Number of Gauss points
 
+/*!
+ * @brief Split an existing triangular cell into 4 new ones using midpoints of its edges
+ * 
+ * @param n Number of cells in the current mesh (may be original or previous iteration of refinement)
+ * @param refinedVertices Vector of new vertices to be filled (containts vertices from the previous iteration of refinement)
+ * @param refinedCells Vector of new cells to be filled
+ * @param refinedCellMeasures Vector of new cell measures (areas)
+ * @param originalCells Indices of original cells corresponding to the new cells
+ * @param refinedVerticesCellsNum Counters for refined vertices (.x) and cells (.y)
+ * @param tempVertices Vector of existing vertices used for refinement
+ * @param tempCells Vector of existing cells used for refinement
+ * @param tempCellMeasures Vector of measures (areas) for existing cells
+ * @param tempOriginalCells Indices of original cells for the existing cells
+ * @param refinedCellParents Vector of direct parents for the new refined cells
+ * @param cellRequiresRefinement Vector of flags showing whether the original cell requiresrefinement
+ * 
+ * Process of splitting a single cell is organized as the following:
+ * - for each cell in the current mesh we check whether it belongs to an original cells which needs refinement (or the whole mesh is refined);
+ * - 3 new vertices are created in the midpoints of edges of the existing triangle and added to the vector of new vertices;
+ * - 4 new cells are created and added to the vector of new cells. Counters for numbers of new vertices and cells are increased using atomicAdd;
+ * - measures are filled with the value of \f$\frac14 S_i\f$ (\f$S_i\f$ is the area of triangle being split);
+ * - index of the original cell is directly copied to the new cells from the cell being refined;
+ * - if needed, index of the direct parent cell of the new cells is assigned to the index of cell being refined.
+ */
 __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, double *refinedCellMeasures, int *originalCells, int2 *refinedVerticesCellsNum,
         const Point3 *tempVertices, const int3 *tempCells, const double *tempCellMeasures, const int *tempOriginalCells, int *refinedCellParents = nullptr, const unsigned char *cellRequiresRefinement = nullptr)
 {
@@ -58,6 +86,28 @@ __global__ void kSplitCell(int n, Point3 *refinedVertices, int3 *refinedCells, d
     }
 }
 
+/*!
+ * @brief Count and (optionally) create new integration tasks for the refined cells from the existing ones
+ * 
+ * @param tasksNum Number of the existing integration tasks
+ * @param refinedCellsNum Number of cells in the refined mesh (for which the tasks are created/counted)
+ * @param counter Counter of the new tasks
+ * @param tasks Existing integration tasks from which new ones are created
+ * @param originalCells Indices of cell of original mesh for the refined mesh cells
+ * @param tempOriginalCells Indices of cell of original mesh for the previous mesh cells
+ * @param refinedCellParents Indices of direct parents of the cells of the refined mesh
+ * @param taskConverged Flags showing that the original integration task has converged
+ * @param refinedTasks Vector of new tasks being created (if nullptr then the tasks are only counted)
+ * 
+ * Existing tasks are being analyzed in large blocks, indices of original cells for the new refined cells
+ * (and optionally indices of direct cell parents for them) are loaded into shared memory.
+ * After the indices of original cells have been loaded, we analyze each existing integration task. If tasks are created for all cells
+ * or this task is the part of original task has not converged we proceed further and check loaded indices of original cells for new ones.
+ * If
+ * -# These indices are the same for the \f$i\f$-th panel of the existing task and the new refined cell and
+ * -# The new refined cell has the \f$i\f$-th panel of the existing task as its direct parent
+ * then a new task is counted and (optionally) created for this new refined cell and the \f$j\f$-th panel of the existing task.
+ */
 __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *counter, const int3 *tasks, const int *originalCells, const int *tempOriginalCells, const int *refinedCellParents = nullptr, unsigned char *taskConverged = nullptr, int3 *refinedTasks = nullptr)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -97,6 +147,16 @@ __global__ void kCountOrCreateTasks(int tasksNum, int refinedCellsNum, int *coun
 	}
 }
 
+/*!
+ * @brief Kernel function for summation of results of integration over refined cells
+ * 
+ * @param n Number of tasks of integration over refined cells
+ * @param results Target vector of integration results for original tasks
+ * @param refinedResults Vector of integration results for refined tasks
+ * @param refinedTasks Vector of integration tasks over refined cells
+ *
+ * Summation is performed using atomicAdd for double-precision numbers, separately for each component of \f$\mathbf{\Psi}\f$ and \f$\theta\f$
+ */
 __global__ void kSumIntegrationResults(int n, double4 *results, const double4 *refinedResults, const int3 *refinedTasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -112,6 +172,17 @@ __global__ void kSumIntegrationResults(int n, double4 *results, const double4 *r
     }
 }
 
+/*!
+ * @brief Extracting the set of original cells that require refinement (by setting the flag for them to 'true') 
+ * 
+ * @param n Number of integration tasks which have not converged
+ * @param cellNeedsRefinement Vector of flags showing whether an original cell requires further refinement
+ * @param restTasks Indices of integration tasks over refined cells which have not converged yet
+ * @param tasks Vector of integration tasks for refined cells
+ * 
+ * Remaining integration tasks for refined cells are analyzed and their 3rd indices are used to determine the original cell
+ * that needs further refinement. If the cell is the \f$i\f$-th control panel for at least one task its flag is set to 'true'.
+ */
 __global__ void kExtractCellNeedsRefinement(int n, unsigned char *cellNeedsRefinement, const int *restTasks, const int3 *tasks)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -387,7 +458,7 @@ void NumericalIntegrator3D::resetMesh()
     copy_h2d(&verticesCellsNum, refinedVerticesCellsNum, 1);
 }
 
-int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTasks, const deviceVector<int3> *tasks, neighbour_type_enum neighborType)
+int NumericalIntegrator3D::determineCellsToBeRefined(const deviceVector<int> &restTasks, const deviceVector<int3> *tasks, neighbour_type_enum neighborType)
 {
     deviceVector<unsigned char> *refinementsRequired;
 
@@ -430,24 +501,18 @@ int NumericalIntegrator3D::determineCellsToBeRefined(deviceVector<int> &restTask
 int NumericalIntegrator3D::updateTasks(const deviceVector<int3> &originalTasks, neighbour_type_enum neighborType)
 {
     deviceVector<int3> *refinedTasks;
-    unsigned char *integralsConverged = nullptr;
+    unsigned char *integralsConverged = getIntegralsConverged(neighborType)->data;
 
     switch (neighborType)
     {
     case neighbour_type_enum::simple_neighbors:
         refinedTasks = &refinedSimpleNeighborsTasks;
-        if(errorControlType == error_control_type_enum::automatic_error_control)
-            integralsConverged = simpleNeighborsIntegralsConverged.data;
         break;
     case neighbour_type_enum::attached_neighbors:
         refinedTasks = &refinedAttachedNeighborsTasks;
-        if(errorControlType == error_control_type_enum::automatic_error_control)
-            integralsConverged = attachedNeighborsIntegralsConverged.data;
         break;
     case neighbour_type_enum::not_neighbors:
         refinedTasks = &refinedNotNeighborsTasks;
-        if(errorControlType == error_control_type_enum::automatic_error_control)
-            integralsConverged = notNeighborsIntegralsConverged.data;
         break;
     }
 
