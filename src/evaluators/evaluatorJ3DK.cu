@@ -1,5 +1,24 @@
+/*!
+ * @file evaluatorJ3DK.cu
+ * @brief Implementation of integration procedures for integrals of Newtonian potential gradient (both numerical and analytical
+ * integration for different types of neighbors)
+ */
 #include "evaluatorJ3DK.cuh"
 
+/*!
+ * @brief Kernel function for analytical integration of the singular part for the attached neighbor pairs
+ * 
+ * @param n Number of integration tasks
+ * @param results A double4 vector with integration results (already contains results of numerical integration of the regular part)
+ * @param tasks List of integration tasks
+ * @param vertices Vector of vertex coordinates of the original mesh
+ * @param cells Vector of vertex indices for cell of the original mesh
+ * @param normals Vector of cell normals for the original mesh
+ * @param measures Vector of cell measures for the original mesh
+ * 
+ * A device function is called, which performs all the computations, and the obtained value is then added to already calculated
+ * integral of the regular part.
+ */
 __global__ void kIntegrateSingularPartAttached(int n, double4 *results, const int3 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -11,6 +30,20 @@ __global__ void kIntegrateSingularPartAttached(int n, double4 *results, const in
     }
 }
 
+/*!
+ * @brief Kernel function for analytical integration of the singular part for the simple neighbor pairs
+ * 
+ * @param n Number of integration tasks
+ * @param results A double4 vector with integration results (already contains results of numerical integration of the regular part)
+ * @param tasks List of integration tasks
+ * @param vertices Vector of vertex coordinates of the original mesh
+ * @param cells Vector of vertex indices for cells of the original mesh
+ * @param normals Vector of cell normals for the original mesh
+ * @param measures Vector of cell measures for the original mesh
+ * 
+ * A device function is called, which performs all the computations, and the obtained value is then added to already calculated
+ * integral of the regular part.
+ */
 __global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int3 *tasks, const Point3 *vertices, const int3 *cells, const Point3 *normals, const double *measures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -22,6 +55,35 @@ __global__ void kIntegrateSingularPartSimple(int n, double4 *results, const int3
     }
 }
 
+/*!
+ * @brief Kernel function for numerical integration of the regular part for simple neighbor cell pairs
+ * 
+ * @param n Number of integration tasks
+ * @param integrals Vector of integral values (with separate values for \f$\mathbf{\Psi}\f$ and \f$\Theta\f$) to be filled
+ * @param refinedTasks Vector of integration tasks for refined cells
+ * @param originalTasks Vector of original integration tasks
+ * @param vertices Vector of vertex coordinates of the original mesh
+ * @param cells Vector of vertex indices for cells of the original mesh
+ * @param cellNormals Vector of cell normals for the original mesh
+ * @param cellMeasures Vector of cell measures for the original mesh
+ * @param refinedVertices Vector of vertex coordinates of the refined cells (might not cover the whole surface)
+ * @param refinedCells Vector of vertex indices for the refined cells (might not cover the whole surface)
+ * @param refinedCellMeasures Vector of measures for the refined cells
+ * @param GaussPointsNum Number of Gaussian points in the quadrature formula
+ * 
+ * In order to calculate the integral value the quadrature formula is used
+ * \f[
+ *      \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+ * \f]
+ * 
+ * -# \f$N_{GP}\f$ positions of Gaussian points \f$\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\f$ are calculated
+ * using positions of vertices of triangle \f$\bigtriangleup_i\f$.
+ * -# \f$N_{GP}\f$ function values \f$\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\f$ are calculated using original mesh data
+ * for triangle \f$\bigtriangleup_j\f$. Functions \f$\Theta - \Theta^{\text{sing}}\f$ and \f$\mathbf{\Psi} - \mathbf{\Psi}^{\text{sing}}\f$
+ * (::thetaPsi - ::singularPartSimple) are used for integration of the regular part.
+ * -# Quadrature formula is actually evaluated using weights of Gaussian points.
+ * -# The obtained value is multiplied by the area of triangle \f$\bigtriangleup_i\f$. 
+ */
 __global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks,
             const Point3 *vertices, const int3 *cells, const Point3 *cellNormals, const double *cellMeasures,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
@@ -45,6 +107,34 @@ __global__ void kIntegrateRegularPartSimple(int n, double4 *integrals, const int
     }
 }
 
+/*!
+ * @brief Kernel function for numerical integration of the regular part for attached neighbor cell pairs
+ * 
+ * @param n Number of integration tasks
+ * @param integrals Vector of integral values (with separate values for \f$\mathbf{\Psi}\f$ and \f$\Theta\f$) to be filled
+ * @param refinedTasks Vector of integration tasks for refined cells
+ * @param originalTasks Vector of original integration tasks
+ * @param vertices Vector of vertex coordinates of the original mesh
+ * @param cells Vector of vertex indices for cells of the original mesh
+ * @param cellNormals Vector of cell normals for the original mesh
+ * @param refinedVertices Vector of vertex coordinates of the refined cells (might not cover the whole surface)
+ * @param refinedCells Vector of vertex indices for the refined cells (might not cover the whole surface)
+ * @param refinedCellMeasures Vector of measures for the refined cells
+ * @param GaussPointsNum Number of Gaussian points in the quadrature formula
+ * 
+ * In order to calculate the integral value the quadrature formula is used
+ * \f[
+ *      \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+ * \f]
+ * 
+ * -# \f$N_{GP}\f$ positions of Gaussian points \f$\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\f$ are calculated
+ * using positions of vertices of triangle \f$\bigtriangleup_i\f$.
+ * -# \f$N_{GP}\f$ function values \f$\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\f$ are calculated using original mesh data
+ * for triangle \f$\bigtriangleup_j\f$. Functions \f$\Theta - \Theta^{\text{sing}}\f$ and \f$\mathbf{\Psi} - \mathbf{\Psi}^{\text{sing}}\f$
+ * (::thetaPsi - ::singularPartAttached) are used for integration of the regular part.
+ * -# Quadrature formula is actually evaluated using weights of Gaussian points.
+ * -# The obtained value is multiplied by the area of triangle \f$\bigtriangleup_i\f$. 
+ */
 __global__ void kIntegrateRegularPartAttached(int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks,
             const Point3 *vertices, const int3 *cells, const Point3 *cellNormals,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
@@ -68,6 +158,31 @@ __global__ void kIntegrateRegularPartAttached(int n, double4 *integrals, const i
     }
 }
 
+/*!
+ * @brief Kernel function for numerical integration for non-neighboring cell pairs
+ * 
+ * @param n Number of integration tasks
+ * @param integrals Vector of integral values (with separate values for \f$\mathbf{\Psi}\f$ and \f$\Theta\f$) to be filled
+ * @param refinedTasks Vector of integration tasks for refined cells
+ * @param vertices Vector of vertex coordinates of the original mesh
+ * @param cells Vector of vertex indices for cells of the original mesh
+ * @param refinedVertices Vector of vertex coordinates of the refined cells (might not cover the whole surface)
+ * @param refinedCells Vector of vertex indices for the refined cells (might not cover the whole surface)
+ * @param refinedCellMeasures Vector of measures for the refined cells
+ * @param GaussPointsNum Number of Gaussian points in the quadrature formula
+ * 
+ * In order to calculate the integral value the quadrature formula is used
+ * \f[
+ *      \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+ * \f]
+ * 
+ * -# \f$N_{GP}\f$ positions of Gaussian points \f$\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\f$ are calculated
+ * using positions of vertices of triangle \f$\bigtriangleup_i\f$.
+ * -# \f$N_{GP}\f$ function values \f$\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\f$ are calculated using original mesh data
+ * for triangle \f$\bigtriangleup_j\f$. Functions \f$\Theta\f$ and \f$\mathbf{\Psi}\f$ (::thetaPsi) are used for integration.
+ * -# Quadrature formula is actually evaluated using weights of Gaussian points.
+ * -# The obtained value is multiplied by the area of triangle \f$\bigtriangleup_i\f$. 
+ */
 __global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *refinedTasks, const Point3 *vertices, const int3 *cells,
             const Point3 *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)
 {
@@ -89,6 +204,23 @@ __global__ void kIntegrateNotNeighbors(int n, double4 *integrals, const int3 *re
     }
 }
 
+/*!
+ * @brief Transformation of integration results from double4 to a vector of Point3 for simple neighbors
+ * 
+ * @param n Number of integral values
+ * @param results A Point3 vector to be filled with final integral values
+ * @param integrals A double4 vector of calculated values of \f$\mathbf{\Psi}\f$ and \f$\Theta\f$
+ * @param tasks List of integration tasks
+ * @param cellNormals Vector of cell normals
+ * @param cellMeasures Vector of cell measures
+ * 
+ * The final integral value \f$\mathbf{J}(K_i,K_j)\f$ is calculated as \f$\frac1{4\pi}\left((\theta + 2p\cdot 2\pi S_i)\mathbf{n}_j + \mathbf{\Psi}\times\mathbf{n}_j\right)\f$
+ * where \f$p\f$ is chosen in such a way so as to ensure
+ * \f[
+ *      -2\pi S_i \leq \int\limits_{K_i} \Theta(M_i,K_j)dS_r \leq 2\pi S_i,
+ * \f]
+ * which can be done in a unique way if panels \f$\bigtriangleup_i\f$ and \f$\bigtriangleup_j\f$ share no common internal points.
+ */
 __global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const double4 *integrals, const int3 *tasks, const Point3 *cellNormals, const double *cellMeasures)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -108,6 +240,17 @@ __global__ void kFinalizeSimpleNeighborsResults(int n, Point3 *results, const do
     }
 }
 
+/*!
+ * @brief Transformation of integration results from double4 to a vector of Point3 for attached neighbors and non-neighbor pairs
+ * 
+ * @param n Number of integral values
+ * @param results A Point3 vector to be filled with final integral values
+ * @param integrals A double4 vector of calculated values of \f$\mathbf{\Psi}\f$ and \f$\Theta\f$
+ * @param tasks List of integration tasks
+ * @param cellNormals Vector of cell normals
+ * 
+ * The final integral value \f$\mathbf{J}(K_i,K_j)\f$ is calculated as \f$\frac1{4\pi}\left(\theta\mathbf{n}_j + \mathbf{\Psi}\times\mathbf{n}_j\right)\f$.
+ */
 __global__ void kFinalizeNonSimpleResults(int n, Point3 *results, const double4 *integrals, const int3 *tasks, const Point3 *cellNormals)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -263,11 +406,35 @@ __device__ double4 singularPartSimple(const Point3 &pt, int i, int j, const Poin
 	return res;
 }
 
+/*!
+ * @brief Auxiliary function \f$\phi\f$ used in analytic formulae for integration of singular part for attached neighbors
+ * 
+ * @param sinCosAlpha \f$(\sin\alpha,\cos\alpha)\f$ stored as a single double2 value
+ * @param sinCosGamma \f$(\sin\gamma,\cos\gamma)\f$ stored as a single double2 value
+ * @param sinXi \f$\sin\xi\f$
+ * @param cosLambda \f$\cos\lambda\f$
+ * @return Value of \f$\phi = 2\mathrm{arctg}(\sin\xi \sin\alpha \sin\gamma, 1 - \cos\alpha + \cos\gamma + \cos\lambda)\f$
+ */
 __device__ double phi(double2 sinCosAlpha, double2 sinCosGamma, double sinXi, double cosLambda)
 {
     return 2.0 * atan2(sinXi * sinCosAlpha.x * sinCosGamma.x, 1.0 - sinCosAlpha.y + sinCosGamma.y + cosLambda);
 }
 
+/*!
+ * @brief Auxiliary functions \f$q_{\Theta}\f$ and \f$q_{\Psi}\f$ used in analytic formulae for integration of singular part for attached neighbors
+ * 
+ * @param sinCosAlpha \f$(\sin\alpha,\cos\alpha)\f$ stored as a single double2 value
+ * @param sinCosBeta \f$(\sin\beta,\cos\beta)\f$ stored as a single double2 value
+ * @param sinCosGamma \f$(\sin\gamma,\cos\gamma)\f$ stored as a single double2 value
+ * @param sinCosNu \f$(\sin\nu,\cos\nu)\f$ stored as a single double2 value
+ * @param sinCosXi \f$(\sin\xi,\cos\xi)\f$ stored as a single double2 value
+ * @param cosMu \f$\cos\mu\f$
+ * @param cosLambda \f$\cos\lambda\f$
+ * @return Values \f$(q_{\Theta}, q_{\Psi})\f$ stored as a single double2
+ * 
+ * The function is applicable for all cases excluding only the case of both triangles lying in the same plane
+ * (which is handled by the ::q_thetaPsi_zero function).
+ */
 __device__ double2 q_thetaPsi(double2 sinCosAlpha, double2 sinCosBeta, double2 sinCosGamma, double2 sinCosNu, double2 sinCosXi, double cosMu, double cosLambda)
 {
     double2 res;
@@ -293,6 +460,17 @@ __device__ double2 q_thetaPsi(double2 sinCosAlpha, double2 sinCosBeta, double2 s
     return res;
 }
 
+/*!
+ * @brief Auxiliary functions \f$q_{\Theta}\f$ and \f$q_{\Psi}\f$ used in analytic formulae for integration of singular part for attached neighbors (special case of both triangles lying in one plane)
+ * 
+ * @param sinCosBeta \f$(\sin\beta,\cos\beta)\f$ stored as a single double2 value
+ * @param sinCosNu \f$(\sin\nu,\cos\nu)\f$ stored as a single double2 value
+ * @param sinAlpha \f$\sin\alpha\f$
+ * @return Values \f$(q_{\Theta}, q_{\Psi})\f$ stored as a single double2
+ * 
+ * For the special case of both triangles lying in one plane a limit value for \f$q_{\Psi}\f$ is used, \f$q_{\Theta} = 0\f$
+ * (general case is handled by the ::q_thetaPsi function).
+ */
 __device__ double2 q_thetaPsi_zero(double2 sinCosBeta, double2 sinCosNu, double sinAlpha)
 {
     double2 res;
@@ -302,6 +480,34 @@ __device__ double2 q_thetaPsi_zero(double2 sinCosBeta, double2 sinCosNu, double 
     return res;
 }
 
+/*!
+ * @brief Auxiliary functions \f$q^{\Theta}\f$ and \f$q^{\Psi}\f$ used in analytic formulae for integration of singular part for simple neighbors
+ * 
+ * @param sinCosXi \f$(\sin\xi,\cos\xi)\f$ stored as a single double2 value
+ * @param mu \f$\mu\f$ angle
+ * @param sinCosMu \f$(\sin\mu,\cos\mu)\f$ stored as a single double2 value
+ * @param logSinMu \f$\ln\sin\mu\f$
+ * @param logSinNu \f$\ln\sin\nu\f$
+ * @param psi \f$\psi\f$ angle
+ * @param sinCosPsi \f$(\sin\psi,\cos\psi)\f$ stored as a single double2 value
+ * @param nu \f$\nu\f$ angle
+ * @param sinCosNu \f$(\sin\nu,\cos\nu)\f$ stored as a single double2 value
+ * @param kappa \f$\kappa\f$ angle
+ * @param sinKappa \f$\sin\kappa\f$
+ * @param sinNuPsi \f$\sin(\nu + \psi)\f$
+ * @param sinMuPsi \f$\sin(\mu - \psi)\f$
+ * @param delta \f$\delta\f$ angle
+ * @param sinCosDelta \f$(\sin\delta,\cos\delta)\f$ stored as a single double2 value
+ * @param cosLambda \f$\cos\lambda\f$
+ * @param cosTheta \f$\cos\theta\f$
+ * @param cosEta \f$\cos\eta\f$
+ * @param cosSigma \f$\cos\sigma\f$
+ * @param cosChi \f$\cos\chi\f$
+ * @return Values \f$(q^{\Theta}, q^{\Psi})\f$ stored as a single double2
+ * 
+ * 4 special cases are checked sequentially; if none of them is the case, then the general case is used. Function is used
+ * in ::integrateSingularPartSimple for analytical integration of the singular part for simple neighbor cell pairs.
+ */
 __device__ double2 q_thetaPsi_cont(double2 sinCosXi, double mu, double2 sinCosMu, double logSinMu, double logSinNu,
         double psi, double2 sinCosPsi, double nu, double2 sinCosNu, double kappa, double sinKappa, double sinNuPsi, double sinMuPsi,
         double delta, double2 sinCosDelta, double cosLambda, double cosTheta, double cosEta, double cosSigma, double cosChi)

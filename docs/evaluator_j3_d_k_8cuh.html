@@ -106,6 +106,9 @@ $(function(){initNavTree('evaluator_j3_d_k_8cuh.html',''); initResizable(); });
   <div class="headertitle"><div class="title">evaluatorJ3DK.cuh File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="class_evaluator_j3_d_k.html" title="Descendent class of Evaluator3D for calculation of repeated integrals of gradient of Newtonian potent...">EvaluatorJ3DK</a> class for computation of integral of Newtonian potential gradient.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="evaluator3d_8cuh_source.html">evaluator3d.cuh</a>&quot;</code><br />
 </div>
 <p><a href="evaluator_j3_d_k_8cuh_source.html">Go to the source code of this file.</a></p>
@@ -113,6 +116,7 @@ $(function(){initNavTree('evaluator_j3_d_k_8cuh.html',''); initResizable(); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_evaluator_j3_d_k.html">EvaluatorJ3DK</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Descendent class of <a class="el" href="class_evaluator3_d.html" title="Parent class for evaluation of integrals in 3D.">Evaluator3D</a> for calculation of repeated integrals of gradient of Newtonian potential \(\mathbf{J}(K_i,K_j)\).  <a href="class_evaluator_j3_d_k.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
@@ -123,23 +127,33 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a4e33ea7dd3bd04aa83b4b9692298fd45" id="r_a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e33ea7dd3bd04aa83b4b9692298fd45">thetaPsi</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 &amp;triangle)</td></tr>
+<tr class="memdesc:a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of the functions \(\mathbf{\Psi}\) and \(\Theta\) in the integral \(\mathbf{J}(M_i,K_j)\) of Newtonian potential gradient.  <br /></td></tr>
 <tr class="separator:a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8151279f5aea132fbb6da9c73c1fc75b" id="r_a8151279f5aea132fbb6da9c73c1fc75b"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8151279f5aea132fbb6da9c73c1fc75b">singularPartAttached</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells)</td></tr>
+<tr class="memdesc:a8151279f5aea132fbb6da9c73c1fc75b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for attached neighbors.  <br /></td></tr>
 <tr class="separator:a8151279f5aea132fbb6da9c73c1fc75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2dfab6efdf762c84256e1bcd90cae1a" id="r_af2dfab6efdf762c84256e1bcd90cae1a"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2dfab6efdf762c84256e1bcd90cae1a">singularPartSimple</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:af2dfab6efdf762c84256e1bcd90cae1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for simple neighbors.  <br /></td></tr>
 <tr class="separator:af2dfab6efdf762c84256e1bcd90cae1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38d301b5454f4ec2cf9eccd25998ac5b" id="r_a38d301b5454f4ec2cf9eccd25998ac5b"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38d301b5454f4ec2cf9eccd25998ac5b">integrateSingularPartAttached</a> (int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:a38d301b5454f4ec2cf9eccd25998ac5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:a38d301b5454f4ec2cf9eccd25998ac5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2819f3ea369e621c9c428b470ce7bb73" id="r_a2819f3ea369e621c9c428b470ce7bb73"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2819f3ea369e621c9c428b470ce7bb73">integrateSingularPartSimple</a> (int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:a2819f3ea369e621c9c428b470ce7bb73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:a2819f3ea369e621c9c428b470ce7bb73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a044254ee74fc1bb96291ff5f533e967e" id="r_a044254ee74fc1bb96291ff5f533e967e"><td class="memItemLeft" align="right" valign="top">__device__ int2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a044254ee74fc1bb96291ff5f533e967e">shiftsForSimpleNeighbors</a> (const int3 &amp;triangle1, const int3 &amp;triangle2)</td></tr>
+<tr class="memdesc:a044254ee74fc1bb96291ff5f533e967e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine necessary index shifts for pair of simple neighbor triangles (positions of their common vertex in each triangle)  <br /></td></tr>
 <tr class="separator:a044254ee74fc1bb96291ff5f533e967e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef2ef313187c7ad423e4203c3455596b" id="r_aef2ef313187c7ad423e4203c3455596b"><td class="memItemLeft" align="right" valign="top">__device__ int2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef2ef313187c7ad423e4203c3455596b">shiftsForAttachedNeighbors</a> (const int3 &amp;triangle1, const int3 &amp;triangle2)</td></tr>
+<tr class="memdesc:aef2ef313187c7ad423e4203c3455596b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine necessary index shifts for pair of attached neighbor triangles (positions of the third vertex, opposite to the common edge, in each triangle)  <br /></td></tr>
 <tr class="separator:aef2ef313187c7ad423e4203c3455596b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a502df3072fdc771498c7df548b7625a3" id="r_a502df3072fdc771498c7df548b7625a3"><td class="memItemLeft" align="right" valign="top">__device__ int3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a502df3072fdc771498c7df548b7625a3">rotateLeft</a> (const int3 &amp;triangle, int shift)</td></tr>
+<tr class="memdesc:a502df3072fdc771498c7df548b7625a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a new triangle with indices obtained by shifting the indices of an existing one.  <br /></td></tr>
 <tr class="separator:a502df3072fdc771498c7df548b7625a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_evaluator_j3_d_k.html" title="Descendent class of Evaluator3D for calculation of repeated integrals of gradient of Newtonian potent...">EvaluatorJ3DK</a> class for computation of integral of Newtonian potential gradient. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ab088ffa39369e5d224a8c61de44730b7" name="ab088ffa39369e5d224a8c61de44730b7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab088ffa39369e5d224a8c61de44730b7">&#9670;&#160;</a></span>EVALUATORJ3DK_CUH</h2>
 
@@ -194,6 +208,33 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the attached neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index of the control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Index of the influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of \(\Theta\) and \(\mathbf{\Psi}\) parts of the integrals</dd></dl>
+<p>Scalar part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q_{\Theta}(\xi, \alpha, \beta, \gamma, \mu, \lambda) + 
+             q_{\Theta}(\xi, \beta, \alpha, \delta, \sigma, \theta)\right),
+\]
+</p>
+<p> while vector part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q_{\Psi}(\xi, \alpha, \beta, \gamma, \mu, \lambda)\mathbf{\tau}_b + 
+             q_{\Psi}(\xi, \beta, \alpha, \delta, \sigma, \theta)\mathbf{\tau}_a - q_{\alpha\beta}(\alpha,\beta)\mathbf{\tau}_c\right).
+\]
+</p>
+<p> Values of \(q_{\Theta}\) and \(q_{\Psi}\) are calculated by separate functions (<a class="el" href="evaluator_j3_d_k_8cu.html#a26eeb901ed36a2ea20da704ac464664b" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi</a> and <a class="el" href="evaluator_j3_d_k_8cu.html#ad43d740b65bb6fac4ce3b49773975829" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi_zero</a> depending on relative position of panels \(\bigtriangleup_i, \bigtriangleup_j\)). Value of \(q_{\alpha\beta}\) is calculated directly in this function. \(S_i\) is the area of triangle \(K_i\). </p>
+
 </div>
 </div>
 <a id="a2819f3ea369e621c9c428b470ce7bb73" name="a2819f3ea369e621c9c428b470ce7bb73"></a>
@@ -235,6 +276,32 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the simple neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index of the control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Index of the influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of \(\Theta\) and \(\mathbf{\Psi}\) parts of the integrals</dd></dl>
+<p>Scalar part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q^{\Theta}(\delta_a) - q^{\Theta}(\delta_b) + 4\pi p\right),
+\]
+</p>
+<p> while vector part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q^{\Psi}(\delta_a)\mathbf{\tau}_a + 
+             q^{\Psi}(\delta_b)\mathbf{\tau}_b\right).
+\]
+</p>
+<p> Values of \(q_{\Theta}\) and \(q_{\Psi}\) are calculated by a separate function <a class="el" href="evaluator_j3_d_k_8cu.html#a41603ef537eb328a369f520bb9afc0cf" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for simple neigh...">q_thetaPsi_cont</a>. The \(4\pi p\) term is added later, when transforming the value of integral from double4 to a Point3 (<a class="el" href="evaluator_j3_d_k_8cu.html#a7b875ec8ef8cdc551febe2f744150ccd" title="Transformation of integration results from double4 to a vector of Point3 for simple neighbors.">kFinalizeSimpleNeighborsResults</a> kernel function). \(S_i\) is the area of triangle \(K_i\). </p>
+
 </div>
 </div>
 <a id="a502df3072fdc771498c7df548b7625a3" name="a502df3072fdc771498c7df548b7625a3"></a>
@@ -255,6 +322,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Generate a new triangle with indices obtained by shifting the indices of an existing one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle</td><td>Indices of an existing triangle </td></tr>
+    <tr><td class="paramname">shift</td><td>Size of shift </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifted indices </dd></dl>
 
 </div>
 </div>
@@ -277,6 +354,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Determine necessary index shifts for pair of attached neighbor triangles (positions of the third vertex, opposite to the common edge, in each triangle) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle1</td><td>Indices of the first triangle </td></tr>
+    <tr><td class="paramname">triangle2</td><td>Indices of the second triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifts for the attached neighbor triangles </dd></dl>
+
 </div>
 </div>
 <a id="a044254ee74fc1bb96291ff5f533e967e" name="a044254ee74fc1bb96291ff5f533e967e"></a>
@@ -297,6 +384,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Determine necessary index shifts for pair of simple neighbor triangles (positions of their common vertex in each triangle) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle1</td><td>Indices of the first triangle </td></tr>
+    <tr><td class="paramname">triangle2</td><td>Indices of the second triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifts for the simple neighbor triangles </dd></dl>
 
 </div>
 </div>
@@ -333,6 +430,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for attached neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">i</td><td>Control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of functions \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) at location \(M_i\)</dd></dl>
+<p>The function is used in the kernel function <a class="el" href="evaluator_j3_d_k_8cu.html#afe5334c74c2c8f850d7012178f6b90f7" title="Kernel function for numerical integration of the regular part for attached neighbor cell pairs.">kIntegrateRegularPartAttached</a> for integration of the regular part for attached neighbors. </p>
 
 </div>
 </div>
@@ -380,6 +491,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for simple neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">i</td><td>Control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of normals for the cells of the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of measures for the cells of original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of functions \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) at location \(M_i\)</dd></dl>
+<p>The function is used in the kernel function <a class="el" href="evaluator_j3_d_k_8cu.html#a7699c585025a317e4075855b4ede4761" title="Kernel function for numerical integration of the regular part for simple neighbor cell pairs.">kIntegrateRegularPartSimple</a> for integration of the regular part for simple neighbors. </p>
+
 </div>
 </div>
 <a id="a4e33ea7dd3bd04aa83b4b9692298fd45" name="a4e33ea7dd3bd04aa83b4b9692298fd45"></a>
@@ -405,6 +532,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computation of the functions \(\mathbf{\Psi}\) and \(\Theta\) in the integral \(\mathbf{J}(M_i,K_j)\) of Newtonian potential gradient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Global vector of vertex coordinates </td></tr>
+    <tr><td class="paramname">triangle</td><td>Indices of vertices in triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A double4 value with \(\mathbf{\Psi}\) and \(\Theta\)</dd></dl>
+<p>For checks of \(\cos\varphi^c_a\to1\), etc., checks of \(1 - \cos\varphi^c_a &lt; \frac{\varepsilon^2}2\), etc. are performed instead. </p>
 
 </div>
 </div>

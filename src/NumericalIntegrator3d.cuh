@@ -35,7 +35,11 @@ __device__ double4 integrate4D(const double4 *functionValues);
  * @param vertices Vector of all vertices positions
  * @param triangle Indices of the vertices of the triangle
  * 
- * L-coordinates of the Gauss points are read from the constant memory
+ * L-coordinates of the Gauss points are read from the constant memory. Position of \f$i\f$-th Gaussian point is calculated as
+ * \f[
+ *      \mathbf{r}_i = \sum\limits_{k=1}^3 Lcoord_k^{(i)}\mathbf{r}_{v_k},
+ * \f]
+ * where \f$\mathbf{r}_{v_k}\f$ are positions of triangle vertices.
  */
 __device__ void calculateQuadraturePoints(Point3 *quadraturePoints, const Point3 *vertices, const int3 &triangle);
 

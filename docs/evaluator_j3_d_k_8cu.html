@@ -104,50 +104,74 @@ $(function(){initNavTree('evaluator_j3_d_k_8cu.html',''); initResizable(); });
   <div class="headertitle"><div class="title">evaluatorJ3DK.cu File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of integration procedures for integrals of Newtonian potential gradient (both numerical and analytical integration for different types of neighbors)  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="evaluator_j3_d_k_8cuh_source.html">evaluatorJ3DK.cuh</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:afa59fb62e57c3fd4205a6200d34d8bc4" id="r_afa59fb62e57c3fd4205a6200d34d8bc4"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa59fb62e57c3fd4205a6200d34d8bc4">kIntegrateSingularPartAttached</a> (int n, double4 *results, const int3 *tasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:afa59fb62e57c3fd4205a6200d34d8bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for analytical integration of the singular part for the attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:afa59fb62e57c3fd4205a6200d34d8bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae003b365700369ae45fb1e81c7f9bc66" id="r_ae003b365700369ae45fb1e81c7f9bc66"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae003b365700369ae45fb1e81c7f9bc66">kIntegrateSingularPartSimple</a> (int n, double4 *results, const int3 *tasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:ae003b365700369ae45fb1e81c7f9bc66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for analytical integration of the singular part for the simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:ae003b365700369ae45fb1e81c7f9bc66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7699c585025a317e4075855b4ede4761" id="r_a7699c585025a317e4075855b4ede4761"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7699c585025a317e4075855b4ede4761">kIntegrateRegularPartSimple</a> (int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *cellNormals, const double *cellMeasures, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)</td></tr>
+<tr class="memdesc:a7699c585025a317e4075855b4ede4761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for numerical integration of the regular part for simple neighbor cell pairs.  <br /></td></tr>
 <tr class="separator:a7699c585025a317e4075855b4ede4761"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe5334c74c2c8f850d7012178f6b90f7" id="r_afe5334c74c2c8f850d7012178f6b90f7"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe5334c74c2c8f850d7012178f6b90f7">kIntegrateRegularPartAttached</a> (int n, double4 *integrals, const int3 *refinedTasks, const int3 *originalTasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *cellNormals, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)</td></tr>
+<tr class="memdesc:afe5334c74c2c8f850d7012178f6b90f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for numerical integration of the regular part for attached neighbor cell pairs.  <br /></td></tr>
 <tr class="separator:afe5334c74c2c8f850d7012178f6b90f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8db5c047685b0ce9cb529c9095ef8e2" id="r_aa8db5c047685b0ce9cb529c9095ef8e2"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8db5c047685b0ce9cb529c9095ef8e2">kIntegrateNotNeighbors</a> (int n, double4 *integrals, const int3 *refinedTasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *refinedVertices, const int3 *refinedCells, const double *refinedCellMeasures, int GaussPointsNum)</td></tr>
+<tr class="memdesc:aa8db5c047685b0ce9cb529c9095ef8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel function for numerical integration for non-neighboring cell pairs.  <br /></td></tr>
 <tr class="separator:aa8db5c047685b0ce9cb529c9095ef8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b875ec8ef8cdc551febe2f744150ccd" id="r_a7b875ec8ef8cdc551febe2f744150ccd"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b875ec8ef8cdc551febe2f744150ccd">kFinalizeSimpleNeighborsResults</a> (int n, <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *results, const double4 *integrals, const int3 *tasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *cellNormals, const double *cellMeasures)</td></tr>
+<tr class="memdesc:a7b875ec8ef8cdc551febe2f744150ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transformation of integration results from double4 to a vector of Point3 for simple neighbors.  <br /></td></tr>
 <tr class="separator:a7b875ec8ef8cdc551febe2f744150ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ffc2aaa248ebb17931611450739b39e" id="r_a8ffc2aaa248ebb17931611450739b39e"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ffc2aaa248ebb17931611450739b39e">kFinalizeNonSimpleResults</a> (int n, <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *results, const double4 *integrals, const int3 *tasks, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *cellNormals)</td></tr>
+<tr class="memdesc:a8ffc2aaa248ebb17931611450739b39e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transformation of integration results from double4 to a vector of Point3 for attached neighbors and non-neighbor pairs.  <br /></td></tr>
 <tr class="separator:a8ffc2aaa248ebb17931611450739b39e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e33ea7dd3bd04aa83b4b9692298fd45" id="r_a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e33ea7dd3bd04aa83b4b9692298fd45">thetaPsi</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 &amp;triangle)</td></tr>
+<tr class="memdesc:a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of the functions \(\mathbf{\Psi}\) and \(\Theta\) in the integral \(\mathbf{J}(M_i,K_j)\) of Newtonian potential gradient.  <br /></td></tr>
 <tr class="separator:a4e33ea7dd3bd04aa83b4b9692298fd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8151279f5aea132fbb6da9c73c1fc75b" id="r_a8151279f5aea132fbb6da9c73c1fc75b"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8151279f5aea132fbb6da9c73c1fc75b">singularPartAttached</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells)</td></tr>
+<tr class="memdesc:a8151279f5aea132fbb6da9c73c1fc75b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for attached neighbors.  <br /></td></tr>
 <tr class="separator:a8151279f5aea132fbb6da9c73c1fc75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2dfab6efdf762c84256e1bcd90cae1a" id="r_af2dfab6efdf762c84256e1bcd90cae1a"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2dfab6efdf762c84256e1bcd90cae1a">singularPartSimple</a> (const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> &amp;pt, int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:af2dfab6efdf762c84256e1bcd90cae1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for simple neighbors.  <br /></td></tr>
 <tr class="separator:af2dfab6efdf762c84256e1bcd90cae1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22311c8f2793a2db50e33b44edcc98d1" id="r_a22311c8f2793a2db50e33b44edcc98d1"><td class="memItemLeft" align="right" valign="top">__device__ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22311c8f2793a2db50e33b44edcc98d1">phi</a> (double2 sinCosAlpha, double2 sinCosGamma, double sinXi, double cosLambda)</td></tr>
+<tr class="memdesc:a22311c8f2793a2db50e33b44edcc98d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliary function \(\phi\) used in analytic formulae for integration of singular part for attached neighbors.  <br /></td></tr>
 <tr class="separator:a22311c8f2793a2db50e33b44edcc98d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26eeb901ed36a2ea20da704ac464664b" id="r_a26eeb901ed36a2ea20da704ac464664b"><td class="memItemLeft" align="right" valign="top">__device__ double2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26eeb901ed36a2ea20da704ac464664b">q_thetaPsi</a> (double2 sinCosAlpha, double2 sinCosBeta, double2 sinCosGamma, double2 sinCosNu, double2 sinCosXi, double cosMu, double cosLambda)</td></tr>
+<tr class="memdesc:a26eeb901ed36a2ea20da704ac464664b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliary functions \(q_{\Theta}\) and \(q_{\Psi}\) used in analytic formulae for integration of singular part for attached neighbors.  <br /></td></tr>
 <tr class="separator:a26eeb901ed36a2ea20da704ac464664b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad43d740b65bb6fac4ce3b49773975829" id="r_ad43d740b65bb6fac4ce3b49773975829"><td class="memItemLeft" align="right" valign="top">__device__ double2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad43d740b65bb6fac4ce3b49773975829">q_thetaPsi_zero</a> (double2 sinCosBeta, double2 sinCosNu, double sinAlpha)</td></tr>
+<tr class="memdesc:ad43d740b65bb6fac4ce3b49773975829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliary functions \(q_{\Theta}\) and \(q_{\Psi}\) used in analytic formulae for integration of singular part for attached neighbors (special case of both triangles lying in one plane)  <br /></td></tr>
 <tr class="separator:ad43d740b65bb6fac4ce3b49773975829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41603ef537eb328a369f520bb9afc0cf" id="r_a41603ef537eb328a369f520bb9afc0cf"><td class="memItemLeft" align="right" valign="top">__device__ double2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41603ef537eb328a369f520bb9afc0cf">q_thetaPsi_cont</a> (double2 sinCosXi, double mu, double2 sinCosMu, double logSinMu, double logSinNu, double psi, double2 sinCosPsi, double nu, double2 sinCosNu, double kappa, double sinKappa, double sinNuPsi, double sinMuPsi, double delta, double2 sinCosDelta, double cosLambda, double cosTheta, double cosEta, double cosSigma, double cosChi)</td></tr>
+<tr class="memdesc:a41603ef537eb328a369f520bb9afc0cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliary functions \(q^{\Theta}\) and \(q^{\Psi}\) used in analytic formulae for integration of singular part for simple neighbors.  <br /></td></tr>
 <tr class="separator:a41603ef537eb328a369f520bb9afc0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38d301b5454f4ec2cf9eccd25998ac5b" id="r_a38d301b5454f4ec2cf9eccd25998ac5b"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38d301b5454f4ec2cf9eccd25998ac5b">integrateSingularPartAttached</a> (int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:a38d301b5454f4ec2cf9eccd25998ac5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the attached neighbor pairs.  <br /></td></tr>
 <tr class="separator:a38d301b5454f4ec2cf9eccd25998ac5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2819f3ea369e621c9c428b470ce7bb73" id="r_a2819f3ea369e621c9c428b470ce7bb73"><td class="memItemLeft" align="right" valign="top">__device__ double4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2819f3ea369e621c9c428b470ce7bb73">integrateSingularPartSimple</a> (int i, int j, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *vertices, const int3 *cells, const <a class="el" href="cuda__math_8cuh.html#a16b7f1b886fa3763a23e6ae41602aa63">Point3</a> *normals, const double *measures)</td></tr>
+<tr class="memdesc:a2819f3ea369e621c9c428b470ce7bb73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the simple neighbor pairs.  <br /></td></tr>
 <tr class="separator:a2819f3ea369e621c9c428b470ce7bb73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a044254ee74fc1bb96291ff5f533e967e" id="r_a044254ee74fc1bb96291ff5f533e967e"><td class="memItemLeft" align="right" valign="top">__device__ int2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a044254ee74fc1bb96291ff5f533e967e">shiftsForSimpleNeighbors</a> (const int3 &amp;triangle1, const int3 &amp;triangle2)</td></tr>
+<tr class="memdesc:a044254ee74fc1bb96291ff5f533e967e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine necessary index shifts for pair of simple neighbor triangles (positions of their common vertex in each triangle)  <br /></td></tr>
 <tr class="separator:a044254ee74fc1bb96291ff5f533e967e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef2ef313187c7ad423e4203c3455596b" id="r_aef2ef313187c7ad423e4203c3455596b"><td class="memItemLeft" align="right" valign="top">__device__ int2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef2ef313187c7ad423e4203c3455596b">shiftsForAttachedNeighbors</a> (const int3 &amp;triangle1, const int3 &amp;triangle2)</td></tr>
+<tr class="memdesc:aef2ef313187c7ad423e4203c3455596b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine necessary index shifts for pair of attached neighbor triangles (positions of the third vertex, opposite to the common edge, in each triangle)  <br /></td></tr>
 <tr class="separator:aef2ef313187c7ad423e4203c3455596b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a502df3072fdc771498c7df548b7625a3" id="r_a502df3072fdc771498c7df548b7625a3"><td class="memItemLeft" align="right" valign="top">__device__ int3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a502df3072fdc771498c7df548b7625a3">rotateLeft</a> (const int3 &amp;triangle, int shift)</td></tr>
+<tr class="memdesc:a502df3072fdc771498c7df548b7625a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a new triangle with indices obtained by shifting the indices of an existing one.  <br /></td></tr>
 <tr class="separator:a502df3072fdc771498c7df548b7625a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of integration procedures for integrals of Newtonian potential gradient (both numerical and analytical integration for different types of neighbors) </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a38d301b5454f4ec2cf9eccd25998ac5b" name="a38d301b5454f4ec2cf9eccd25998ac5b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a38d301b5454f4ec2cf9eccd25998ac5b">&#9670;&#160;</a></span>integrateSingularPartAttached()</h2>
 
@@ -186,6 +210,33 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the attached neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index of the control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Index of the influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of \(\Theta\) and \(\mathbf{\Psi}\) parts of the integrals</dd></dl>
+<p>Scalar part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q_{\Theta}(\xi, \alpha, \beta, \gamma, \mu, \lambda) + 
+             q_{\Theta}(\xi, \beta, \alpha, \delta, \sigma, \theta)\right),
+\]
+</p>
+<p> while vector part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q_{\Psi}(\xi, \alpha, \beta, \gamma, \mu, \lambda)\mathbf{\tau}_b + 
+             q_{\Psi}(\xi, \beta, \alpha, \delta, \sigma, \theta)\mathbf{\tau}_a - q_{\alpha\beta}(\alpha,\beta)\mathbf{\tau}_c\right).
+\]
+</p>
+<p> Values of \(q_{\Theta}\) and \(q_{\Psi}\) are calculated by separate functions (<a class="el" href="#a26eeb901ed36a2ea20da704ac464664b" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi</a> and <a class="el" href="#ad43d740b65bb6fac4ce3b49773975829" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi_zero</a> depending on relative position of panels \(\bigtriangleup_i, \bigtriangleup_j\)). Value of \(q_{\alpha\beta}\) is calculated directly in this function. \(S_i\) is the area of triangle \(K_i\). </p>
 
 </div>
 </div>
@@ -228,6 +279,32 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Computation of integrals of singular part of integrand \(\int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r\) and \(\int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r\) for the simple neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index of the control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Index of the influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of \(\Theta\) and \(\mathbf{\Psi}\) parts of the integrals</dd></dl>
+<p>Scalar part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} \Theta^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q^{\Theta}(\delta_a) - q^{\Theta}(\delta_b) + 4\pi p\right),
+\]
+</p>
+<p> while vector part is evaluated as  </p><p class="formulaDsp">
+\[
+     \int\limits_{K_i} {\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)dS_r = S_i \left(q^{\Psi}(\delta_a)\mathbf{\tau}_a + 
+             q^{\Psi}(\delta_b)\mathbf{\tau}_b\right).
+\]
+</p>
+<p> Values of \(q_{\Theta}\) and \(q_{\Psi}\) are calculated by a separate function <a class="el" href="#a41603ef537eb328a369f520bb9afc0cf" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for simple neigh...">q_thetaPsi_cont</a>. The \(4\pi p\) term is added later, when transforming the value of integral from double4 to a Point3 (<a class="el" href="#a7b875ec8ef8cdc551febe2f744150ccd" title="Transformation of integration results from double4 to a vector of Point3 for simple neighbors.">kFinalizeSimpleNeighborsResults</a> kernel function). \(S_i\) is the area of triangle \(K_i\). </p>
+
 </div>
 </div>
 <a id="a8ffc2aaa248ebb17931611450739b39e" name="a8ffc2aaa248ebb17931611450739b39e"></a>
@@ -263,6 +340,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transformation of integration results from double4 to a vector of Point3 for attached neighbors and non-neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integral values </td></tr>
+    <tr><td class="paramname">results</td><td>A Point3 vector to be filled with final integral values </td></tr>
+    <tr><td class="paramname">integrals</td><td>A double4 vector of calculated values of \(\mathbf{\Psi}\) and \(\Theta\) </td></tr>
+    <tr><td class="paramname">tasks</td><td>List of integration tasks </td></tr>
+    <tr><td class="paramname">cellNormals</td><td>Vector of cell normals</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The final integral value \(\mathbf{J}(K_i,K_j)\) is calculated as \(\frac1{4\pi}\left(\theta\mathbf{n}_j + \mathbf{\Psi}\times\mathbf{n}_j\right)\). </p>
 
 </div>
 </div>
@@ -304,6 +394,25 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transformation of integration results from double4 to a vector of Point3 for simple neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integral values </td></tr>
+    <tr><td class="paramname">results</td><td>A Point3 vector to be filled with final integral values </td></tr>
+    <tr><td class="paramname">integrals</td><td>A double4 vector of calculated values of \(\mathbf{\Psi}\) and \(\Theta\) </td></tr>
+    <tr><td class="paramname">tasks</td><td>List of integration tasks </td></tr>
+    <tr><td class="paramname">cellNormals</td><td>Vector of cell normals </td></tr>
+    <tr><td class="paramname">cellMeasures</td><td>Vector of cell measures</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The final integral value \(\mathbf{J}(K_i,K_j)\) is calculated as \(\frac1{4\pi}\left((\theta + 2p\cdot 2\pi S_i)\mathbf{n}_j + \mathbf{\Psi}\times\mathbf{n}_j\right)\) where \(p\) is chosen in such a way so as to ensure  </p><p class="formulaDsp">
+\[
+     -2\pi S_i \leq \int\limits_{K_i} \Theta(M_i,K_j)dS_r \leq 2\pi S_i,
+\]
+</p>
+<p> which can be done in a unique way if panels \(\bigtriangleup_i\) and \(\bigtriangleup_j\) share no common internal points. </p>
 
 </div>
 </div>
@@ -360,6 +469,33 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for numerical integration for non-neighboring cell pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">integrals</td><td>Vector of integral values (with separate values for \(\mathbf{\Psi}\) and \(\Theta\)) to be filled </td></tr>
+    <tr><td class="paramname">refinedTasks</td><td>Vector of integration tasks for refined cells </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates of the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices for cells of the original mesh </td></tr>
+    <tr><td class="paramname">refinedVertices</td><td>Vector of vertex coordinates of the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCells</td><td>Vector of vertex indices for the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCellMeasures</td><td>Vector of measures for the refined cells </td></tr>
+    <tr><td class="paramname">GaussPointsNum</td><td>Number of Gaussian points in the quadrature formula</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>In order to calculate the integral value the quadrature formula is used  </p><p class="formulaDsp">
+\[
+     \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+\]
+</p>
+<ol type="1">
+<li>\(N_{GP}\) positions of Gaussian points \(\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\) are calculated using positions of vertices of triangle \(\bigtriangleup_i\).</li>
+<li>\(N_{GP}\) function values \(\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\) are calculated using original mesh data for triangle \(\bigtriangleup_j\). Functions \(\Theta\) and \(\mathbf{\Psi}\) (<a class="el" href="#a4e33ea7dd3bd04aa83b4b9692298fd45" title="Computation of the functions  and  in the integral  of Newtonian potential gradient.">thetaPsi</a>) are used for integration.</li>
+<li>Quadrature formula is actually evaluated using weights of Gaussian points.</li>
+<li>The obtained value is multiplied by the area of triangle \(\bigtriangleup_i\). </li>
+</ol>
 
 </div>
 </div>
@@ -426,6 +562,35 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for numerical integration of the regular part for attached neighbor cell pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">integrals</td><td>Vector of integral values (with separate values for \(\mathbf{\Psi}\) and \(\Theta\)) to be filled </td></tr>
+    <tr><td class="paramname">refinedTasks</td><td>Vector of integration tasks for refined cells </td></tr>
+    <tr><td class="paramname">originalTasks</td><td>Vector of original integration tasks </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates of the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices for cells of the original mesh </td></tr>
+    <tr><td class="paramname">cellNormals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">refinedVertices</td><td>Vector of vertex coordinates of the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCells</td><td>Vector of vertex indices for the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCellMeasures</td><td>Vector of measures for the refined cells </td></tr>
+    <tr><td class="paramname">GaussPointsNum</td><td>Number of Gaussian points in the quadrature formula</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>In order to calculate the integral value the quadrature formula is used  </p><p class="formulaDsp">
+\[
+     \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+\]
+</p>
+<ol type="1">
+<li>\(N_{GP}\) positions of Gaussian points \(\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\) are calculated using positions of vertices of triangle \(\bigtriangleup_i\).</li>
+<li>\(N_{GP}\) function values \(\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\) are calculated using original mesh data for triangle \(\bigtriangleup_j\). Functions \(\Theta - \Theta^{\text{sing}}\) and \(\mathbf{\Psi} - \mathbf{\Psi}^{\text{sing}}\) (<a class="el" href="#a4e33ea7dd3bd04aa83b4b9692298fd45" title="Computation of the functions  and  in the integral  of Newtonian potential gradient.">thetaPsi</a> - <a class="el" href="#a8151279f5aea132fbb6da9c73c1fc75b" title="Expressions for singular parts  and  of integral  for attached neighbors.">singularPartAttached</a>) are used for integration of the regular part.</li>
+<li>Quadrature formula is actually evaluated using weights of Gaussian points.</li>
+<li>The obtained value is multiplied by the area of triangle \(\bigtriangleup_i\). </li>
+</ol>
 
 </div>
 </div>
@@ -498,6 +663,36 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for numerical integration of the regular part for simple neighbor cell pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">integrals</td><td>Vector of integral values (with separate values for \(\mathbf{\Psi}\) and \(\Theta\)) to be filled </td></tr>
+    <tr><td class="paramname">refinedTasks</td><td>Vector of integration tasks for refined cells </td></tr>
+    <tr><td class="paramname">originalTasks</td><td>Vector of original integration tasks </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates of the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices for cells of the original mesh </td></tr>
+    <tr><td class="paramname">cellNormals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">cellMeasures</td><td>Vector of cell measures for the original mesh </td></tr>
+    <tr><td class="paramname">refinedVertices</td><td>Vector of vertex coordinates of the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCells</td><td>Vector of vertex indices for the refined cells (might not cover the whole surface) </td></tr>
+    <tr><td class="paramname">refinedCellMeasures</td><td>Vector of measures for the refined cells </td></tr>
+    <tr><td class="paramname">GaussPointsNum</td><td>Number of Gaussian points in the quadrature formula</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>In order to calculate the integral value the quadrature formula is used  </p><p class="formulaDsp">
+\[
+     \mathbf{I}=\sum\limits_{i=1}^{N_{GP}} \mathbf{f}(\mathbf{r}_i)w_i,\qquad \mathbf{I}\in\mathbb{R}^4.
+\]
+</p>
+<ol type="1">
+<li>\(N_{GP}\) positions of Gaussian points \(\mathbf{r}_1,\ldots,\mathbf{r}_{N_GP}\) are calculated using positions of vertices of triangle \(\bigtriangleup_i\).</li>
+<li>\(N_{GP}\) function values \(\mathbf{f}(\mathbf{r}_i),\quad i=1,\ldots,N_{GP},\) are calculated using original mesh data for triangle \(\bigtriangleup_j\). Functions \(\Theta - \Theta^{\text{sing}}\) and \(\mathbf{\Psi} - \mathbf{\Psi}^{\text{sing}}\) (<a class="el" href="#a4e33ea7dd3bd04aa83b4b9692298fd45" title="Computation of the functions  and  in the integral  of Newtonian potential gradient.">thetaPsi</a> - <a class="el" href="#af2dfab6efdf762c84256e1bcd90cae1a" title="Expressions for singular parts  and  of integral  for simple neighbors.">singularPartSimple</a>) are used for integration of the regular part.</li>
+<li>Quadrature formula is actually evaluated using weights of Gaussian points.</li>
+<li>The obtained value is multiplied by the area of triangle \(\bigtriangleup_i\). </li>
+</ol>
+
 </div>
 </div>
 <a id="afa59fb62e57c3fd4205a6200d34d8bc4" name="afa59fb62e57c3fd4205a6200d34d8bc4"></a>
@@ -543,6 +738,21 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kernel function for analytical integration of the singular part for the attached neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">results</td><td>A double4 vector with integration results (already contains results of numerical integration of the regular part) </td></tr>
+    <tr><td class="paramname">tasks</td><td>List of integration tasks </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates of the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices for cell of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>A device function is called, which performs all the computations, and the obtained value is then added to already calculated integral of the regular part. </p>
 
 </div>
 </div>
@@ -590,6 +800,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Kernel function for analytical integration of the singular part for the simple neighbor pairs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of integration tasks </td></tr>
+    <tr><td class="paramname">results</td><td>A double4 vector with integration results (already contains results of numerical integration of the regular part) </td></tr>
+    <tr><td class="paramname">tasks</td><td>List of integration tasks </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates of the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices for cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of cell normals for the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of cell measures for the original mesh</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>A device function is called, which performs all the computations, and the obtained value is then added to already calculated integral of the regular part. </p>
+
 </div>
 </div>
 <a id="a22311c8f2793a2db50e33b44edcc98d1" name="a22311c8f2793a2db50e33b44edcc98d1"></a>
@@ -620,6 +845,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Auxiliary function \(\phi\) used in analytic formulae for integration of singular part for attached neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sinCosAlpha</td><td>\((\sin\alpha,\cos\alpha)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosGamma</td><td>\((\sin\gamma,\cos\gamma)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinXi</td><td>\(\sin\xi\) </td></tr>
+    <tr><td class="paramname">cosLambda</td><td>\(\cos\lambda\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of \(\phi = 2\mathrm{arctg}(\sin\xi \sin\alpha \sin\gamma, 1 - \cos\alpha + \cos\gamma + \cos\lambda)\) </dd></dl>
 
 </div>
 </div>
@@ -666,6 +903,22 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Auxiliary functions \(q_{\Theta}\) and \(q_{\Psi}\) used in analytic formulae for integration of singular part for attached neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sinCosAlpha</td><td>\((\sin\alpha,\cos\alpha)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosBeta</td><td>\((\sin\beta,\cos\beta)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosGamma</td><td>\((\sin\gamma,\cos\gamma)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosNu</td><td>\((\sin\nu,\cos\nu)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosXi</td><td>\((\sin\xi,\cos\xi)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">cosMu</td><td>\(\cos\mu\) </td></tr>
+    <tr><td class="paramname">cosLambda</td><td>\(\cos\lambda\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values \((q_{\Theta}, q_{\Psi})\) stored as a single double2</dd></dl>
+<p>The function is applicable for all cases excluding only the case of both triangles lying in the same plane (which is handled by the <a class="el" href="#ad43d740b65bb6fac4ce3b49773975829" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi_zero</a> function). </p>
 
 </div>
 </div>
@@ -778,6 +1031,35 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Auxiliary functions \(q^{\Theta}\) and \(q^{\Psi}\) used in analytic formulae for integration of singular part for simple neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sinCosXi</td><td>\((\sin\xi,\cos\xi)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">mu</td><td>\(\mu\) angle </td></tr>
+    <tr><td class="paramname">sinCosMu</td><td>\((\sin\mu,\cos\mu)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">logSinMu</td><td>\(\ln\sin\mu\) </td></tr>
+    <tr><td class="paramname">logSinNu</td><td>\(\ln\sin\nu\) </td></tr>
+    <tr><td class="paramname">psi</td><td>\(\psi\) angle </td></tr>
+    <tr><td class="paramname">sinCosPsi</td><td>\((\sin\psi,\cos\psi)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">nu</td><td>\(\nu\) angle </td></tr>
+    <tr><td class="paramname">sinCosNu</td><td>\((\sin\nu,\cos\nu)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">kappa</td><td>\(\kappa\) angle </td></tr>
+    <tr><td class="paramname">sinKappa</td><td>\(\sin\kappa\) </td></tr>
+    <tr><td class="paramname">sinNuPsi</td><td>\(\sin(\nu + \psi)\) </td></tr>
+    <tr><td class="paramname">sinMuPsi</td><td>\(\sin(\mu - \psi)\) </td></tr>
+    <tr><td class="paramname">delta</td><td>\(\delta\) angle </td></tr>
+    <tr><td class="paramname">sinCosDelta</td><td>\((\sin\delta,\cos\delta)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">cosLambda</td><td>\(\cos\lambda\) </td></tr>
+    <tr><td class="paramname">cosTheta</td><td>\(\cos\theta\) </td></tr>
+    <tr><td class="paramname">cosEta</td><td>\(\cos\eta\) </td></tr>
+    <tr><td class="paramname">cosSigma</td><td>\(\cos\sigma\) </td></tr>
+    <tr><td class="paramname">cosChi</td><td>\(\cos\chi\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values \((q^{\Theta}, q^{\Psi})\) stored as a single double2</dd></dl>
+<p>4 special cases are checked sequentially; if none of them is the case, then the general case is used. Function is used in <a class="el" href="#a2819f3ea369e621c9c428b470ce7bb73" title="Computation of integrals of singular part of integrand  and  for the simple neighbor pairs.">integrateSingularPartSimple</a> for analytical integration of the singular part for simple neighbor cell pairs. </p>
+
 </div>
 </div>
 <a id="ad43d740b65bb6fac4ce3b49773975829" name="ad43d740b65bb6fac4ce3b49773975829"></a>
@@ -804,6 +1086,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Auxiliary functions \(q_{\Theta}\) and \(q_{\Psi}\) used in analytic formulae for integration of singular part for attached neighbors (special case of both triangles lying in one plane) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sinCosBeta</td><td>\((\sin\beta,\cos\beta)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinCosNu</td><td>\((\sin\nu,\cos\nu)\) stored as a single double2 value </td></tr>
+    <tr><td class="paramname">sinAlpha</td><td>\(\sin\alpha\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values \((q_{\Theta}, q_{\Psi})\) stored as a single double2</dd></dl>
+<p>For the special case of both triangles lying in one plane a limit value for \(q_{\Psi}\) is used, \(q_{\Theta} = 0\) (general case is handled by the <a class="el" href="#a26eeb901ed36a2ea20da704ac464664b" title="Auxiliary functions  and  used in analytic formulae for integration of singular part for attached nei...">q_thetaPsi</a> function). </p>
+
 </div>
 </div>
 <a id="a502df3072fdc771498c7df548b7625a3" name="a502df3072fdc771498c7df548b7625a3"></a>
@@ -824,6 +1118,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Generate a new triangle with indices obtained by shifting the indices of an existing one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle</td><td>Indices of an existing triangle </td></tr>
+    <tr><td class="paramname">shift</td><td>Size of shift </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifted indices </dd></dl>
 
 </div>
 </div>
@@ -846,6 +1150,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Determine necessary index shifts for pair of attached neighbor triangles (positions of the third vertex, opposite to the common edge, in each triangle) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle1</td><td>Indices of the first triangle </td></tr>
+    <tr><td class="paramname">triangle2</td><td>Indices of the second triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifts for the attached neighbor triangles </dd></dl>
+
 </div>
 </div>
 <a id="a044254ee74fc1bb96291ff5f533e967e" name="a044254ee74fc1bb96291ff5f533e967e"></a>
@@ -866,6 +1180,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Determine necessary index shifts for pair of simple neighbor triangles (positions of their common vertex in each triangle) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">triangle1</td><td>Indices of the first triangle </td></tr>
+    <tr><td class="paramname">triangle2</td><td>Indices of the second triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shifts for the simple neighbor triangles </dd></dl>
 
 </div>
 </div>
@@ -902,6 +1226,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for attached neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">i</td><td>Control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of functions \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) at location \(M_i\)</dd></dl>
+<p>The function is used in the kernel function <a class="el" href="#afe5334c74c2c8f850d7012178f6b90f7" title="Kernel function for numerical integration of the regular part for attached neighbor cell pairs.">kIntegrateRegularPartAttached</a> for integration of the regular part for attached neighbors. </p>
 
 </div>
 </div>
@@ -949,6 +1287,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Expressions for singular parts \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) of integral \(\mathbf{J}_{3D}(K_i,K_j)\) for simple neighbors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">i</td><td>Control panel \(\bigtriangleup_i\) </td></tr>
+    <tr><td class="paramname">j</td><td>Influencing panel \(\bigtriangleup_j\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Vector of vertex coordinates in the original mesh </td></tr>
+    <tr><td class="paramname">cells</td><td>Vector of vertex indices in the cells of the original mesh </td></tr>
+    <tr><td class="paramname">normals</td><td>Vector of normals for the cells of the original mesh </td></tr>
+    <tr><td class="paramname">measures</td><td>Vector of measures for the cells of original mesh </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Values of functions \(\Theta^{\text{sing}}(M_i,K_j)\) and \({\mathbf{\Psi}}^{\text{sing}}(M_i,K_j)\) at location \(M_i\)</dd></dl>
+<p>The function is used in the kernel function <a class="el" href="#a7699c585025a317e4075855b4ede4761" title="Kernel function for numerical integration of the regular part for simple neighbor cell pairs.">kIntegrateRegularPartSimple</a> for integration of the regular part for simple neighbors. </p>
+
 </div>
 </div>
 <a id="a4e33ea7dd3bd04aa83b4b9692298fd45" name="a4e33ea7dd3bd04aa83b4b9692298fd45"></a>
@@ -974,6 +1328,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computation of the functions \(\mathbf{\Psi}\) and \(\Theta\) in the integral \(\mathbf{J}(M_i,K_j)\) of Newtonian potential gradient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Observation point \(M_i\) </td></tr>
+    <tr><td class="paramname">vertices</td><td>Global vector of vertex coordinates </td></tr>
+    <tr><td class="paramname">triangle</td><td>Indices of vertices in triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A double4 value with \(\mathbf{\Psi}\) and \(\Theta\)</dd></dl>
+<p>For checks of \(\cos\varphi^c_a\to1\), etc., checks of \(1 - \cos\varphi^c_a &lt; \frac{\varepsilon^2}2\), etc. are performed instead. </p>
 
 </div>
 </div>
